@@ -1,1 +1,60 @@
 @import "tailwindcss";
+@import "./themes.css";
+
+@theme {
+    /* Surface and Background Colors */
+    --color-background: var(--background);
+    --color-surface: var(--surface);
+    --color-surface-secondary: var(--surface-secondary);
+
+    /* Borders */
+    --color-border: var(--border);
+    --color-border-hover: var(--border-hover);
+
+    /* Typography (Semantic mapping to avoid direct color names) */
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-muted: var(--text-muted);
+
+    /* Brand / Action Colors */
+    --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
+    --color-accent: var(--accent);
+    --color-accent-hover: var(--accent-hover);
+
+    /* Feedback Colors & Backgrounds */
+    --color-success: var(--success);
+    --color-success-bg: var(--success-bg);
+
+    --color-warning: var(--warning);
+    --color-warning-bg: var(--warning-bg);
+
+    --color-danger: var(--danger);
+    --color-danger-bg: var(--danger-bg);
+
+    --color-info: var(--info);
+    --color-info-bg: var(--info-bg);
+
+    /* Custom Rings & Shadows */
+    --color-focus-ring: var(--focus-ring);
+}
+
+/* Base resets & styles matching our semantic theme */
+@layer base {
+    html {
+        background-color: var(--background);
+        color: var(--text-primary);
+        transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    }
+
+    body {
+        background-color: var(--background);
+        color: var(--text-primary);
+    }
+
+    /* Custom focus style across interactive elements */
+    *:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+}

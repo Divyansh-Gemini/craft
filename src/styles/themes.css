@@ -1,0 +1,85 @@
+/**
+ * Craft Design System - Color Variables
+ * Source of truth for theme tokens.
+ *
+ * This file defines the CSS variables for both light and dark themes.
+ * It uses standard semantic names and supports future theme scalability.
+ */
+
+:root {
+    /* Common System Layout / Surfaces */
+    --background: #FAFAF9;
+    --surface: #FFFFFF;
+    --surface-secondary: #F5F5F4;
+
+    /* Borders */
+    --border: #E7E5E4;
+    --border-hover: #D6D3D1;
+
+    /* Typography */
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+
+    /* Brand / Action Colors */
+    --primary: #059669;
+    --primary-hover: #047857;
+    --accent: #78716C;
+    --accent-hover: #57534E;
+
+    /* Semantic Feedback Colors (Light Theme) */
+    --success: #10B981;
+    --success-bg: #ECFDF5;
+    --warning: #F59E0B;
+    --warning-bg: #FFFBEB;
+    --danger: #EF4444;
+    --danger-bg: #FEF2F2;
+    --info: #0EA5E9;
+    --info-bg: #F0F9FF;
+
+    /* Focus Ring */
+    --focus-ring: rgba(5, 150, 105, 0.4);
+}
+
+.dark {
+    /* Common System Layout / Surfaces */
+    --background: #020617;
+    --surface: #0F172A;
+    --surface-secondary: #1E293B;
+
+    /* Borders */
+    --border: #334155;
+    --border-hover: #475569;
+
+    /* Typography */
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+
+    /* Brand / Action Colors (Slightly brighter/optimized for dark mode readability) */
+    --primary: #10B981;
+    --primary-hover: #34D399;
+    --accent: #A8A29E;
+    --accent-hover: #D6D3D1;
+
+    /* Semantic Feedback Colors (Dark Theme Optimized)
+     *
+     * CRITICAL: In Dark Mode, using light backgrounds (like #ECFDF5) creates extreme contrast
+     * issues and violates dark-mode aesthetics. We adjust semantic backgrounds to deep,
+     * low-brightness hues or transparent layers, while preserving readable text.
+     */
+    --success: #10B981;
+    --success-bg: #062f21; /* Darker emerald for dark-mode alert backgrounds */
+
+    --warning: #F59E0B;
+    --warning-bg: #451a03; /* Darker amber for dark-mode warning backgrounds */
+
+    --danger: #EF4444;
+    --danger-bg: #4c0519; /* Darker red for dark-mode danger backgrounds */
+
+    --info: #0EA5E9;
+    --info-bg: #072f4f; /* Darker blue for dark-mode info backgrounds */
+
+    /* Focus Ring */
+    --focus-ring: rgba(16, 185, 129, 0.4);
+}
