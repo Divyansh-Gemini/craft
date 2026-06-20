@@ -2,10 +2,12 @@ import type {Metadata} from "next";
 import "../styles/globals.css";
 import React from "react";
 import {ThemeProvider} from "@/components/theme-provider";
+import {Header} from "@/components/layout/header";
+import {Footer} from "@/components/layout/footer";
 
 export const metadata: Metadata = {
-    title: "Craft — Audio, Video, Image & PDF Tools",
-    description: "Convert, trim, merge, compress, and transform audio, video, image, and PDF files. Fast, privacy-first tools that work directly in your browser.",
+    title: "Craft - File Utilities Workshop",
+    description: "High-performance browser-side file conversion, compression, and media tools.",
 };
 
 // Inline script executed immediately before paint to prevent theme flash
@@ -39,7 +41,16 @@ export default function RootLayout({
         </head>
         <body className="min-h-full flex flex-col bg-background text-text-primary transition-colors duration-200">
         <ThemeProvider>
-            {children}
+            {/* Global Navigation Header */}
+            <Header/>
+
+            {/* Main Page Area */}
+            <main className="flex-1 flex flex-col">
+                {children}
+            </main>
+
+            {/* Global Nav Footer */}
+            <Footer/>
         </ThemeProvider>
         </body>
         </html>
