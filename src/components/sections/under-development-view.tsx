@@ -68,7 +68,7 @@ export function UnderDevelopmentView({tool}: UnderDevelopmentViewProps) {
         .slice(0, 3);
 
     return (
-        <div className="w-full flex-1 bg-background relative overflow-hidden select-none">
+        <div className="w-full flex-1 bg-background relative overflow-hidden">
             {/* Ambient Background Glow (Dynamic Gradient) */}
             <div
                 className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 rounded-full blur-[120px] opacity-10 dark:opacity-15 bg-radial from-primary/50 to-transparent pointer-events-none"/>
@@ -116,14 +116,18 @@ export function UnderDevelopmentView({tool}: UnderDevelopmentViewProps) {
                 </div>
 
                 {/* Centered Visually Appealing Under Development Message Card */}
-                <div className="border border-border bg-surface/50 backdrop-blur-md rounded-3xl p-8 sm:p-16 shadow-sm relative overflow-hidden flex flex-col items-center text-center space-y-6">
+                <div
+                    className="border border-border bg-surface/50 backdrop-blur-md rounded-3xl p-8 sm:p-16 shadow-sm relative overflow-hidden flex flex-col items-center text-center space-y-6">
                     {/* Glowing effect inside card */}
-                    <div className={`absolute -top-24 -left-24 w-48 h-48 rounded-full blur-3xl opacity-30 ${config.bg}`} />
-                    <div className={`absolute -bottom-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-30 ${config.bg}`} />
+                    <div
+                        className={`absolute -top-24 -left-24 w-48 h-48 rounded-full blur-3xl opacity-30 ${config.bg}`}/>
+                    <div
+                        className={`absolute -bottom-24 -right-24 w-48 h-48 rounded-full blur-3xl opacity-30 ${config.bg}`}/>
 
                     {/* Pulsing Wrench/Construction Icon */}
-                    <div className={`w-14 h-14 rounded-full ${config.bg} ${config.border} ${config.text} border flex items-center justify-center relative animate-pulse`}>
-                        <Wrench20Regular className="w-6 h-6 transform scale-110" />
+                    <div
+                        className={`w-14 h-14 rounded-full ${config.bg} ${config.border} ${config.text} border flex items-center justify-center relative animate-pulse`}>
+                        <Wrench20Regular className="w-6 h-6 transform scale-110"/>
                     </div>
 
                     <div className="space-y-2 max-w-md">

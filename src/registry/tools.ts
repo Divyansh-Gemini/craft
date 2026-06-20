@@ -1,5 +1,6 @@
 import {Tool} from "@/types/tool";
 import {UnderDevelopmentView} from "@/components/sections/under-development-view";
+import {TextCounterView} from "@/components/tools/text-counter-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -208,7 +209,7 @@ export const TOOLS: Tool[] = [
         description: "Count characters, words, sentences, and lines in your text.",
         category: "text",
         iconId: "text-word-count",
-        component: UnderDevelopmentView
+        component: TextCounterView
     },
     {
         slug: "text-diff",

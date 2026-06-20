@@ -36,5 +36,6 @@ export default async function ToolPage({params}: ToolPageProps) {
         notFound();
     }
 
-    return <UnderDevelopmentView tool={tool}/>;
+    const ToolComponent = tool.component || UnderDevelopmentView;
+    return <ToolComponent tool={tool}/>;
 }
