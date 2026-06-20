@@ -1,6 +1,7 @@
 import {Tool} from "@/types/tool";
 import {UnderDevelopmentView} from "@/components/sections/under-development-view";
 import {TextCounterView} from "@/components/tools/text-counter-view";
+import {JsonFormatterView} from "@/components/tools/json-formatter-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -201,7 +202,7 @@ export const TOOLS: Tool[] = [
         description: "Beautify, format, and validate JSON data structures.",
         category: "text",
         iconId: "code",
-        component: UnderDevelopmentView
+        component: JsonFormatterView
     },
     {
         slug: "text-counter",
