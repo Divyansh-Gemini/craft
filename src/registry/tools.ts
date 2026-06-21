@@ -5,6 +5,7 @@ import {JsonFormatterView} from "@/components/tools/json-formatter-view";
 import {TextDiffView} from "@/components/tools/text-diff-view";
 import {ConvertImageView} from "@/components/tools/convert-image-view";
 import {ResizeImageView} from "@/components/tools/resize-image-view";
+import {CompressImageView} from "@/components/tools/compress-image-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -33,7 +34,7 @@ export const TOOLS: Tool[] = [
     },
     {
         slug: "compress-audio",
-        title: "Lossless Compress Audio",
+        title: "Compress Audio",
         description: "Reduce audio file size without losing any audio quality.",
         category: "audio",
         iconId: "resize-small",
@@ -67,7 +68,7 @@ export const TOOLS: Tool[] = [
     },
     {
         slug: "compress-video",
-        title: "Lossless Compress Video",
+        title: "Compress Video",
         description: "Reduce video file size while maintaining original quality.",
         category: "video",
         iconId: "resize-small",
@@ -125,11 +126,11 @@ export const TOOLS: Tool[] = [
     },
     {
         slug: "compress-image",
-        title: "Lossless Compress Image",
+        title: "Compress Image",
         description: "Compress PNG, JPG, or WebP images without quality degradation.",
         category: "image",
         iconId: "resize-small",
-        component: UnderDevelopmentView
+        component: CompressImageView
     },
     {
         slug: "convert-image",
