@@ -11,22 +11,7 @@ import {
     Speaker220Regular
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
-
-const STOP_WORDS = new Set([
-    "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "as", "at",
-    "be", "because", "been", "before", "being", "below", "between", "both", "but", "by",
-    "can", "cannot", "could", "did", "do", "does", "doing", "down", "during",
-    "each", "few", "for", "from", "further",
-    "had", "has", "have", "having", "he", "her", "here", "hers", "herself", "him", "himself", "his", "how",
-    "i", "if", "in", "into", "is", "it", "its", "itself",
-    "me", "more", "most", "my", "myself",
-    "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "our", "ours", "ourselves", "out", "over", "own",
-    "same", "she", "should", "so", "some", "such",
-    "than", "that", "the", "their", "theirs", "them", "themselves", "then", "there", "these", "they", "this", "those", "through", "to", "too", "under", "until", "up", "very",
-    "was", "we", "were", "what", "when", "where", "which", "while", "who", "whom", "why", "with", "would",
-    "you", "your", "yours", "yourself", "yourselves",
-    "will", "etc", "shall", "doesnt", "dont", "im", "youre", "theyre", "ive", "weve"
-]);
+import {calculateTextStats, transformTextContent} from "@/features/text/text-counter";
 
 interface TextCounterViewProps {
     tool: Tool;
@@ -39,67 +24,7 @@ export function TextCounterView({tool}: TextCounterViewProps) {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     // Memoize derived computations to optimize performance on typing
-    const stats = useMemo(() => {
-        const charCountWithSpaces = text.length;
-        const charCountNoSpaces = text.replace(/\s/g, "").length;
-
-        const words = text.trim().split(/\s+/).filter((w) => w.length > 0);
-        const wordCount = words.length;
-
-        const sentencesCount = text
-            .split(/[.!?]+/)
-            .filter((s) => s.trim().length > 0).length;
-
-        const paragraphsCount = text
-            .split(/\n+/)
-            .filter((p) => p.trim().length > 0).length;
-
-        const linesCount = text.length > 0 ? text.split(/\r\n|\r|\n/).length : 0;
-
-        // Reading & Speaking times
-        // Average reading speed: 200 WPM
-        const readingTimeSec = Math.ceil((wordCount / 200) * 60);
-        const readingMin = Math.floor(readingTimeSec / 60);
-        const readingSec = readingTimeSec % 60;
-
-        // Average speaking speed: 130 WPM
-        const speakingTimeSec = Math.ceil((wordCount / 130) * 60);
-        const speakingMin = Math.floor(speakingTimeSec / 60);
-        const speakingSec = speakingTimeSec % 60;
-
-        // Top 5 word frequency analysis
-        let topWords: [string, number][] = [];
-        if (text.trim()) {
-            const cleanText = text
-                .toLowerCase()
-                .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"']/g, "");
-            const filteredWords = cleanText
-                .split(/\s+/)
-                .filter((w) => w.length > 2 && !STOP_WORDS.has(w));
-            const freq: { [key: string]: number } = {};
-            filteredWords.forEach((w) => {
-                freq[w] = (freq[w] || 0) + 1;
-            });
-            topWords = Object.entries(freq)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5);
-        }
-
-        return {
-            charCountWithSpaces,
-            charCountNoSpaces,
-            wordsArray: words,
-            wordCount,
-            sentencesCount,
-            paragraphsCount,
-            linesCount,
-            readingMin,
-            readingSec,
-            speakingMin,
-            speakingSec,
-            topWords
-        };
-    }, [text]);
+    const stats = useMemo(() => calculateTextStats(text), [text]);
 
     const {
         charCountWithSpaces,
@@ -134,18 +59,7 @@ export function TextCounterView({tool}: TextCounterViewProps) {
 
     // Text transformations
     const transformText = useCallback((type: "upper" | "lower" | "title" | "sentence") => {
-        if (!text) return;
-        let result = text;
-        if (type === "upper") {
-            result = text.toUpperCase();
-        } else if (type === "lower") {
-            result = text.toLowerCase();
-        } else if (type === "title") {
-            result = text.replace(/\b\w/g, (char) => char.toUpperCase());
-        } else if (type === "sentence") {
-            result = text.toLowerCase().replace(/(^\s*|[.!?]\s+)([a-z])/g, (match) => match.toUpperCase());
-        }
-        setText(result);
+        setText(transformTextContent(text, type));
     }, [text]);
 
     return (
@@ -290,7 +204,7 @@ export function TextCounterView({tool}: TextCounterViewProps) {
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
                                 placeholder="Type, paste, or drag and drop your text here to begin counting..."
-                                className="w-full min-h-[300px] sm:min-h-[400px] p-5 text-sm leading-relaxed text-text-primary bg-transparent resize-y outline-none select-text border-none"
+                                className="w-full min-h-75 sm:min-h-100 p-5 text-sm leading-relaxed text-text-primary bg-transparent resize-y outline-none select-text border-none"
                             />
 
                             {/* Textarea Bottom Action Bar */}

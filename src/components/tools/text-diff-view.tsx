@@ -12,109 +12,15 @@ import {
     DocumentArrowUp20Regular
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
-import {diffLines, diffWords} from "diff";
+import {
+    DiffLineData,
+    SAMPLES,
+    computeAlignedDiff
+} from "@/features/text/text-diff";
 
 interface TextDiffViewProps {
     tool: Tool;
 }
-
-interface DiffLineData {
-    lineNumber: number;
-    content: string;
-    type: "added" | "removed" | "modified" | "unchanged";
-    words?: any[];
-}
-
-interface AlignedRow {
-    type: "added" | "removed" | "modified" | "unchanged";
-    left?: DiffLineData;
-    right?: DiffLineData;
-}
-
-// Preset samples for quick testing
-const SAMPLES = {
-    code: {
-        name: "TypeScript React Component",
-        original: `import React from 'react';
-
-// A simple button component
-export function CustomButton({ label, onClick }) {
-    return (
-        <button onClick={onClick} className="btn-primary">
-            {label}
-        </button>
-    );
-}`,
-        modified: `import React, { useMemo } from 'react';
-        
-interface ButtonProps {
-    label: string;
-    onClick: () => void;
-    disabled?: boolean;
-    variant?: 'primary' | 'secondary';
-}
-        
-// A highly optimized button component with variant options
-export function CustomButton({
-    label,
-    onClick,
-    disabled = false,
-    variant = 'primary'
-}: ButtonProps) {
-    const btnClass = useMemo(() => {
-        const base = "px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer";
-        return variant === 'primary'
-            ? \`\${base} bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm\`
-            : \`\${base} bg-stone-200 hover:bg-stone-300 text-stone-800\`;
-    }, [variant]);
-        
-    return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            className={\`\${btnClass} disabled:opacity-50 disabled:cursor-not-allowed\`}
-        >
-            {label}
-        </button>
-    );
-}`
-    },
-    json: {
-        name: "JSON Configuration",
-        original: `{
-    "appName": "Craft Tools",
-    "version": "1.0.0",
-    "features": {
-        "darkMode": true,
-        "offlineSupport": false,
-        "analyticsEnabled": true
-    },
-    "maxUploadSizeMb": 10
-}`,
-        modified: `{
-    "appName": "Craft Ultimate Tools",
-    "version": "1.1.0",
-    "features": {
-        "darkMode": true,
-        "offlineSupport": true,
-        "analyticsEnabled": false
-    },
-    "maxUploadSizeMb": 25,
-    "allowedFormats": [
-        ".png",
-        ".jpg",
-        ".pdf",
-        ".txt",
-        ".json"
-    ]
-}`
-    },
-    text: {
-        name: "Plain Text Release Notes",
-        original: `Welcome to Craft v1.0. This release features support for several text conversion tools and a simple character counter. We hope these utilities help speed up your workflow. Let us know if you find any bugs or have any feature suggestions.`,
-        modified: `Welcome to Craft v1.1! This release introduces our brand new Text Difference Viewer with real-time highlights, word-level changes, and Git-style comparison modes. We have also added support for uploading files and syncing textareas. Please share your feedback and bug reports with us.`
-    }
-};
 
 interface DiffEditorProps {
     title: string;
@@ -143,14 +49,14 @@ const BTN_TAB_BASE = "px-3 py-1 rounded-md text-[11px] font-bold cursor-pointer 
 const BTN_ICON_BASE = "p-1 rounded-md text-text-muted disabled:opacity-40 cursor-pointer transition-colors";
 
 const PRESET_OPTIONS = [
-    { key: "code" as const, label: "Component" },
-    { key: "json" as const, label: "JSON Conf" },
-    { key: "text" as const, label: "Prose Text" }
+    {key: "code" as const, label: "Component"},
+    {key: "json" as const, label: "JSON Conf"},
+    {key: "text" as const, label: "Prose Text"}
 ];
 
 const DIFF_MODES = [
-    { key: "split" as const, label: "Split View" },
-    { key: "unified" as const, label: "Unified View" }
+    {key: "split" as const, label: "Split View"},
+    {key: "unified" as const, label: "Unified View"}
 ];
 
 function DiffEditor({
@@ -321,24 +227,26 @@ interface SplitCellProps {
 }
 
 function SplitCell({
-    side,
-    lineData,
-    gutterClass,
-    bgClass,
-    sign,
-    style,
-    isLineWrap,
-    borderRight = false
-}: SplitCellProps) {
+                       side,
+                       lineData,
+                       gutterClass,
+                       bgClass,
+                       sign,
+                       style,
+                       isLineWrap,
+                       borderRight = false
+                   }: SplitCellProps) {
     return (
         <div
             className={`w-[50%] flex shrink-0 ${borderRight ? "border-r border-border/30" : ""} ${bgClass}`}
             style={style}
         >
-            <div className={`w-11 shrink-0 select-none text-right pr-2.5 py-0.5 border-r font-mono text-[10px] leading-6 ${gutterClass}`}>
+            <div
+                className={`w-11 shrink-0 select-none text-right pr-2.5 py-0.5 border-r font-mono text-[10px] leading-6 ${gutterClass}`}>
                 {lineData ? lineData.lineNumber : ""}
             </div>
-            <div className="w-5 shrink-0 select-none text-center py-0.5 font-mono text-[11px] leading-6 text-text-muted/30">
+            <div
+                className="w-5 shrink-0 select-none text-center py-0.5 font-mono text-[11px] leading-6 text-text-muted/30">
                 {sign}
             </div>
             <div className={`flex-1 py-0.5 px-2.5 overflow-x-auto whitespace-pre font-mono text-xs leading-6 ${
@@ -368,23 +276,25 @@ interface UnifiedLineProps {
 }
 
 function UnifiedLine({
-    leftLineNum,
-    rightLineNum,
-    sign,
-    containerClass,
-    leftGutterClass,
-    rightGutterClass,
-    signClass,
-    contentClass,
-    isLineWrap,
-    children
-}: UnifiedLineProps) {
+                         leftLineNum,
+                         rightLineNum,
+                         sign,
+                         containerClass,
+                         leftGutterClass,
+                         rightGutterClass,
+                         signClass,
+                         contentClass,
+                         isLineWrap,
+                         children
+                     }: UnifiedLineProps) {
     return (
         <div className={`flex transition-colors ${containerClass}`}>
-            <div className={`w-11 shrink-0 select-none text-right pr-2.5 py-0.5 border-r font-mono text-[10px] leading-6 ${leftGutterClass}`}>
+            <div
+                className={`w-11 shrink-0 select-none text-right pr-2.5 py-0.5 border-r font-mono text-[10px] leading-6 ${leftGutterClass}`}>
                 {leftLineNum !== undefined ? leftLineNum : ""}
             </div>
-            <div className={`w-11 shrink-0 select-none text-right pr-2.5 py-0.5 border-r font-mono text-[10px] leading-6 ${rightGutterClass}`}>
+            <div
+                className={`w-11 shrink-0 select-none text-right pr-2.5 py-0.5 border-r font-mono text-[10px] leading-6 ${rightGutterClass}`}>
                 {rightLineNum !== undefined ? rightLineNum : ""}
             </div>
             <div className={`w-5 shrink-0 select-none text-center py-0.5 font-mono text-[11px] leading-6 ${signClass}`}>
@@ -882,146 +792,4 @@ export function TextDiffView({tool}: TextDiffViewProps) {
             </div>
         </div>
     );
-}
-
-/**
- * Computes side-by-side aligned line differences between two strings using Myers algorithm from js-diff.
- * Pairs consecutive deleted and added line blocks to highlight precise word changes.
- */
-function computeAlignedDiff(
-    oldText: string,
-    newText: string
-): {
-    rows: AlignedRow[];
-    stats: { additions: number; removals: number; modified: number; unchanged: number };
-} {
-    const changes = diffLines(oldText, newText);
-
-    const rows: AlignedRow[] = [];
-    let leftLineCounter = 1;
-    let rightLineCounter = 1;
-
-    let additions = 0;
-    let removals = 0;
-    let modified = 0;
-    let unchanged = 0;
-
-    for (let i = 0; i < changes.length; i++) {
-        const change = changes[i];
-        const lines = change.value.split(/\r?\n/);
-        // Remove last empty line from splits ending with a newline
-        if (lines.length > 0 && lines[lines.length - 1] === "") {
-            lines.pop();
-        }
-
-        if (!change.added && !change.removed) {
-            // Unchanged block
-            for (const line of lines) {
-                rows.push({
-                    type: "unchanged",
-                    left: {
-                        lineNumber: leftLineCounter++,
-                        content: line,
-                        type: "unchanged"
-                    },
-                    right: {
-                        lineNumber: rightLineCounter++,
-                        content: line,
-                        type: "unchanged"
-                    }
-                });
-                unchanged++;
-            }
-        } else if (change.removed) {
-            // Check if next change represents a sequential additions block. If so, pair as modified line-by-line
-            const nextChange = changes[i + 1];
-            if (nextChange && nextChange.added) {
-                const nextLines = nextChange.value.split(/\r?\n/);
-                if (nextLines.length > 0 && nextLines[nextLines.length - 1] === "") {
-                    nextLines.pop();
-                }
-
-                const maxLinesCount = Math.max(lines.length, nextLines.length);
-                for (let j = 0; j < maxLinesCount; j++) {
-                    if (j < lines.length && j < nextLines.length) {
-                        // Pair deleted & added lines
-                        const origLine = lines[j];
-                        const modLine = nextLines[j];
-                        const wordDiff = diffWords(origLine, modLine);
-
-                        rows.push({
-                            type: "modified",
-                            left: {
-                                lineNumber: leftLineCounter++,
-                                content: origLine,
-                                type: "removed",
-                                words: wordDiff
-                            },
-                            right: {
-                                lineNumber: rightLineCounter++,
-                                content: modLine,
-                                type: "added",
-                                words: wordDiff
-                            }
-                        });
-                        modified++;
-                    } else if (j < lines.length) {
-                        // Extra deleted lines
-                        rows.push({
-                            type: "removed",
-                            left: {
-                                lineNumber: leftLineCounter++,
-                                content: lines[j],
-                                type: "removed"
-                            }
-                        });
-                        removals++;
-                    } else {
-                        // Extra added lines
-                        rows.push({
-                            type: "added",
-                            right: {
-                                lineNumber: rightLineCounter++,
-                                content: nextLines[j],
-                                type: "added"
-                            }
-                        });
-                        additions++;
-                    }
-                }
-                i++; // Skip the next index since it was processed as paired additions
-            } else {
-                // Pure deletions
-                for (const line of lines) {
-                    rows.push({
-                        type: "removed",
-                        left: {
-                            lineNumber: leftLineCounter++,
-                            content: line,
-                            type: "removed"
-                        }
-                    });
-                    removals++;
-                }
-            }
-        } else if (change.added) {
-            // Pure additions
-            for (const line of lines) {
-                rows.push({
-                    type: "added",
-                    right: {
-                        lineNumber: rightLineCounter++,
-                        content: line,
-                        type: "added"
-                    }
-                });
-                additions++;
-            }
-        }
-    }
-
-    return {
-        rows,
-        stats: {additions, removals, modified, unchanged}
-    };
 }
