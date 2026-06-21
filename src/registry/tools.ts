@@ -7,6 +7,7 @@ import {ConvertImageView} from "@/components/tools/convert-image-view";
 import {ResizeImageView} from "@/components/tools/resize-image-view";
 import {CompressImageView} from "@/components/tools/compress-image-view";
 import {IcoGeneratorView} from "@/components/tools/ico-generator-view";
+import {PdfToImagesView} from "@/components/tools/pdf-to-images-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -197,7 +198,7 @@ export const TOOLS: Tool[] = [
         description: "Convert PDF pages into high-quality PNG or JPG images.",
         category: "pdf",
         iconId: "image",
-        component: UnderDevelopmentView
+        component: PdfToImagesView
     },
 
     // Text Tools (3)
