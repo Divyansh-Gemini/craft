@@ -6,6 +6,7 @@ import {TextDiffView} from "@/components/tools/text-diff-view";
 import {ConvertImageView} from "@/components/tools/convert-image-view";
 import {ResizeImageView} from "@/components/tools/resize-image-view";
 import {CompressImageView} from "@/components/tools/compress-image-view";
+import {IcoGeneratorView} from "@/components/tools/ico-generator-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -146,7 +147,7 @@ export const TOOLS: Tool[] = [
         description: "Convert vector SVG files or standard PNG/JPG images into favicon ICO files.",
         category: "image",
         iconId: "image",
-        component: UnderDevelopmentView
+        component: IcoGeneratorView
     },
 
     // PDF Tools (6)
