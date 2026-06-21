@@ -3,6 +3,7 @@ import {UnderDevelopmentView} from "@/components/sections/under-development-view
 import {TextCounterView} from "@/components/tools/text-counter-view";
 import {JsonFormatterView} from "@/components/tools/json-formatter-view";
 import {TextDiffView} from "@/components/tools/text-diff-view";
+import {ConvertImageView} from "@/components/tools/convert-image-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -135,7 +136,7 @@ export const TOOLS: Tool[] = [
         description: "Convert between PNG, JPG, WebP, AVIF, and other formats.",
         category: "image",
         iconId: "arrow-swap",
-        component: UnderDevelopmentView
+        component: ConvertImageView
     },
     {
         slug: "generate-ico",
