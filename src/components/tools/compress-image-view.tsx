@@ -824,7 +824,7 @@ export function CompressImageView({tool}: CompressImageViewProps) {
                                 </div>
 
                                 {/* Files Grid List */}
-                                <div className="space-y-3 max-h-125 overflow-y-auto pr-1">
+                                <div className="space-y-3 max-h-125 overflow-y-auto pr-2 custom-scrollbar">
                                     {files.map((item) => (
                                         <FileListItem
                                             key={item.id}

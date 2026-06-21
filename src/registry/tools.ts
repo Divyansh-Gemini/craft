@@ -8,6 +8,7 @@ import {ResizeImageView} from "@/components/tools/resize-image-view";
 import {CompressImageView} from "@/components/tools/compress-image-view";
 import {IcoGeneratorView} from "@/components/tools/ico-generator-view";
 import {PdfToImagesView} from "@/components/tools/pdf-to-images-view";
+import {MergePdfView} from "@/components/tools/merge-pdf-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -158,7 +159,7 @@ export const TOOLS: Tool[] = [
         description: "Join multiple PDF files into a single document.",
         category: "pdf",
         iconId: "document-add",
-        component: UnderDevelopmentView
+        component: MergePdfView
     },
     {
         slug: "extract-pdf",

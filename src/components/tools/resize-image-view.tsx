@@ -663,7 +663,7 @@ export function ResizeImageView({tool}: ResizeImageViewProps) {
                                 </div>
 
                                 {/* Files Grid/List */}
-                                <div className="space-y-3 max-h-115 overflow-y-auto pr-1">
+                                <div className="space-y-3 max-h-115 overflow-y-auto pr-2 custom-scrollbar">
                                     {files.map((item) => (
                                         <div
                                             key={item.id}
