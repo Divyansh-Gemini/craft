@@ -2,6 +2,7 @@ import {Tool} from "@/types/tool";
 import {UnderDevelopmentView} from "@/components/sections/under-development-view";
 import {TextCounterView} from "@/components/tools/text-counter-view";
 import {JsonFormatterView} from "@/components/tools/json-formatter-view";
+import {TextDiffView} from "@/components/tools/text-diff-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -218,6 +219,6 @@ export const TOOLS: Tool[] = [
         description: "Compare two text blocks and highlight additions, deletions, and changes.",
         category: "text",
         iconId: "item-compare",
-        component: UnderDevelopmentView
+        component: TextDiffView
     }
 ];
