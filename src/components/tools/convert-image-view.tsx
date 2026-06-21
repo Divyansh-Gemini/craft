@@ -123,6 +123,7 @@ export function ConvertImageView({tool}: ConvertImageViewProps) {
     const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             handleFiles(e.target.files);
+            e.target.value = "";
         }
     };
 

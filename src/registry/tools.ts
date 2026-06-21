@@ -4,6 +4,7 @@ import {TextCounterView} from "@/components/tools/text-counter-view";
 import {JsonFormatterView} from "@/components/tools/json-formatter-view";
 import {TextDiffView} from "@/components/tools/text-diff-view";
 import {ConvertImageView} from "@/components/tools/convert-image-view";
+import {ResizeImageView} from "@/components/tools/resize-image-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -120,7 +121,7 @@ export const TOOLS: Tool[] = [
         description: "Scale and adjust image width and height dimensions.",
         category: "image",
         iconId: "resize-image",
-        component: UnderDevelopmentView
+        component: ResizeImageView
     },
     {
         slug: "compress-image",
