@@ -34,11 +34,11 @@ const TABS_CONFIG = [
 ] as const;
 
 export function ToolsBrowserSection({
-    searchQuery,
-    setSearchQuery,
-    activeTab,
-    setActiveTab
-}: ToolsBrowserSectionProps) {
+                                        searchQuery,
+                                        setSearchQuery,
+                                        activeTab,
+                                        setActiveTab
+                                    }: ToolsBrowserSectionProps) {
     const [pillStyle, setPillStyle] = useState({left: 0, width: 0});
     const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
     const router = useRouter();
@@ -60,6 +60,18 @@ export function ToolsBrowserSection({
         return () => window.removeEventListener("resize", updatePill);
     }, [activeTab]);
 
+    const handleTabClick = (tabId: TabCategory) => {
+        setActiveTab(tabId);
+        const element = document.getElementById("tools");
+        if (element) {
+            const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+            const offsetPosition = elementPosition - 50; // 50px offset to prevent sticky header clipping
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    };
 
     // Compute search and tab matching state values
     const filteredTools = TOOLS.filter((tool) => {
@@ -116,7 +128,7 @@ export function ToolsBrowserSection({
                                 aria-selected={isActive}
                                 aria-controls="tools-grid"
                                 tabIndex={isActive ? 0 : -1}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => handleTabClick(tab.id)}
                                 className={`
                                     relative flex-1 px-4 py-2.5 text-sm font-bold rounded-lg cursor-pointer transition-colors duration-200 flex items-center justify-center gap-2 shrink-0 z-10 whitespace-nowrap
                                     focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none select-none
