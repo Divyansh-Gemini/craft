@@ -10,6 +10,7 @@ import {IcoGeneratorView} from "@/components/tools/ico-generator-view";
 import {PdfToImagesView} from "@/components/tools/pdf-to-images-view";
 import {MergePdfView} from "@/components/tools/merge-pdf-view";
 import {RemovePdfView} from "@/components/tools/remove-pdf-view";
+import {ExtractPdfView} from "@/components/tools/extract-pdf-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -168,7 +169,7 @@ export const TOOLS: Tool[] = [
         description: "Extract specific pages or page ranges from a PDF file.",
         category: "pdf",
         iconId: "document-text-extract",
-        component: UnderDevelopmentView
+        component: ExtractPdfView
     },
     {
         slug: "remove-pdf",
