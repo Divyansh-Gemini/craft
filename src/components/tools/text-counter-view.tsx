@@ -4,11 +4,11 @@ import React, {useState, useRef, useMemo, useCallback} from "react";
 import {
     Copy20Regular,
     Dismiss20Regular,
-    TextWordCount20Regular,
     Clock20Regular,
     Speaker220Regular
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
+import {ToolHeader} from "@/components/ui/tool-header";
 import {calculateTextStats, transformTextContent} from "@/features/text/text-counter";
 
 interface TextCounterViewProps {
@@ -61,56 +61,37 @@ export function TextCounterView({tool}: TextCounterViewProps) {
 
     return (
         <>
-            {/* Tool Title Block */}
-            <div
-                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2.5">
-                            <span
-                                className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
-                                <TextWordCount20Regular className="w-4 h-4"/>
-                            </span>
-                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                            {tool.title}
-                        </h1>
-                    </div>
-                    <p className="text-xs sm:text-sm text-text-muted">
-                        {tool.description}
-                    </p>
-                </div>
-
-                {/* Toolbar Actions */}
-                <div className="flex items-center gap-2 flex-wrap">
-                    <button
-                        onClick={() => transformText("upper")}
-                        disabled={!text}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
-                    >
-                        UPPERCASE
-                    </button>
-                    <button
-                        onClick={() => transformText("lower")}
-                        disabled={!text}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
-                    >
-                        lowercase
-                    </button>
-                    <button
-                        onClick={() => transformText("title")}
-                        disabled={!text}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
-                    >
-                        Title Case
-                    </button>
-                    <button
-                        onClick={() => transformText("sentence")}
-                        disabled={!text}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
-                    >
-                        Sentence Case
-                    </button>
-                </div>
-            </div>
+            {/* Toolbar Actions */}
+            <ToolHeader title={tool.title} description={tool.description} iconId={tool.iconId}>
+                <button
+                    onClick={() => transformText("upper")}
+                    disabled={!text}
+                    className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
+                >
+                    UPPERCASE
+                </button>
+                <button
+                    onClick={() => transformText("lower")}
+                    disabled={!text}
+                    className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
+                >
+                    lowercase
+                </button>
+                <button
+                    onClick={() => transformText("title")}
+                    disabled={!text}
+                    className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
+                >
+                    Title Case
+                </button>
+                <button
+                    onClick={() => transformText("sentence")}
+                    disabled={!text}
+                    className="px-3 py-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-secondary hover:border-primary hover:text-primary disabled:opacity-50 disabled:hover:border-border disabled:hover:text-text-secondary cursor-pointer transition-colors"
+                >
+                    Sentence Case
+                </button>
+            </ToolHeader>
 
             {/* Primary Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -11,6 +11,7 @@ import {
     ChevronDown20Regular,
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
+import {ToolHeader} from "@/components/ui/tool-header";
 
 import {
     JSONLine,
@@ -314,39 +315,20 @@ export function JsonFormatterView({tool}: JsonFormatterViewProps) {
     return (
         <>
             {/* Header Information */}
-            <div
-                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-5 gap-4">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2.5">
-                            <span
-                                className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
-                                <Code20Regular className="w-4 h-4"/>
-                            </span>
-                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                            {tool.title}
-                        </h1>
-                    </div>
-                    <p className="text-xs sm:text-sm text-text-muted">
-                        {tool.description}
-                    </p>
-                </div>
-
-                {/* Example & Clear buttons */}
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={handleLoadSample}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-xs font-bold text-text-secondary hover:border-primary hover:text-primary transition-all duration-200 cursor-pointer"
-                    >
-                        Load Example
-                    </button>
-                    <button
-                        onClick={handleClear}
-                        className="px-3 py-1.5 rounded-lg border border-border bg-surface text-xs font-bold text-text-secondary hover:border-danger hover:text-danger transition-all duration-200 cursor-pointer"
-                    >
-                        Clear
-                    </button>
-                </div>
-            </div>
+            <ToolHeader title={tool.title} description={tool.description} iconId={tool.iconId}>
+                <button
+                    onClick={handleLoadSample}
+                    className="px-3 py-1.5 rounded-lg border border-border bg-surface text-xs font-bold text-text-secondary hover:border-primary hover:text-primary transition-all duration-200 cursor-pointer"
+                >
+                    Load Example
+                </button>
+                <button
+                    onClick={handleClear}
+                    className="px-3 py-1.5 rounded-lg border border-border bg-surface text-xs font-bold text-text-secondary hover:border-danger hover:text-danger transition-all duration-200 cursor-pointer"
+                >
+                    Clear
+                </button>
+            </ToolHeader>
 
             {/* Configuration Toolbar */}
             <div

@@ -10,6 +10,7 @@ import {
     DocumentArrowUp20Regular
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
+import {ToolHeader} from "@/components/ui/tool-header";
 import {
     DiffLineData,
     SAMPLES,
@@ -421,39 +422,20 @@ export function TextDiffView({tool}: TextDiffViewProps) {
     return (
         <>
             {/* Header Title Block */}
-            <div
-                className="flex flex-col md:flex-row md:items-center justify-between border-b border-border pb-6 gap-4">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-2.5">
-                            <span
-                                className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
-                                <ItemCompare20Regular className="w-4 h-4"/>
-                            </span>
-                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                            {tool.title}
-                        </h1>
-                    </div>
-                    <p className="text-xs sm:text-sm text-text-muted">
-                        {tool.description}
-                    </p>
-                </div>
-
-                {/* Quick Presets Dropdown */}
-                <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">
-                            Try Samples:
-                        </span>
-                    {PRESET_OPTIONS.map((preset) => (
-                        <button
-                            key={preset.key}
-                            onClick={() => handleLoadSample(preset.key)}
-                            className={BTN_PRESET}
-                        >
-                            {preset.label}
-                        </button>
-                    ))}
-                </div>
-            </div>
+            <ToolHeader title={tool.title} description={tool.description} iconId={tool.iconId}>
+                <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">
+                    Try Samples:
+                </span>
+                {PRESET_OPTIONS.map((preset) => (
+                    <button
+                        key={preset.key}
+                        onClick={() => handleLoadSample(preset.key)}
+                        className={BTN_PRESET}
+                    >
+                        {preset.label}
+                    </button>
+                ))}
+            </ToolHeader>
 
             {/* Global Toolbar Bar */}
             <div
