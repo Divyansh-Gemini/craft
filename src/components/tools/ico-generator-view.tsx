@@ -641,24 +641,8 @@ export function IcoGeneratorView({tool}: IcoGeneratorViewProps) {
     const sizeOptions = [16, 32, 48, 64, 128, 256];
 
     return (
-        <div className="w-full flex-1 bg-background relative overflow-hidden">
-            {/* Ambient Background Glow */}
-            <div
-                className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 rounded-full blur-[120px] opacity-10 dark:opacity-15 bg-radial from-primary/50 to-transparent pointer-events-none"
-            />
-
+        <div className="w-full flex-1 relative overflow-hidden">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
-                {/* Back link */}
-                <button
-                    onClick={() => router.push("/")}
-                    className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
-                >
-                    <ArrowLeft20Regular
-                        className="w-4 h-4 transform transition-transform duration-300 group-hover:-translate-x-0.5"
-                    />
-                    Back to All Tools
-                </button>
-
                 {/* Header */}
                 <div
                     className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4"

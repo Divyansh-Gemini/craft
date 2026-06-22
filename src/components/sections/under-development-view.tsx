@@ -68,22 +68,8 @@ export function UnderDevelopmentView({tool}: UnderDevelopmentViewProps) {
         .slice(0, 3);
 
     return (
-        <div className="w-full flex-1 bg-background relative overflow-hidden">
-            {/* Ambient Background Glow (Dynamic Gradient) */}
-            <div
-                className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 rounded-full blur-[120px] opacity-10 dark:opacity-15 bg-radial from-primary/50 to-transparent pointer-events-none"/>
-
+        <div className="w-full flex-1 relative overflow-hidden">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative z-10 space-y-12">
-                {/* Back Button */}
-                <button
-                    onClick={() => router.push("/")}
-                    className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
-                >
-                    <ArrowLeft20Regular
-                        className="w-4 h-4 transform transition-transform duration-300 group-hover:-translate-x-0.5"/>
-                    Back to All Tools
-                </button>
-
                 {/* Glassmorphism Hero Panel */}
                 <div
                     className="relative border border-border bg-surface/40 backdrop-blur-xl rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
