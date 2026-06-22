@@ -12,6 +12,7 @@ import {MergePdfView} from "@/components/tools/merge-pdf-view";
 import {RemovePdfView} from "@/components/tools/remove-pdf-view";
 import {ExtractPdfView} from "@/components/tools/extract-pdf-view";
 import {ReorderPdfView} from "@/components/tools/reorder-pdf-view";
+import {ImagesToPdfView} from "@/components/tools/images-to-pdf-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -194,7 +195,7 @@ export const TOOLS: Tool[] = [
         description: "Convert one or more images into a single PDF document.",
         category: "pdf",
         iconId: "document",
-        component: UnderDevelopmentView
+        component: ImagesToPdfView
     },
     {
         slug: "pdf-to-images",
