@@ -9,6 +9,7 @@ import {CompressImageView} from "@/components/tools/compress-image-view";
 import {IcoGeneratorView} from "@/components/tools/ico-generator-view";
 import {PdfToImagesView} from "@/components/tools/pdf-to-images-view";
 import {MergePdfView} from "@/components/tools/merge-pdf-view";
+import {RemovePdfView} from "@/components/tools/remove-pdf-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -175,7 +176,7 @@ export const TOOLS: Tool[] = [
         description: "Delete unwanted pages from a PDF document.",
         category: "pdf",
         iconId: "document-dismiss",
-        component: UnderDevelopmentView
+        component: RemovePdfView
     },
     {
         slug: "reorder-pdf",
