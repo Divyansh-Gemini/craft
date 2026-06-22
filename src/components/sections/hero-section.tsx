@@ -2,6 +2,7 @@
 
 import React from "react";
 import {TabCategory} from "./tools-browser-section";
+import {Dismiss20Regular} from "@fluentui/react-icons";
 
 interface HeroSectionProps {
     searchQuery: string;
@@ -145,12 +146,26 @@ export function HeroSection({searchQuery, setSearchQuery, searchInputRef, setAct
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search tools... (Press '/' to focus)"
-                            className="w-full bg-surface border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 rounded-2xl py-3.5 pl-11 pr-14 text-xs shadow-sm transition-all duration-200 text-text-primary placeholder:text-text-muted outline-none"
+                            className="w-full bg-surface border border-border focus:border-primary focus:ring-1 focus:ring-primary/30 rounded-2xl py-3.5 pl-11 pr-10 sm:pr-16 text-xs shadow-sm transition-all duration-200 text-text-primary placeholder:text-text-muted outline-none"
                         />
-                        <div
-                            className="absolute inset-y-0 right-0 pr-4 hidden sm:flex items-center pointer-events-none select-none font-mono text-[10px] text-text-muted font-bold">
-                            <kbd
-                                className="px-1.5 py-0.5 rounded border border-border bg-surface-secondary shadow-xs">/</kbd>
+                        <div className="absolute inset-y-0 right-0 pr-4 flex items-center gap-2">
+                            {searchQuery && (
+                                <button
+                                    onClick={() => {
+                                        setSearchQuery("");
+                                        searchInputRef.current?.focus();
+                                    }}
+                                    className="flex items-center text-text-muted hover:text-text-secondary transition-colors duration-200 cursor-pointer"
+                                    aria-label="Clear search"
+                                >
+                                    <Dismiss20Regular className="w-4 h-4"/>
+                                </button>
+                            )}
+                            <div
+                                className="hidden sm:flex items-center pointer-events-none select-none font-mono text-[10px] text-text-muted font-bold">
+                                <kbd
+                                    className="px-1.5 py-0.5 rounded border border-border bg-surface-secondary shadow-xs">/</kbd>
+                            </div>
                         </div>
                     </div>
                 </div>
