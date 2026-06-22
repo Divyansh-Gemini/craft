@@ -207,7 +207,7 @@ export function ToolsBrowserSection({
                             name={tool.title}
                             desc={tool.description}
                             icon={<ToolIcon iconId={tool.iconId}/>}
-                            onClick={() => router.push(`/tools/${tool.slug}`)}
+                            href={`/tools/${tool.slug}`}
                         />
                     ))}
                 </div>

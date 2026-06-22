@@ -1,18 +1,18 @@
 import React from "react";
+import Link from "next/link";
 
 interface ToolCardProps {
     name: string;
     desc: string;
     icon: React.ReactNode;
+    href: string;
     onClick?: () => void;
 }
 
-export function ToolCard({name, desc, icon, onClick}: ToolCardProps) {
+export function ToolCard({name, desc, icon, href}: ToolCardProps) {
     return (
-        <div
-            onClick={onClick}
-            className="group relative flex flex-col justify-between p-5 bg-surface border border-border hover:border-border-hover hover:shadow-md hover:-translate-y-0.5 rounded-2xl transition-all duration-300 cursor-pointer"
-        >
+        <Link href={href}
+              className="group relative flex-col justify-between p-5 bg-surface border border-border hover:border-border-hover hover:shadow-md hover:-translate-y-0.5 rounded-2xl transition-all duration-300 cursor-pointer text-inherit no-underline">
             <div className="space-y-4">
                 {/* Tool Icon Box */}
                 <div
@@ -44,6 +44,6 @@ export function ToolCard({name, desc, icon, onClick}: ToolCardProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
                 </svg>
             </div>
-        </div>
+        </Link>
     );
 }
