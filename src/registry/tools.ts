@@ -11,6 +11,7 @@ import {PdfToImagesView} from "@/components/tools/pdf-to-images-view";
 import {MergePdfView} from "@/components/tools/merge-pdf-view";
 import {RemovePdfView} from "@/components/tools/remove-pdf-view";
 import {ExtractPdfView} from "@/components/tools/extract-pdf-view";
+import {ReorderPdfView} from "@/components/tools/reorder-pdf-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -185,7 +186,7 @@ export const TOOLS: Tool[] = [
         description: "Rearrange the page sequence inside a PDF file.",
         category: "pdf",
         iconId: "reorder",
-        component: UnderDevelopmentView
+        component: ReorderPdfView
     },
     {
         slug: "images-to-pdf",
