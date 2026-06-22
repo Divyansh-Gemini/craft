@@ -501,345 +501,343 @@ export function ImagesToPdfView({tool}: ImagesToPdfViewProps) {
     };
 
     return (
-        <div className="w-full flex-1 relative overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
-                {/* Header Section */}
-                <div
-                    className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2.5">
+        <>
+            {/* Header Section */}
+            <div
+                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
                             <span
                                 className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
                                 <Image20Regular className="w-4 h-4"/>
                             </span>
-                            <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                                {tool.title}
-                            </h1>
-                        </div>
-                        <p className="text-xs sm:text-sm text-text-muted">
-                            {tool.description}
-                        </p>
+                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
+                            {tool.title}
+                        </h1>
                     </div>
+                    <p className="text-xs sm:text-sm text-text-muted">
+                        {tool.description}
+                    </p>
                 </div>
+            </div>
 
-                {/* Notifications */}
-                {errorMsg && (
+            {/* Notifications */}
+            {errorMsg && (
+                <div
+                    className="flex items-start gap-3 p-4 border border-danger/20 bg-danger-bg/40 text-danger rounded-2xl text-xs font-bold animate-fadeIn">
+                    <ErrorCircle20Regular className="w-5 h-5 shrink-0"/>
+                    <div>{errorMsg}</div>
+                </div>
+            )}
+
+            <div className="space-y-6">
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={onFileSelect}
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                />
+
+                {/* Drag and Drop Zone when empty */}
+                {files.length === 0 && (
                     <div
-                        className="flex items-start gap-3 p-4 border border-danger/20 bg-danger-bg/40 text-danger rounded-2xl text-xs font-bold animate-fadeIn">
-                        <ErrorCircle20Regular className="w-5 h-5 shrink-0"/>
-                        <div>{errorMsg}</div>
+                        onDragOver={onDragOverUpload}
+                        onDragLeave={onDragLeaveUpload}
+                        onDrop={onDropUpload}
+                        onClick={triggerFileInput}
+                        className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
+                            isDragging
+                                ? "border-primary bg-primary/5 shadow-inner"
+                                : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
+                        }`}
+                    >
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <div
+                                className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
+                                <Image20Regular className="w-8 h-8"/>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-sm font-extrabold text-text-primary">
+                                    Drag & drop images here, or <span className="text-primary">browse</span>
+                                </p>
+                                <p className="text-[10px] text-text-muted max-w-md mx-auto leading-relaxed">
+                                    Convert PNG, JPG, WebP, SVG, or GIF files client-side into a single high-quality
+                                    PDF document.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 )}
 
-                <div className="space-y-6">
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={onFileSelect}
-                        multiple
-                        accept="image/*"
-                        className="hidden"
-                    />
+                {/* Workspace Split Layout */}
+                {files.length > 0 && (
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                    {/* Drag and Drop Zone when empty */}
-                    {files.length === 0 && (
-                        <div
-                            onDragOver={onDragOverUpload}
-                            onDragLeave={onDragLeaveUpload}
-                            onDrop={onDropUpload}
-                            onClick={triggerFileInput}
-                            className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
-                                isDragging
-                                    ? "border-primary bg-primary/5 shadow-inner"
-                                    : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-                            }`}
-                        >
-                            <div className="flex flex-col items-center justify-center space-y-4">
+                        {/* Left Side: Images Grid Reorder Section */}
+                        <div className="lg:col-span-8 space-y-4">
+                            <div
+                                onDragOver={onDragOverQueue}
+                                onDragLeave={onDragLeaveQueue}
+                                onDrop={onDropQueue}
+                                className={`border bg-surface/50 backdrop-blur-md rounded-2xl p-5 space-y-4 transition-all duration-300 ${
+                                    isDraggingQueue
+                                        ? "border-primary ring-2 ring-primary/20 shadow-md shadow-primary/5 bg-primary/5 scale-[1.002]"
+                                        : "border-border"
+                                }`}
+                            >
+                                {/* Action Bar Header */}
                                 <div
-                                    className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
-                                    <Image20Regular className="w-8 h-8"/>
+                                    className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-3 gap-3">
+                                    <div
+                                        className="flex items-center gap-2 text-xs font-black text-text-primary uppercase tracking-wider">
+                                        <Grid20Regular className="w-4 h-4 text-primary"/>
+                                        <span>Images Queue ({files.length})</span>
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={triggerFileInput}
+                                            disabled={isProcessing}
+                                            className="w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-muted hover:border-primary hover:text-primary disabled:opacity-50 transition-all duration-200 cursor-pointer shrink-0"
+                                            title="Add More Images"
+                                        >
+                                            <Add20Regular className="w-3.5 h-3.5"/>
+                                            <span className="hidden sm:inline">Add Images</span>
+                                        </button>
+                                        <button
+                                            onClick={clearAll}
+                                            disabled={isProcessing}
+                                            className="w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-muted hover:border-danger hover:text-danger disabled:opacity-50 transition-all duration-200 cursor-pointer shrink-0"
+                                            title="Clear Queue"
+                                        >
+                                            <Delete20Regular className="w-3.5 h-3.5"/>
+                                            <span className="hidden sm:inline">Clear Queue</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-extrabold text-text-primary">
-                                        Drag & drop images here, or <span className="text-primary">browse</span>
-                                    </p>
-                                    <p className="text-[10px] text-text-muted max-w-md mx-auto leading-relaxed">
-                                        Convert PNG, JPG, WebP, SVG, or GIF files client-side into a single high-quality
-                                        PDF document.
-                                    </p>
+
+                                {/* Instructions tooltip */}
+                                <p className="text-[10px] text-text-muted leading-relaxed font-bold bg-surface-secondary/40 border border-border/60 p-2.5 rounded-xl">
+                                    💡 Reorder items using drag-and-drop, or use the card overlay controls to move
+                                    left/right or type a target position number. Pages compile sequentially.
+                                </p>
+
+                                {/* Reordering Grid */}
+                                <div
+                                    ref={containerRef}
+                                    onDragOver={(e) => {
+                                        e.preventDefault();
+                                        handleDragScroll(e.clientY);
+                                    }}
+                                    className="max-h-140 overflow-y-auto pr-1.5 custom-scrollbar"
+                                >
+                                    <div className="grid grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 select-none">
+                                        {files.map((item, idx) => (
+                                            <ImageGridCard
+                                                key={item.id}
+                                                item={item}
+                                                index={idx}
+                                                totalCount={files.length}
+                                                isDragged={draggedIndex === idx}
+                                                isDragOver={dragOverIndex === idx}
+                                                onMove={moveImage}
+                                                onMoveTo={moveImageToPosition}
+                                                onRemove={removeImage}
+                                                onDragStart={handleDragStart}
+                                                onDragOver={handleDragOver}
+                                                onDragEnd={handleDragEnd}
+                                                onDrop={handleDrop}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    )}
 
-                    {/* Workspace Split Layout */}
-                    {files.length > 0 && (
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-                            {/* Left Side: Images Grid Reorder Section */}
-                            <div className="lg:col-span-8 space-y-4">
-                                <div
-                                    onDragOver={onDragOverQueue}
-                                    onDragLeave={onDragLeaveQueue}
-                                    onDrop={onDropQueue}
-                                    className={`border bg-surface/50 backdrop-blur-md rounded-2xl p-5 space-y-4 transition-all duration-300 ${
-                                        isDraggingQueue
-                                            ? "border-primary ring-2 ring-primary/20 shadow-md shadow-primary/5 bg-primary/5 scale-[1.002]"
-                                            : "border-border"
-                                    }`}
-                                >
-                                    {/* Action Bar Header */}
-                                    <div
-                                        className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-3 gap-3">
-                                        <div
-                                            className="flex items-center gap-2 text-xs font-black text-text-primary uppercase tracking-wider">
-                                            <Grid20Regular className="w-4 h-4 text-primary"/>
-                                            <span>Images Queue ({files.length})</span>
-                                        </div>
-
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={triggerFileInput}
-                                                disabled={isProcessing}
-                                                className="w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-muted hover:border-primary hover:text-primary disabled:opacity-50 transition-all duration-200 cursor-pointer shrink-0"
-                                                title="Add More Images"
-                                            >
-                                                <Add20Regular className="w-3.5 h-3.5"/>
-                                                <span className="hidden sm:inline">Add Images</span>
-                                            </button>
-                                            <button
-                                                onClick={clearAll}
-                                                disabled={isProcessing}
-                                                className="w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-surface text-[10px] font-bold text-text-muted hover:border-danger hover:text-danger disabled:opacity-50 transition-all duration-200 cursor-pointer shrink-0"
-                                                title="Clear Queue"
-                                            >
-                                                <Delete20Regular className="w-3.5 h-3.5"/>
-                                                <span className="hidden sm:inline">Clear Queue</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Instructions tooltip */}
-                                    <p className="text-[10px] text-text-muted leading-relaxed font-bold bg-surface-secondary/40 border border-border/60 p-2.5 rounded-xl">
-                                        💡 Reorder items using drag-and-drop, or use the card overlay controls to move
-                                        left/right or type a target position number. Pages compile sequentially.
-                                    </p>
-
-                                    {/* Reordering Grid */}
-                                    <div
-                                        ref={containerRef}
-                                        onDragOver={(e) => {
-                                            e.preventDefault();
-                                            handleDragScroll(e.clientY);
-                                        }}
-                                        className="max-h-140 overflow-y-auto pr-1.5 custom-scrollbar"
-                                    >
-                                        <div className="grid grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 select-none">
-                                            {files.map((item, idx) => (
-                                                <ImageGridCard
-                                                    key={item.id}
-                                                    item={item}
-                                                    index={idx}
-                                                    totalCount={files.length}
-                                                    isDragged={draggedIndex === idx}
-                                                    isDragOver={dragOverIndex === idx}
-                                                    onMove={moveImage}
-                                                    onMoveTo={moveImageToPosition}
-                                                    onRemove={removeImage}
-                                                    onDragStart={handleDragStart}
-                                                    onDragOver={handleDragOver}
-                                                    onDragEnd={handleDragEnd}
-                                                    onDrop={handleDrop}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
+                        {/* Right Side: Configuration & Build Panel */}
+                        <div className="lg:col-span-4 space-y-6">
+                            <div
+                                className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-6">
+                                <div className="flex items-center gap-2 border-b border-border pb-3">
+                                    <Settings20Regular className="w-4 h-4 text-primary"/>
+                                    <h2 className="text-xs font-black text-text-primary uppercase tracking-wider">
+                                        PDF Page Layout Settings
+                                    </h2>
                                 </div>
-                            </div>
 
-                            {/* Right Side: Configuration & Build Panel */}
-                            <div className="lg:col-span-4 space-y-6">
-                                <div
-                                    className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-6">
-                                    <div className="flex items-center gap-2 border-b border-border pb-3">
-                                        <Settings20Regular className="w-4 h-4 text-primary"/>
-                                        <h2 className="text-xs font-black text-text-primary uppercase tracking-wider">
-                                            PDF Page Layout Settings
-                                        </h2>
-                                    </div>
-
-                                    {/* Filename Option */}
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-text-secondary">
-                                            Output Filename
-                                        </label>
-                                        <div className="relative">
-                                            <input
-                                                type="text"
-                                                value={outputName}
-                                                onChange={(e) => setOutputName(e.target.value)}
-                                                placeholder="e.g. report"
-                                                disabled={isProcessing}
-                                                className="w-full text-xs font-bold px-3.5 py-3 border border-border bg-surface rounded-xl focus:border-primary focus:ring-1 focus:ring-primary/20 outline-hidden transition-all duration-200 placeholder:text-text-muted/60 disabled:opacity-50"
-                                            />
-                                            <span
-                                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-text-muted select-none font-mono">
+                                {/* Filename Option */}
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-text-secondary">
+                                        Output Filename
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            value={outputName}
+                                            onChange={(e) => setOutputName(e.target.value)}
+                                            placeholder="e.g. report"
+                                            disabled={isProcessing}
+                                            className="w-full text-xs font-bold px-3.5 py-3 border border-border bg-surface rounded-xl focus:border-primary focus:ring-1 focus:ring-primary/20 outline-hidden transition-all duration-200 placeholder:text-text-muted/60 disabled:opacity-50"
+                                        />
+                                        <span
+                                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-text-muted select-none font-mono">
                                                 .pdf
                                             </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Page Size Option */}
-                                    <div className="space-y-2 border-t border-border pt-4">
-                                        <label className="text-xs font-bold text-text-secondary">
-                                            Page Size
-                                        </label>
-                                        <RadioSelector
-                                            options={[
-                                                {value: "original", label: "Original Size"},
-                                                {value: "a4", label: "A4 Size"},
-                                                {value: "letter", label: "US Letter"}
-                                            ]}
-                                            selectedValue={pageSize}
-                                            onChange={(val) => {
-                                                setPageSize(val);
-                                                // Reset standardize width if switching away from original size
-                                                if (val !== "original") {
-                                                    setStandardizeWidth("disable");
-                                                }
-                                            }}
-                                            disabled={isProcessing}
-                                            className="grid-cols-3"
-                                        />
-                                    </div>
-
-                                    {/* Orientation Option (Only for A4/Letter size) */}
-                                    {pageSize !== "original" && (
-                                        <div className="space-y-2 border-t border-border pt-4 animate-fadeIn">
-                                            <label className="text-xs font-bold text-text-secondary">
-                                                Page Orientation
-                                            </label>
-                                            <RadioSelector
-                                                options={[
-                                                    {value: "auto", label: "Auto Orientation"},
-                                                    {value: "portrait", label: "Portrait"},
-                                                    {value: "landscape", label: "Landscape"}
-                                                ]}
-                                                selectedValue={orientation}
-                                                onChange={setOrientation}
-                                                disabled={isProcessing}
-                                                className="grid-cols-3"
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* Standardize widths option (Only for original page size) */}
-                                    {pageSize === "original" && (
-                                        <div className="space-y-2 border-t border-border pt-4 animate-fadeIn">
-                                            <label className="text-xs font-bold text-text-secondary">
-                                                Standardize Widths
-                                            </label>
-                                            <RadioSelector
-                                                options={[
-                                                    {value: "disable", label: "Original widths"},
-                                                    {value: "smallest", label: "Standardize (Smallest)"},
-                                                    {value: "largest", label: "Standardize (Largest)"}
-                                                ]}
-                                                selectedValue={standardizeWidth}
-                                                onChange={setStandardizeWidth}
-                                                disabled={isProcessing}
-                                                className="grid-cols-3"
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* Page Margins Option */}
-                                    <div className="space-y-2 border-t border-border pt-4">
-                                        <label className="text-xs font-bold text-text-secondary">
-                                            Page Margins
-                                        </label>
-                                        <RadioSelector
-                                            options={[
-                                                {value: "none", label: "No Margins"},
-                                                {value: "small", label: "Narrow (20pt)"},
-                                                {value: "medium", label: "Moderate (40pt)"}
-                                            ]}
-                                            selectedValue={margin}
-                                            onChange={setMargin}
-                                            disabled={isProcessing}
-                                            className="grid-cols-3"
-                                        />
-                                    </div>
-
-                                    {/* Stats Card Summary */}
-                                    <div
-                                        className="bg-surface-secondary/40 border border-border p-4 rounded-xl space-y-2 text-xs font-bold text-text-secondary">
-                                        <div className="flex justify-between">
-                                            <span>Total Images:</span>
-                                            <span className="text-text-primary font-extrabold">{files.length}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span>Est. Combined File Size:</span>
-                                            <span
-                                                className="text-text-primary font-extrabold font-mono">{formatBytes(totalFilesSize)}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Compile PDF Button */}
-                                    <div className="pt-2">
-                                        {isProcessing ? (
-                                            <button
-                                                disabled
-                                                className="w-full py-3.5 px-4 bg-primary/10 text-primary border border-primary/20 rounded-xl text-xs font-black flex items-center justify-center gap-2"
-                                            >
-                                                <div
-                                                    className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
-                                                <span>Compiling PDF ({progress}%)</span>
-                                            </button>
-                                        ) : (
-                                            <button
-                                                onClick={startConversion}
-                                                disabled={files.length === 0}
-                                                className="w-full py-3.5 px-4 bg-success text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 hover:bg-success/90 disabled:opacity-50 transition-all duration-200 cursor-pointer shadow-md shadow-success/15 hover:scale-[1.01] active:scale-[0.99]"
-                                            >
-                                                <ArrowDownload20Regular className="w-4 h-4"/>
-                                                <span>Compile & Download PDF</span>
-                                            </button>
-                                        )}
                                     </div>
                                 </div>
 
-                                {/* Active Process Log details */}
-                                {isProcessing && (
-                                    <div
-                                        className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-4 animate-fadeIn">
-                                        <div
-                                            className="flex justify-between items-center text-xs font-black text-text-primary">
-                                            <span>Processing Stage</span>
-                                            <span className="font-mono text-primary">{progress}%</span>
-                                        </div>
+                                {/* Page Size Option */}
+                                <div className="space-y-2 border-t border-border pt-4">
+                                    <label className="text-xs font-bold text-text-secondary">
+                                        Page Size
+                                    </label>
+                                    <RadioSelector
+                                        options={[
+                                            {value: "original", label: "Original Size"},
+                                            {value: "a4", label: "A4 Size"},
+                                            {value: "letter", label: "US Letter"}
+                                        ]}
+                                        selectedValue={pageSize}
+                                        onChange={(val) => {
+                                            setPageSize(val);
+                                            // Reset standardize width if switching away from original size
+                                            if (val !== "original") {
+                                                setStandardizeWidth("disable");
+                                            }
+                                        }}
+                                        disabled={isProcessing}
+                                        className="grid-cols-3"
+                                    />
+                                </div>
 
-                                        <div
-                                            className="w-full bg-surface-secondary rounded-full h-2 overflow-hidden border border-border">
-                                            <div
-                                                className="bg-primary h-full transition-all duration-300"
-                                                style={{width: `${progress}%`}}
-                                            />
-                                        </div>
-
-                                        {currentStepName && (
-                                            <div
-                                                className="text-[10px] text-text-muted font-bold flex items-center gap-1.5">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"/>
-                                                <span className="truncate">Active: {currentStepName}</span>
-                                            </div>
-                                        )}
+                                {/* Orientation Option (Only for A4/Letter size) */}
+                                {pageSize !== "original" && (
+                                    <div className="space-y-2 border-t border-border pt-4 animate-fadeIn">
+                                        <label className="text-xs font-bold text-text-secondary">
+                                            Page Orientation
+                                        </label>
+                                        <RadioSelector
+                                            options={[
+                                                {value: "auto", label: "Auto Orientation"},
+                                                {value: "portrait", label: "Portrait"},
+                                                {value: "landscape", label: "Landscape"}
+                                            ]}
+                                            selectedValue={orientation}
+                                            onChange={setOrientation}
+                                            disabled={isProcessing}
+                                            className="grid-cols-3"
+                                        />
                                     </div>
                                 )}
+
+                                {/* Standardize widths option (Only for original page size) */}
+                                {pageSize === "original" && (
+                                    <div className="space-y-2 border-t border-border pt-4 animate-fadeIn">
+                                        <label className="text-xs font-bold text-text-secondary">
+                                            Standardize Widths
+                                        </label>
+                                        <RadioSelector
+                                            options={[
+                                                {value: "disable", label: "Original widths"},
+                                                {value: "smallest", label: "Standardize (Smallest)"},
+                                                {value: "largest", label: "Standardize (Largest)"}
+                                            ]}
+                                            selectedValue={standardizeWidth}
+                                            onChange={setStandardizeWidth}
+                                            disabled={isProcessing}
+                                            className="grid-cols-3"
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Page Margins Option */}
+                                <div className="space-y-2 border-t border-border pt-4">
+                                    <label className="text-xs font-bold text-text-secondary">
+                                        Page Margins
+                                    </label>
+                                    <RadioSelector
+                                        options={[
+                                            {value: "none", label: "No Margins"},
+                                            {value: "small", label: "Narrow (20pt)"},
+                                            {value: "medium", label: "Moderate (40pt)"}
+                                        ]}
+                                        selectedValue={margin}
+                                        onChange={setMargin}
+                                        disabled={isProcessing}
+                                        className="grid-cols-3"
+                                    />
+                                </div>
+
+                                {/* Stats Card Summary */}
+                                <div
+                                    className="bg-surface-secondary/40 border border-border p-4 rounded-xl space-y-2 text-xs font-bold text-text-secondary">
+                                    <div className="flex justify-between">
+                                        <span>Total Images:</span>
+                                        <span className="text-text-primary font-extrabold">{files.length}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span>Est. Combined File Size:</span>
+                                        <span
+                                            className="text-text-primary font-extrabold font-mono">{formatBytes(totalFilesSize)}</span>
+                                    </div>
+                                </div>
+
+                                {/* Compile PDF Button */}
+                                <div className="pt-2">
+                                    {isProcessing ? (
+                                        <button
+                                            disabled
+                                            className="w-full py-3.5 px-4 bg-primary/10 text-primary border border-primary/20 rounded-xl text-xs font-black flex items-center justify-center gap-2"
+                                        >
+                                            <div
+                                                className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
+                                            <span>Compiling PDF ({progress}%)</span>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={startConversion}
+                                            disabled={files.length === 0}
+                                            className="w-full py-3.5 px-4 bg-success text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 hover:bg-success/90 disabled:opacity-50 transition-all duration-200 cursor-pointer shadow-md shadow-success/15 hover:scale-[1.01] active:scale-[0.99]"
+                                        >
+                                            <ArrowDownload20Regular className="w-4 h-4"/>
+                                            <span>Compile & Download PDF</span>
+                                        </button>
+                                    )}
+                                </div>
                             </div>
+
+                            {/* Active Process Log details */}
+                            {isProcessing && (
+                                <div
+                                    className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-4 animate-fadeIn">
+                                    <div
+                                        className="flex justify-between items-center text-xs font-black text-text-primary">
+                                        <span>Processing Stage</span>
+                                        <span className="font-mono text-primary">{progress}%</span>
+                                    </div>
+
+                                    <div
+                                        className="w-full bg-surface-secondary rounded-full h-2 overflow-hidden border border-border">
+                                        <div
+                                            className="bg-primary h-full transition-all duration-300"
+                                            style={{width: `${progress}%`}}
+                                        />
+                                    </div>
+
+                                    {currentStepName && (
+                                        <div
+                                            className="text-[10px] text-text-muted font-bold flex items-center gap-1.5">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"/>
+                                            <span className="truncate">Active: {currentStepName}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
 
             {/* Floating Success Toast (Avoids layout jerking / shifting) */}
@@ -856,6 +854,6 @@ export function ImagesToPdfView({tool}: ImagesToPdfViewProps) {
                     </button>
                 </div>
             )}
-        </div>
+        </>
     );
 }

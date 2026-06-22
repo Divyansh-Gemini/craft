@@ -626,321 +626,319 @@ export function ReorderPdfView({tool}: ReorderPdfViewProps) {
     };
 
     return (
-        <div className="w-full flex-1 relative overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
-                {/* Title and description */}
-                <div
-                    className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2.5">
+        <>
+            {/* Title and description */}
+            <div
+                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
                             <span
                                 className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
                                 <ArrowSwap20Regular className="w-4 h-4"/>
                             </span>
-                            <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                                {tool.title}
-                            </h1>
-                        </div>
-                        <p className="text-xs sm:text-sm text-text-muted">
-                            {tool.description}
-                        </p>
+                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
+                            {tool.title}
+                        </h1>
                     </div>
+                    <p className="text-xs sm:text-sm text-text-muted">
+                        {tool.description}
+                    </p>
                 </div>
+            </div>
 
-                {/* Notification Banners */}
-                {errorMsg && (
-                    <div
-                        className="flex items-start gap-3 p-4 border border-danger/20 bg-danger-bg/40 text-danger rounded-2xl text-xs font-bold animate-fadeIn">
-                        <ErrorCircle20Regular className="w-5 h-5 shrink-0"/>
-                        <div>{errorMsg}</div>
-                    </div>
-                )}
+            {/* Notification Banners */}
+            {errorMsg && (
+                <div
+                    className="flex items-start gap-3 p-4 border border-danger/20 bg-danger-bg/40 text-danger rounded-2xl text-xs font-bold animate-fadeIn">
+                    <ErrorCircle20Regular className="w-5 h-5 shrink-0"/>
+                    <div>{errorMsg}</div>
+                </div>
+            )}
 
-                {successMsg && (
-                    <div
-                        className="flex items-start gap-3 p-4 border border-success/20 bg-success-bg/40 text-success rounded-2xl text-xs font-bold animate-fadeIn">
-                        <CheckmarkCircle20Regular className="w-5 h-5 shrink-0"/>
-                        <div>{successMsg}</div>
-                    </div>
-                )}
+            {successMsg && (
+                <div
+                    className="flex items-start gap-3 p-4 border border-success/20 bg-success-bg/40 text-success rounded-2xl text-xs font-bold animate-fadeIn">
+                    <CheckmarkCircle20Regular className="w-5 h-5 shrink-0"/>
+                    <div>{successMsg}</div>
+                </div>
+            )}
 
-                {/* PDF Loading Core overlay */}
-                {!pdfjs && !errorMsg && (
+            {/* PDF Loading Core overlay */}
+            {!pdfjs && !errorMsg && (
+                <div
+                    className="flex flex-col items-center justify-center py-20 space-y-4 border border-border bg-surface/30 backdrop-blur-md rounded-3xl">
                     <div
-                        className="flex flex-col items-center justify-center py-20 space-y-4 border border-border bg-surface/30 backdrop-blur-md rounded-3xl">
+                        className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"/>
+                    <p className="text-xs font-bold text-text-secondary animate-pulse">
+                        Initializing WebAssembly PDF Render Core...
+                    </p>
+                </div>
+            )}
+
+            {pdfjs && (
+                <div className="space-y-6">
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={onFileSelect}
+                        accept=".pdf,application/pdf"
+                        className="hidden"
+                    />
+
+                    {/* File Upload Zone */}
+                    {!file && (
                         <div
-                            className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"/>
-                        <p className="text-xs font-bold text-text-secondary animate-pulse">
-                            Initializing WebAssembly PDF Render Core...
-                        </p>
-                    </div>
-                )}
-
-                {pdfjs && (
-                    <div className="space-y-6">
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={onFileSelect}
-                            accept=".pdf,application/pdf"
-                            className="hidden"
-                        />
-
-                        {/* File Upload Zone */}
-                        {!file && (
-                            <div
-                                onDragOver={onDragOverUpload}
-                                onDragLeave={onDragLeaveUpload}
-                                onDrop={onDropUpload}
-                                onClick={triggerFileInput}
-                                className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
-                                    isDragging
-                                        ? "border-primary bg-primary/5 shadow-inner"
-                                        : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-                                }`}
-                            >
-                                <div className="flex flex-col items-center justify-center space-y-4">
-                                    <div
-                                        className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
-                                        <ArrowSwap20Regular className="w-8 h-8"/>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-extrabold text-text-primary">
-                                            Drag & drop your PDF file here, or <span
-                                            className="text-primary">browse</span>
-                                        </p>
-                                        <p className="text-[10px] text-text-muted">
-                                            Rearrange page orders, duplicate, or delete pages client-side. Your files
-                                            never touch our servers.
-                                        </p>
-                                    </div>
+                            onDragOver={onDragOverUpload}
+                            onDragLeave={onDragLeaveUpload}
+                            onDrop={onDropUpload}
+                            onClick={triggerFileInput}
+                            className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
+                                isDragging
+                                    ? "border-primary bg-primary/5 shadow-inner"
+                                    : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
+                            }`}
+                        >
+                            <div className="flex flex-col items-center justify-center space-y-4">
+                                <div
+                                    className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
+                                    <ArrowSwap20Regular className="w-8 h-8"/>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-sm font-extrabold text-text-primary">
+                                        Drag & drop your PDF file here, or <span
+                                        className="text-primary">browse</span>
+                                    </p>
+                                    <p className="text-[10px] text-text-muted">
+                                        Rearrange page orders, duplicate, or delete pages client-side. Your files
+                                        never touch our servers.
+                                    </p>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Editor Workspace */}
-                        {file && pdfDoc && (
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                                {/* Left Side: Pages Grid Editor */}
-                                <div className="lg:col-span-8 space-y-4">
+                    {/* Editor Workspace */}
+                    {file && pdfDoc && (
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                            {/* Left Side: Pages Grid Editor */}
+                            <div className="lg:col-span-8 space-y-4">
+                                <div
+                                    className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-5 space-y-4">
                                     <div
-                                        className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-5 space-y-4">
+                                        className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-3 gap-3">
                                         <div
-                                            className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-3 gap-3">
-                                            <div
-                                                className="flex items-center gap-2 text-xs font-black text-text-primary">
-                                                <Grid20Regular className="w-4 h-4 text-primary"/>
-                                                <span>Drag-and-Drop Editor</span>
-                                            </div>
-
-                                            <div className="flex gap-1.5 self-start sm:self-auto">
-                                                <button
-                                                    onClick={resetToOriginal}
-                                                    className="px-2.5 py-1 text-[10px] font-black text-text-secondary hover:text-primary hover:bg-surface-secondary border border-border bg-surface rounded-md cursor-pointer transition-all duration-150"
-                                                >
-                                                    Reset Order
-                                                </button>
-                                                <button
-                                                    onClick={reverseOrder}
-                                                    className="px-2.5 py-1 text-[10px] font-black text-text-secondary hover:text-primary hover:bg-surface-secondary border border-border bg-surface rounded-md cursor-pointer transition-all duration-150"
-                                                >
-                                                    Reverse
-                                                </button>
-                                                <button
-                                                    onClick={clearAll}
-                                                    className="px-2.5 py-1 text-[10px] font-black text-text-muted hover:text-danger hover:bg-danger-bg/10 border border-border bg-surface rounded-md cursor-pointer transition-all duration-150"
-                                                >
-                                                    Clear All
-                                                </button>
-                                            </div>
+                                            className="flex items-center gap-2 text-xs font-black text-text-primary">
+                                            <Grid20Regular className="w-4 h-4 text-primary"/>
+                                            <span>Drag-and-Drop Editor</span>
                                         </div>
 
-                                        <p className="text-[10px] text-text-muted leading-relaxed font-bold bg-surface-secondary/40 border border-border/60 p-2.5 rounded-xl">
-                                            💡 Drag cards to change the sequence. Use the overlay controls to delete,
-                                            shift positions, or enter a target position number.
-                                        </p>
+                                        <div className="flex gap-1.5 self-start sm:self-auto">
+                                            <button
+                                                onClick={resetToOriginal}
+                                                className="px-2.5 py-1 text-[10px] font-black text-text-secondary hover:text-primary hover:bg-surface-secondary border border-border bg-surface rounded-md cursor-pointer transition-all duration-150"
+                                            >
+                                                Reset Order
+                                            </button>
+                                            <button
+                                                onClick={reverseOrder}
+                                                className="px-2.5 py-1 text-[10px] font-black text-text-secondary hover:text-primary hover:bg-surface-secondary border border-border bg-surface rounded-md cursor-pointer transition-all duration-150"
+                                            >
+                                                Reverse
+                                            </button>
+                                            <button
+                                                onClick={clearAll}
+                                                className="px-2.5 py-1 text-[10px] font-black text-text-muted hover:text-danger hover:bg-danger-bg/10 border border-border bg-surface rounded-md cursor-pointer transition-all duration-150"
+                                            >
+                                                Clear All
+                                            </button>
+                                        </div>
+                                    </div>
 
-                                        {/* Drag and Drop Grid Container */}
-                                        <div
-                                            ref={containerRef}
-                                            onDragOver={(e) => {
-                                                e.preventDefault();
-                                                handleDragScroll(e.clientY);
-                                            }}
-                                            className="max-h-140 overflow-y-auto pr-1.5 custom-scrollbar"
-                                        >
-                                            {pageSequence.length > 0 ? (
-                                                <div className="grid grid-cols-3 lg:grid-cols-4 gap-4 select-none">
-                                                    {pageSequence.map((item, idx) => (
-                                                        <PageThumbnailCard
-                                                            key={item.id}
-                                                            pdfDoc={pdfDoc}
-                                                            pageNumber={item.pageNum}
-                                                            index={idx}
-                                                            totalCount={pageSequence.length}
-                                                            isDragged={draggedIndex === idx}
-                                                            isDragOver={dragOverIndex === idx}
-                                                            onMove={movePage}
-                                                            onMoveTo={movePageToPosition}
-                                                            onRemove={removePage}
-                                                            onDragStart={handleDragStart}
-                                                            onDragOver={handleDragOver}
-                                                            onDragEnd={handleDragEnd}
-                                                            onDrop={handleDrop}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <div
-                                                    className="flex flex-col items-center justify-center py-20 text-center space-y-2 border border-dashed border-border rounded-xl">
+                                    <p className="text-[10px] text-text-muted leading-relaxed font-bold bg-surface-secondary/40 border border-border/60 p-2.5 rounded-xl">
+                                        💡 Drag cards to change the sequence. Use the overlay controls to delete,
+                                        shift positions, or enter a target position number.
+                                    </p>
+
+                                    {/* Drag and Drop Grid Container */}
+                                    <div
+                                        ref={containerRef}
+                                        onDragOver={(e) => {
+                                            e.preventDefault();
+                                            handleDragScroll(e.clientY);
+                                        }}
+                                        className="max-h-140 overflow-y-auto pr-1.5 custom-scrollbar"
+                                    >
+                                        {pageSequence.length > 0 ? (
+                                            <div className="grid grid-cols-3 lg:grid-cols-4 gap-4 select-none">
+                                                {pageSequence.map((item, idx) => (
+                                                    <PageThumbnailCard
+                                                        key={item.id}
+                                                        pdfDoc={pdfDoc}
+                                                        pageNumber={item.pageNum}
+                                                        index={idx}
+                                                        totalCount={pageSequence.length}
+                                                        isDragged={draggedIndex === idx}
+                                                        isDragOver={dragOverIndex === idx}
+                                                        onMove={movePage}
+                                                        onMoveTo={movePageToPosition}
+                                                        onRemove={removePage}
+                                                        onDragStart={handleDragStart}
+                                                        onDragOver={handleDragOver}
+                                                        onDragEnd={handleDragEnd}
+                                                        onDrop={handleDrop}
+                                                    />
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className="flex flex-col items-center justify-center py-20 text-center space-y-2 border border-dashed border-border rounded-xl">
                                                     <span className="text-text-muted/40">
                                                         <DismissCircle20Regular className="w-8 h-8"/>
                                                     </span>
-                                                    <p className="text-xs font-bold text-text-muted">
-                                                        No pages left in the sequence. Clear range or reset order to
-                                                        start over.
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
+                                                <p className="text-xs font-bold text-text-muted">
+                                                    No pages left in the sequence. Clear range or reset order to
+                                                    start over.
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Right Side: Actions and Controls */}
-                                <div className="lg:col-span-4 space-y-6">
+                            {/* Right Side: Actions and Controls */}
+                            <div className="lg:col-span-4 space-y-6">
+                                <div
+                                    className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-6">
+                                    <div className="flex items-center gap-2 border-b border-border pb-3">
+                                        <Settings20Regular className="w-4 h-4 text-primary"/>
+                                        <h2 className="text-xs font-black text-text-primary uppercase tracking-wider">
+                                            Reorder Settings
+                                        </h2>
+                                    </div>
+
+                                    {/* File Metadata Card */}
                                     <div
-                                        className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-6">
-                                        <div className="flex items-center gap-2 border-b border-border pb-3">
-                                            <Settings20Regular className="w-4 h-4 text-primary"/>
-                                            <h2 className="text-xs font-black text-text-primary uppercase tracking-wider">
-                                                Reorder Settings
-                                            </h2>
+                                        className="flex items-center justify-between bg-surface-secondary/40 border border-border p-4 rounded-xl">
+                                        <div className="min-w-0 flex-1 pr-3">
+                                            <p className="text-xs font-extrabold text-text-primary truncate"
+                                               title={file.name}>
+                                                {file.name}
+                                            </p>
+                                            <p className="text-[10px] text-text-muted font-bold mt-0.5 font-mono">
+                                                {formatBytes(file.size)} • {totalPages} {totalPages === 1 ? "Page" : "Pages"}
+                                            </p>
                                         </div>
+                                        <button
+                                            onClick={resetState}
+                                            disabled={isProcessing}
+                                            className="w-8 h-8 rounded-lg border border-border bg-surface text-text-muted hover:border-danger hover:text-danger disabled:opacity-50 cursor-pointer transition-all duration-200 flex items-center justify-center shrink-0"
+                                            title="Choose different PDF"
+                                        >
+                                            <Dismiss20Regular className="w-4 h-4"/>
+                                        </button>
+                                    </div>
 
-                                        {/* File Metadata Card */}
-                                        <div
-                                            className="flex items-center justify-between bg-surface-secondary/40 border border-border p-4 rounded-xl">
-                                            <div className="min-w-0 flex-1 pr-3">
-                                                <p className="text-xs font-extrabold text-text-primary truncate"
-                                                   title={file.name}>
-                                                    {file.name}
-                                                </p>
-                                                <p className="text-[10px] text-text-muted font-bold mt-0.5 font-mono">
-                                                    {formatBytes(file.size)} • {totalPages} {totalPages === 1 ? "Page" : "Pages"}
-                                                </p>
-                                            </div>
-                                            <button
-                                                onClick={resetState}
-                                                disabled={isProcessing}
-                                                className="w-8 h-8 rounded-lg border border-border bg-surface text-text-muted hover:border-danger hover:text-danger disabled:opacity-50 cursor-pointer transition-all duration-200 flex items-center justify-center shrink-0"
-                                                title="Choose different PDF"
-                                            >
-                                                <Dismiss20Regular className="w-4 h-4"/>
-                                            </button>
-                                        </div>
-
-                                        {/* Page sequence string input */}
-                                        <div className="space-y-2 border-t border-border pt-4">
-                                            <div className="flex justify-between items-center">
-                                                <label className="text-xs font-bold text-text-secondary">
-                                                    Page Sequence Input
-                                                </label>
-                                                <span className="text-[10px] text-text-muted font-bold font-mono">
+                                    {/* Page sequence string input */}
+                                    <div className="space-y-2 border-t border-border pt-4">
+                                        <div className="flex justify-between items-center">
+                                            <label className="text-xs font-bold text-text-secondary">
+                                                Page Sequence Input
+                                            </label>
+                                            <span className="text-[10px] text-text-muted font-bold font-mono">
                                                     {pageSequence.length} page(s)
                                                 </span>
-                                            </div>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    value={rangeInput}
-                                                    onChange={handleRangeInputChange}
-                                                    placeholder="e.g. 1-3, 5, 2"
-                                                    disabled={isProcessing}
-                                                    className="w-full text-xs font-bold font-mono px-3.5 py-3 border border-border bg-surface rounded-xl focus:border-primary focus:ring-1 focus:ring-primary/20 outline-hidden transition-all duration-200 placeholder:text-text-muted/60 disabled:opacity-50"
-                                                />
-                                            </div>
+                                        </div>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                value={rangeInput}
+                                                onChange={handleRangeInputChange}
+                                                placeholder="e.g. 1-3, 5, 2"
+                                                disabled={isProcessing}
+                                                className="w-full text-xs font-bold font-mono px-3.5 py-3 border border-border bg-surface rounded-xl focus:border-primary focus:ring-1 focus:ring-primary/20 outline-hidden transition-all duration-200 placeholder:text-text-muted/60 disabled:opacity-50"
+                                            />
+                                        </div>
 
-                                            {/* Live verification label */}
-                                            <div className="flex items-center min-h-5 pt-0.5">
-                                                {!isValidPageRange(rangeInput) ? (
-                                                    <span
-                                                        className="text-[10px] text-danger font-bold flex items-center gap-1">
+                                        {/* Live verification label */}
+                                        <div className="flex items-center min-h-5 pt-0.5">
+                                            {!isValidPageRange(rangeInput) ? (
+                                                <span
+                                                    className="text-[10px] text-danger font-bold flex items-center gap-1">
                                                         <ErrorCircle20Regular className="w-3.5 h-3.5"/>
                                                         Invalid format (use numbers, commas, and dashes, e.g. 1-3, 5)
                                                     </span>
-                                                ) : pageSequence.length === 0 ? (
-                                                    <span
-                                                        className="text-[10px] text-danger font-bold flex items-center gap-1">
+                                            ) : pageSequence.length === 0 ? (
+                                                <span
+                                                    className="text-[10px] text-danger font-bold flex items-center gap-1">
                                                         <ErrorCircle20Regular className="w-3.5 h-3.5"/>
                                                         Sequence must contain at least 1 page
                                                     </span>
-                                                ) : (
-                                                    <span className="text-[10px] text-text-muted font-bold">
+                                            ) : (
+                                                <span className="text-[10px] text-text-muted font-bold">
                                                         Sequence successfully mapped. Ready to export.
                                                     </span>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {/* Compile & Download button */}
-                                        <div className="pt-2">
-                                            {isProcessing ? (
-                                                <button
-                                                    disabled
-                                                    className="w-full py-3.5 px-4 bg-primary/10 text-primary border border-primary/20 rounded-xl text-xs font-black flex items-center justify-center gap-2"
-                                                >
-                                                    <div
-                                                        className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
-                                                    <span>Processing PDF ({progress}%)</span>
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={handleProcessPdf}
-                                                    disabled={!isSelectionValid}
-                                                    className="w-full py-3.5 px-4 bg-success text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 hover:bg-success/90 disabled:opacity-50 transition-all duration-200 cursor-pointer shadow-md shadow-success/15 hover:scale-[1.01] active:scale-[0.99]"
-                                                >
-                                                    <ArrowDownload20Regular className="w-4 h-4"/>
-                                                    <span>
-                                                        Save & Download PDF
-                                                    </span>
-                                                </button>
                                             )}
                                         </div>
                                     </div>
 
-                                    {/* Action logger overlay */}
-                                    {isProcessing && (
-                                        <div
-                                            className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-4 animate-fadeIn">
-                                            <div
-                                                className="flex justify-between items-center text-xs font-black text-text-primary">
-                                                <span>Processing Details</span>
-                                                <span className="font-mono text-primary">{progress}%</span>
-                                            </div>
-
-                                            <div
-                                                className="w-full bg-surface-secondary rounded-full h-2 overflow-hidden border border-border">
+                                    {/* Compile & Download button */}
+                                    <div className="pt-2">
+                                        {isProcessing ? (
+                                            <button
+                                                disabled
+                                                className="w-full py-3.5 px-4 bg-primary/10 text-primary border border-primary/20 rounded-xl text-xs font-black flex items-center justify-center gap-2"
+                                            >
                                                 <div
-                                                    className="bg-primary h-full transition-all duration-300"
-                                                    style={{width: `${progress}%`}}
-                                                />
-                                            </div>
-
-                                            {currentStepName && (
-                                                <div
-                                                    className="text-[10px] text-text-muted font-bold flex items-center gap-1.5">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"/>
-                                                    <span className="truncate">Active: {currentStepName}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
+                                                    className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
+                                                <span>Processing PDF ({progress}%)</span>
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={handleProcessPdf}
+                                                disabled={!isSelectionValid}
+                                                className="w-full py-3.5 px-4 bg-success text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 hover:bg-success/90 disabled:opacity-50 transition-all duration-200 cursor-pointer shadow-md shadow-success/15 hover:scale-[1.01] active:scale-[0.99]"
+                                            >
+                                                <ArrowDownload20Regular className="w-4 h-4"/>
+                                                <span>
+                                                        Save & Download PDF
+                                                    </span>
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
+
+                                {/* Action logger overlay */}
+                                {isProcessing && (
+                                    <div
+                                        className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-4 animate-fadeIn">
+                                        <div
+                                            className="flex justify-between items-center text-xs font-black text-text-primary">
+                                            <span>Processing Details</span>
+                                            <span className="font-mono text-primary">{progress}%</span>
+                                        </div>
+
+                                        <div
+                                            className="w-full bg-surface-secondary rounded-full h-2 overflow-hidden border border-border">
+                                            <div
+                                                className="bg-primary h-full transition-all duration-300"
+                                                style={{width: `${progress}%`}}
+                                            />
+                                        </div>
+
+                                        {currentStepName && (
+                                            <div
+                                                className="text-[10px] text-text-muted font-bold flex items-center gap-1.5">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"/>
+                                                <span className="truncate">Active: {currentStepName}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        </div>
+                        </div>
+                    )}
+                </div>
+            )}
+        </>
     );
 }

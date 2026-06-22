@@ -637,199 +637,197 @@ export function IcoGeneratorView({tool}: IcoGeneratorViewProps) {
     const sizeOptions = [16, 32, 48, 64, 128, 256];
 
     return (
-        <div className="w-full flex-1 relative overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
-                {/* Header */}
-                <div
-                    className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4"
-                >
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2.5">
+        <>
+            {/* Header */}
+            <div
+                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4"
+            >
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
                             <span
                                 className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center"
                             >
                                 <Image20Regular className="w-4 h-4"/>
                             </span>
-                            <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                                {tool.title}
-                            </h1>
-                        </div>
-                        <p className="text-xs sm:text-sm text-text-muted">
-                            {tool.description}
-                        </p>
+                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
+                            {tool.title}
+                        </h1>
                     </div>
-                </div>
-
-                {/* Workspace Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    {/* Left Column: Input and Settings */}
-                    <div className="lg:col-span-7 space-y-6">
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={onFileSelect}
-                            accept="image/*,.heic,.heif,.svg"
-                            className="hidden"
-                        />
-
-                        {/* File Dropzone */}
-                        {!file ? (
-                            <FileDropzone
-                                isDragging={isDragging}
-                                onDragOver={onDragOver}
-                                onDragLeave={onDragLeave}
-                                onDrop={onDrop}
-                                onClick={triggerFileInput}
-                            />
-                        ) : (
-                            <SelectedFileCard
-                                file={file}
-                                previewUrl={previewUrl}
-                                isConverting={isConverting}
-                                onRemove={removeFile}
-                            />
-                        )}
-
-                        {/* Settings Panel */}
-                        {file && (
-                            <div
-                                className="border border-border bg-surface/40 backdrop-blur-md p-6 rounded-3xl space-y-6"
-                            >
-                                <h2 className="text-sm font-extrabold text-text-primary flex items-center gap-2">
-                                    <Settings20Regular className="w-4 h-4 text-primary"/>
-                                    Favicon Configuration
-                                </h2>
-
-                                {/* Preset Buttons */}
-                                <div className="space-y-2.5">
-                                    <label className="text-xs font-bold text-text-secondary">
-                                        Favicon Sizes Preset
-                                    </label>
-                                    <div className="grid grid-cols-3 gap-2">
-                                        {(["standard", "all", "custom"] as const).map((preset) => (
-                                            <button
-                                                key={preset}
-                                                onClick={() => handlePresetChange(preset)}
-                                                className={`py-2 text-[10px] sm:text-xs font-black uppercase rounded-xl border transition-all cursor-pointer ${
-                                                    sizePreset === preset
-                                                        ? "bg-primary text-white border-primary shadow-sm"
-                                                        : "bg-surface text-text-secondary border-border hover:bg-surface-secondary"
-                                                }`}
-                                            >
-                                                {preset === "standard" && "Standard Favicon"}
-                                                {preset === "all" && "All Sizes"}
-                                                {preset === "custom" && "Custom Selection"}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    <p className="text-[10px] text-text-muted">
-                                        {sizePreset === "standard" && "Includes 16x16, 32x32, 48x48 sizes. Fits 99% of general web requirements."}
-                                        {sizePreset === "all" && "Includes 16x16 to 256x256. Perfect for Windows, macOS desktop, and touch screen shortcuts."}
-                                        {sizePreset === "custom" && "Choose custom dimensions to embed into the generated ICO file."}
-                                    </p>
-                                </div>
-
-                                {/* Custom Checkboxes Grid */}
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-text-secondary">
-                                        Select Dimensions:
-                                    </label>
-                                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                                        {sizeOptions.map((size) => {
-                                            const isSelected = selectedSizes.includes(size);
-                                            return (
-                                                <button
-                                                    key={size}
-                                                    onClick={() => toggleSize(size)}
-                                                    className={`flex flex-col items-center justify-center p-2.5 rounded-xl border transition-all cursor-pointer ${
-                                                        isSelected
-                                                            ? "border-primary/80 bg-primary/5 text-primary shadow-sm"
-                                                            : "border-border bg-surface/30 hover:border-border-hover text-text-muted hover:text-text-primary"
-                                                    }`}
-                                                >
-                                                    <span className="text-xs font-extrabold font-mono">{size}</span>
-                                                    <span className="text-[8px] opacity-75">px</span>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Conversion trigger */}
-                        {showGenerateButton && (
-                            <button
-                                onClick={startConversion}
-                                disabled={isConverting}
-                                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-xs font-black tracking-wider uppercase text-white bg-primary hover:bg-primary-hover disabled:bg-primary/40 cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all animate-in fade-in duration-200"
-                            >
-                                {isConverting ? (
-                                    <>
-                                        <div
-                                            className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>
-                                        Converting to Favicon...
-                                    </>
-                                ) : (
-                                    <>
-                                        <ArrowDownload20Regular className="w-4 h-4"/>
-                                        Generate Favicon (.ICO)
-                                    </>
-                                )}
-                            </button>
-                        )}
-
-                        {/* Informational Guidance */}
-                        <div
-                            className="p-4 border border-border/80 bg-surface/30 backdrop-blur-md rounded-2xl flex gap-3 text-text-secondary"
-                        >
-                            <Info20Regular className="w-4 h-4 shrink-0 text-primary mt-0.5"/>
-                            <div className="space-y-1">
-                                <h4 className="text-xs font-bold text-text-primary">
-                                    About the ICO Format
-                                </h4>
-                                <p className="text-[10px] leading-relaxed">
-                                    Favicon.ico is a container that bundles multiple resolutions. The browser
-                                    automatically fetches the ideal size depending on the use case (e.g. 16x16 for tabs,
-                                    32x32 for shortcut icons, 48x48 for app icons).
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right Column: Previews & Results */}
-                    <div className="lg:col-span-5 space-y-6">
-                        {/* Browser Favicon Simulation Panel */}
-                        <LiveBrowserPreview
-                            previewUrl={previewUrl}
-                            mockTitle={mockTitle}
-                            setMockTitle={setMockTitle}
-                            tabTheme={tabTheme}
-                            setTabTheme={setTabTheme}
-                        />
-
-                        {/* Desktop Shortcut Icon Mock */}
-                        {previewUrl && <ShortcutPreview previewUrl={previewUrl}/>}
-
-                        {/* Conversion Status / Success Panel */}
-                        {status === "success" && convertedBlob && (
-                            <SuccessPanel
-                                convertedSize={convertedSize}
-                                generatedSizes={generatedSizes}
-                                isConverting={isConverting}
-                                copied={copied}
-                                onDownload={triggerDownload}
-                                onCopySnippet={copyCodeSnippet}
-                            />
-                        )}
-
-                        {/* Error State */}
-                        {status === "error" && errorMsg && (
-                            <ErrorPanel errorMsg={errorMsg} onRetry={startConversion}/>
-                        )}
-                    </div>
+                    <p className="text-xs sm:text-sm text-text-muted">
+                        {tool.description}
+                    </p>
                 </div>
             </div>
-        </div>
+
+            {/* Workspace Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Left Column: Input and Settings */}
+                <div className="lg:col-span-7 space-y-6">
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={onFileSelect}
+                        accept="image/*,.heic,.heif,.svg"
+                        className="hidden"
+                    />
+
+                    {/* File Dropzone */}
+                    {!file ? (
+                        <FileDropzone
+                            isDragging={isDragging}
+                            onDragOver={onDragOver}
+                            onDragLeave={onDragLeave}
+                            onDrop={onDrop}
+                            onClick={triggerFileInput}
+                        />
+                    ) : (
+                        <SelectedFileCard
+                            file={file}
+                            previewUrl={previewUrl}
+                            isConverting={isConverting}
+                            onRemove={removeFile}
+                        />
+                    )}
+
+                    {/* Settings Panel */}
+                    {file && (
+                        <div
+                            className="border border-border bg-surface/40 backdrop-blur-md p-6 rounded-3xl space-y-6"
+                        >
+                            <h2 className="text-sm font-extrabold text-text-primary flex items-center gap-2">
+                                <Settings20Regular className="w-4 h-4 text-primary"/>
+                                Favicon Configuration
+                            </h2>
+
+                            {/* Preset Buttons */}
+                            <div className="space-y-2.5">
+                                <label className="text-xs font-bold text-text-secondary">
+                                    Favicon Sizes Preset
+                                </label>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {(["standard", "all", "custom"] as const).map((preset) => (
+                                        <button
+                                            key={preset}
+                                            onClick={() => handlePresetChange(preset)}
+                                            className={`py-2 text-[10px] sm:text-xs font-black uppercase rounded-xl border transition-all cursor-pointer ${
+                                                sizePreset === preset
+                                                    ? "bg-primary text-white border-primary shadow-sm"
+                                                    : "bg-surface text-text-secondary border-border hover:bg-surface-secondary"
+                                            }`}
+                                        >
+                                            {preset === "standard" && "Standard Favicon"}
+                                            {preset === "all" && "All Sizes"}
+                                            {preset === "custom" && "Custom Selection"}
+                                        </button>
+                                    ))}
+                                </div>
+                                <p className="text-[10px] text-text-muted">
+                                    {sizePreset === "standard" && "Includes 16x16, 32x32, 48x48 sizes. Fits 99% of general web requirements."}
+                                    {sizePreset === "all" && "Includes 16x16 to 256x256. Perfect for Windows, macOS desktop, and touch screen shortcuts."}
+                                    {sizePreset === "custom" && "Choose custom dimensions to embed into the generated ICO file."}
+                                </p>
+                            </div>
+
+                            {/* Custom Checkboxes Grid */}
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-text-secondary">
+                                    Select Dimensions:
+                                </label>
+                                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                                    {sizeOptions.map((size) => {
+                                        const isSelected = selectedSizes.includes(size);
+                                        return (
+                                            <button
+                                                key={size}
+                                                onClick={() => toggleSize(size)}
+                                                className={`flex flex-col items-center justify-center p-2.5 rounded-xl border transition-all cursor-pointer ${
+                                                    isSelected
+                                                        ? "border-primary/80 bg-primary/5 text-primary shadow-sm"
+                                                        : "border-border bg-surface/30 hover:border-border-hover text-text-muted hover:text-text-primary"
+                                                }`}
+                                            >
+                                                <span className="text-xs font-extrabold font-mono">{size}</span>
+                                                <span className="text-[8px] opacity-75">px</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Conversion trigger */}
+                    {showGenerateButton && (
+                        <button
+                            onClick={startConversion}
+                            disabled={isConverting}
+                            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-xs font-black tracking-wider uppercase text-white bg-primary hover:bg-primary-hover disabled:bg-primary/40 cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all animate-in fade-in duration-200"
+                        >
+                            {isConverting ? (
+                                <>
+                                    <div
+                                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>
+                                    Converting to Favicon...
+                                </>
+                            ) : (
+                                <>
+                                    <ArrowDownload20Regular className="w-4 h-4"/>
+                                    Generate Favicon (.ICO)
+                                </>
+                            )}
+                        </button>
+                    )}
+
+                    {/* Informational Guidance */}
+                    <div
+                        className="p-4 border border-border/80 bg-surface/30 backdrop-blur-md rounded-2xl flex gap-3 text-text-secondary"
+                    >
+                        <Info20Regular className="w-4 h-4 shrink-0 text-primary mt-0.5"/>
+                        <div className="space-y-1">
+                            <h4 className="text-xs font-bold text-text-primary">
+                                About the ICO Format
+                            </h4>
+                            <p className="text-[10px] leading-relaxed">
+                                Favicon.ico is a container that bundles multiple resolutions. The browser
+                                automatically fetches the ideal size depending on the use case (e.g. 16x16 for tabs,
+                                32x32 for shortcut icons, 48x48 for app icons).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Column: Previews & Results */}
+                <div className="lg:col-span-5 space-y-6">
+                    {/* Browser Favicon Simulation Panel */}
+                    <LiveBrowserPreview
+                        previewUrl={previewUrl}
+                        mockTitle={mockTitle}
+                        setMockTitle={setMockTitle}
+                        tabTheme={tabTheme}
+                        setTabTheme={setTabTheme}
+                    />
+
+                    {/* Desktop Shortcut Icon Mock */}
+                    {previewUrl && <ShortcutPreview previewUrl={previewUrl}/>}
+
+                    {/* Conversion Status / Success Panel */}
+                    {status === "success" && convertedBlob && (
+                        <SuccessPanel
+                            convertedSize={convertedSize}
+                            generatedSizes={generatedSizes}
+                            isConverting={isConverting}
+                            copied={copied}
+                            onDownload={triggerDownload}
+                            onCopySnippet={copyCodeSnippet}
+                        />
+                    )}
+
+                    {/* Error State */}
+                    {status === "error" && errorMsg && (
+                        <ErrorPanel errorMsg={errorMsg} onRetry={startConversion}/>
+                    )}
+                </div>
+            </div>
+        </>
     );
 }

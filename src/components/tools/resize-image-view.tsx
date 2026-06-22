@@ -396,487 +396,485 @@ export function ResizeImageView({tool}: ResizeImageViewProps) {
     const hasResized = successCount > 0;
 
     return (
-        <div className="w-full flex-1 relative overflow-hidden">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
-                {/* Tool Title Block */}
-                <div
-                    className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2.5">
+        <>
+            {/* Tool Title Block */}
+            <div
+                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
                             <span
                                 className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
                                 <Settings20Regular className="w-4 h-4"/>
                             </span>
-                            <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                                {tool.title}
-                            </h1>
-                        </div>
-                        <p className="text-xs sm:text-sm text-text-muted">
-                            {tool.description}
-                        </p>
+                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
+                            {tool.title}
+                        </h1>
                     </div>
+                    <p className="text-xs sm:text-sm text-text-muted">
+                        {tool.description}
+                    </p>
                 </div>
+            </div>
 
-                {/* Main Workspace */}
-                <div className="space-y-6">
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={onFileSelect}
-                        multiple
-                        accept="image/*"
-                        className="hidden"
-                    />
+            {/* Main Workspace */}
+            <div className="space-y-6">
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={onFileSelect}
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                />
 
-                    {/* Dropzone Area */}
-                    {totalCount === 0 && (
-                        <div
-                            onDragOver={onDragOver}
-                            onDragLeave={onDragLeave}
-                            onDrop={onDrop}
-                            onClick={triggerFileInput}
-                            className={`relative border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer transition-all duration-300 group ${
-                                isDragging
-                                    ? "border-primary bg-primary/5"
-                                    : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-                            }`}
-                        >
-                            <div className="flex flex-col items-center justify-center space-y-4">
-                                <div
-                                    className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
-                                    <Image20Regular className="w-8 h-8"/>
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-extrabold text-text-primary">
-                                        Drag & drop images here, or <span className="text-primary">browse</span>
-                                    </p>
-                                    <p className="text-[10px] text-text-muted">
-                                        Supports PNG, JPG, WebP, AVIF, HEIC, TIFF, GIF (Up to 15MB each)
-                                    </p>
-                                </div>
+                {/* Dropzone Area */}
+                {totalCount === 0 && (
+                    <div
+                        onDragOver={onDragOver}
+                        onDragLeave={onDragLeave}
+                        onDrop={onDrop}
+                        onClick={triggerFileInput}
+                        className={`relative border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer transition-all duration-300 group ${
+                            isDragging
+                                ? "border-primary bg-primary/5"
+                                : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
+                        }`}
+                    >
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <div
+                                className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
+                                <Image20Regular className="w-8 h-8"/>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-sm font-extrabold text-text-primary">
+                                    Drag & drop images here, or <span className="text-primary">browse</span>
+                                </p>
+                                <p className="text-[10px] text-text-muted">
+                                    Supports PNG, JPG, WebP, AVIF, HEIC, TIFF, GIF (Up to 15MB each)
+                                </p>
                             </div>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {/* Resize Config & Controls (Visible only after file selection) */}
-                    {totalCount > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Resize Config & Controls (Visible only after file selection) */}
+                {totalCount > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                            {/* Controls Side Panel */}
+                        {/* Controls Side Panel */}
+                        <div
+                            className="md:col-span-1 border border-border bg-surface/40 backdrop-blur-md p-5 rounded-3xl space-y-6">
+                            <h3 className="text-xs font-black uppercase tracking-wider text-text-primary flex items-center gap-1.5 border-b border-border pb-3">
+                                <Settings20Regular className="w-4 h-4 text-primary"/>
+                                Resize Configuration
+                            </h3>
+
+                            {/* Mode Select Tabs */}
                             <div
-                                className="md:col-span-1 border border-border bg-surface/40 backdrop-blur-md p-5 rounded-3xl space-y-6">
-                                <h3 className="text-xs font-black uppercase tracking-wider text-text-primary flex items-center gap-1.5 border-b border-border pb-3">
-                                    <Settings20Regular className="w-4 h-4 text-primary"/>
-                                    Resize Configuration
-                                </h3>
+                                className="grid grid-cols-2 gap-1 p-1 bg-surface-secondary/60 rounded-xl border border-border">
+                                <button
+                                    onClick={() => setResizeMode("dimensions")}
+                                    className={`py-1.5 text-[10px] font-black uppercase rounded-lg transition-all cursor-pointer ${
+                                        resizeMode === "dimensions"
+                                            ? "bg-surface text-text-primary shadow-sm"
+                                            : "text-text-muted hover:text-text-secondary"
+                                    }`}
+                                >
+                                    Dimensions
+                                </button>
+                                <button
+                                    onClick={() => setResizeMode("percentage")}
+                                    className={`py-1.5 text-[10px] font-black uppercase rounded-lg transition-all cursor-pointer ${
+                                        resizeMode === "percentage"
+                                            ? "bg-surface text-text-primary shadow-sm"
+                                            : "text-text-muted hover:text-text-secondary"
+                                    }`}
+                                >
+                                    Percentage
+                                </button>
+                            </div>
 
-                                {/* Mode Select Tabs */}
-                                <div
-                                    className="grid grid-cols-2 gap-1 p-1 bg-surface-secondary/60 rounded-xl border border-border">
-                                    <button
-                                        onClick={() => setResizeMode("dimensions")}
-                                        className={`py-1.5 text-[10px] font-black uppercase rounded-lg transition-all cursor-pointer ${
-                                            resizeMode === "dimensions"
-                                                ? "bg-surface text-text-primary shadow-sm"
-                                                : "text-text-muted hover:text-text-secondary"
-                                        }`}
-                                    >
-                                        Dimensions
-                                    </button>
-                                    <button
-                                        onClick={() => setResizeMode("percentage")}
-                                        className={`py-1.5 text-[10px] font-black uppercase rounded-lg transition-all cursor-pointer ${
-                                            resizeMode === "percentage"
-                                                ? "bg-surface text-text-primary shadow-sm"
-                                                : "text-text-muted hover:text-text-secondary"
-                                        }`}
-                                    >
-                                        Percentage
-                                    </button>
-                                </div>
-
-                                {/* Mode 1: Dimensions Controls */}
-                                {resizeMode === "dimensions" && (
-                                    <div className="space-y-4">
-                                        <div className="flex items-end gap-3">
-                                            {/* Width Input */}
-                                            <div className="flex-1 space-y-1">
-                                                <label
-                                                    className="text-[10px] font-black uppercase tracking-wide text-text-muted">Width
-                                                    (px)</label>
-                                                <input
-                                                    type="number"
-                                                    value={widthInput}
-                                                    onChange={(e) => handleWidthChange(e.target.value)}
-                                                    min="1"
-                                                    disabled={isResizing}
-                                                    className="w-full px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors"
-                                                />
-                                            </div>
-
-                                            {/* Link Aspect Ratio Button */}
-                                            <button
-                                                onClick={toggleAspectRatio}
-                                                disabled={isResizing}
-                                                className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
-                                                    maintainAspectRatio
-                                                        ? "bg-primary/10 border-primary/30 text-primary"
-                                                        : "bg-surface border-border text-text-muted hover:text-text-secondary"
-                                                }`}
-                                                title={maintainAspectRatio ? "Unlock aspect ratio" : "Lock aspect ratio"}
-                                            >
-                                                {maintainAspectRatio ? (
-                                                    <LockClosed20Regular className="w-4 h-4"/>
-                                                ) : (
-                                                    <LockOpen20Regular className="w-4 h-4"/>
-                                                )}
-                                            </button>
-
-                                            {/* Height Input */}
-                                            <div className="flex-1 space-y-1">
-                                                <label
-                                                    className="text-[10px] font-black uppercase tracking-wide text-text-muted">Height
-                                                    (px)</label>
-                                                <input
-                                                    type="number"
-                                                    value={heightInput}
-                                                    onChange={(e) => handleHeightChange(e.target.value)}
-                                                    min="1"
-                                                    disabled={isResizing}
-                                                    className="w-full px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Quick aspect ratio hint */}
-                                        {maintainAspectRatio && getBaselineRatio() && (
-                                            <div
-                                                className="text-[9px] text-text-muted leading-relaxed italic bg-surface-secondary/30 p-2 border border-border/50 rounded-lg">
-                                                Aspect ratio is locked at{" "}
-                                                <strong className="font-mono">
-                                                    {parseFloat(getBaselineRatio()!.toFixed(2))}:1
-                                                </strong>{" "}
-                                                based on the first image. Changing one dimension automatically
-                                                calculates the other.
-                                            </div>
-                                        )}
-
-                                        {!maintainAspectRatio && (
-                                            <div
-                                                className="text-[9px] text-danger/80 leading-relaxed italic bg-danger-bg/20 p-2 border border-danger/20 rounded-lg">
-                                                Aspect ratio is unlocked. The resized images will be stretched to fit
-                                                the exact dimensions.
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* Mode 2: Percentage Controls */}
-                                {resizeMode === "percentage" && (
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <div className="flex justify-between items-center text-xs font-bold">
-                                                <span
-                                                    className="text-[10px] font-black uppercase tracking-wide text-text-muted">Scale Value</span>
-                                                <span className="text-primary font-mono font-black">{percentage}%</span>
-                                            </div>
+                            {/* Mode 1: Dimensions Controls */}
+                            {resizeMode === "dimensions" && (
+                                <div className="space-y-4">
+                                    <div className="flex items-end gap-3">
+                                        {/* Width Input */}
+                                        <div className="flex-1 space-y-1">
+                                            <label
+                                                className="text-[10px] font-black uppercase tracking-wide text-text-muted">Width
+                                                (px)</label>
                                             <input
-                                                type="range"
-                                                min="5"
-                                                max="150"
-                                                step="5"
-                                                value={percentage}
-                                                onChange={(e) => setPercentage(parseInt(e.target.value, 10))}
+                                                type="number"
+                                                value={widthInput}
+                                                onChange={(e) => handleWidthChange(e.target.value)}
+                                                min="1"
                                                 disabled={isResizing}
-                                                className="w-full accent-primary cursor-pointer"
+                                                className="w-full px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors"
                                             />
                                         </div>
 
-                                        {/* Percentage Quick presets */}
-                                        <div className="grid grid-cols-4 gap-1.5">
-                                            {[25, 50, 75, 100].map((preset) => (
-                                                <button
-                                                    key={preset}
-                                                    onClick={() => setPercentage(preset)}
-                                                    disabled={isResizing}
-                                                    className={`py-1 text-[10px] font-extrabold rounded-lg border transition-all cursor-pointer ${
-                                                        percentage === preset
-                                                            ? "bg-primary text-white border-primary"
-                                                            : "bg-surface text-text-secondary border-border hover:bg-surface-secondary"
-                                                    }`}
-                                                >
-                                                    {preset}%
-                                                </button>
-                                            ))}
+                                        {/* Link Aspect Ratio Button */}
+                                        <button
+                                            onClick={toggleAspectRatio}
+                                            disabled={isResizing}
+                                            className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
+                                                maintainAspectRatio
+                                                    ? "bg-primary/10 border-primary/30 text-primary"
+                                                    : "bg-surface border-border text-text-muted hover:text-text-secondary"
+                                            }`}
+                                            title={maintainAspectRatio ? "Unlock aspect ratio" : "Lock aspect ratio"}
+                                        >
+                                            {maintainAspectRatio ? (
+                                                <LockClosed20Regular className="w-4 h-4"/>
+                                            ) : (
+                                                <LockOpen20Regular className="w-4 h-4"/>
+                                            )}
+                                        </button>
+
+                                        {/* Height Input */}
+                                        <div className="flex-1 space-y-1">
+                                            <label
+                                                className="text-[10px] font-black uppercase tracking-wide text-text-muted">Height
+                                                (px)</label>
+                                            <input
+                                                type="number"
+                                                value={heightInput}
+                                                onChange={(e) => handleHeightChange(e.target.value)}
+                                                min="1"
+                                                disabled={isResizing}
+                                                className="w-full px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors"
+                                            />
                                         </div>
                                     </div>
-                                )}
-                            </div>
 
-                            {/* Files List Panel */}
-                            <div className="md:col-span-2 space-y-4">
-                                {/* Toolbar Control */}
-                                <div
-                                    className="flex items-center justify-between p-4 border border-border bg-surface/50 backdrop-blur-md rounded-2xl gap-3">
-                                    <div className="text-xs font-bold text-text-secondary">
-                                        Images loaded:{" "}
-                                        <span className="text-text-primary font-extrabold font-mono">
-                                            {totalCount}
-                                        </span>
+                                    {/* Quick aspect ratio hint */}
+                                    {maintainAspectRatio && getBaselineRatio() && (
+                                        <div
+                                            className="text-[9px] text-text-muted leading-relaxed italic bg-surface-secondary/30 p-2 border border-border/50 rounded-lg">
+                                            Aspect ratio is locked at{" "}
+                                            <strong className="font-mono">
+                                                {parseFloat(getBaselineRatio()!.toFixed(2))}:1
+                                            </strong>{" "}
+                                            based on the first image. Changing one dimension automatically
+                                            calculates the other.
+                                        </div>
+                                    )}
+
+                                    {!maintainAspectRatio && (
+                                        <div
+                                            className="text-[9px] text-danger/80 leading-relaxed italic bg-danger-bg/20 p-2 border border-danger/20 rounded-lg">
+                                            Aspect ratio is unlocked. The resized images will be stretched to fit
+                                            the exact dimensions.
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Mode 2: Percentage Controls */}
+                            {resizeMode === "percentage" && (
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-center text-xs font-bold">
+                                                <span
+                                                    className="text-[10px] font-black uppercase tracking-wide text-text-muted">Scale Value</span>
+                                            <span className="text-primary font-mono font-black">{percentage}%</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="5"
+                                            max="150"
+                                            step="5"
+                                            value={percentage}
+                                            onChange={(e) => setPercentage(parseInt(e.target.value, 10))}
+                                            disabled={isResizing}
+                                            className="w-full accent-primary cursor-pointer"
+                                        />
                                     </div>
 
-                                    <div className="flex items-center gap-2 shrink-0">
-                                        <button
-                                            onClick={triggerFileInput}
-                                            disabled={isResizing}
-                                            className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover rounded-lg cursor-pointer transition-colors disabled:opacity-50"
-                                        >
-                                            <Add20Regular className="w-3.5 h-3.5"/>
-                                            Add Images
-                                        </button>
-
-                                        <button
-                                            onClick={clearAll}
-                                            className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-text-secondary hover:text-danger hover:bg-danger-bg/40 rounded-lg cursor-pointer transition-colors"
-                                        >
-                                            <Delete20Regular className="w-3.5 h-3.5"/>
-                                            Clear All
-                                        </button>
+                                    {/* Percentage Quick presets */}
+                                    <div className="grid grid-cols-4 gap-1.5">
+                                        {[25, 50, 75, 100].map((preset) => (
+                                            <button
+                                                key={preset}
+                                                onClick={() => setPercentage(preset)}
+                                                disabled={isResizing}
+                                                className={`py-1 text-[10px] font-extrabold rounded-lg border transition-all cursor-pointer ${
+                                                    percentage === preset
+                                                        ? "bg-primary text-white border-primary"
+                                                        : "bg-surface text-text-secondary border-border hover:bg-surface-secondary"
+                                                }`}
+                                            >
+                                                {preset}%
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
+                            )}
+                        </div>
 
-                                {/* Files Grid/List */}
-                                <div className="space-y-3 max-h-115 overflow-y-auto pr-2 custom-scrollbar">
-                                    {files.map((item) => (
-                                        <div
-                                            key={item.id}
-                                            className="flex flex-row items-center justify-between border border-border bg-surface/40 hover:bg-surface/70 backdrop-blur-md p-3 sm:p-4 rounded-2xl gap-3 transition-all duration-200"
-                                        >
-                                            {/* Left Side: Thumbnail & Image Info */}
-                                            <div className="flex items-center gap-3 min-w-0 flex-1">
-                                                <div
-                                                    className="w-12 h-12 rounded-lg bg-surface-secondary border border-border shrink-0 overflow-hidden flex items-center justify-center text-text-muted relative">
-                                                    {item.previewUrl ? (
-                                                        /* eslint-disable-next-line @next/next/no-img-element */
-                                                        <img
-                                                            src={item.previewUrl}
-                                                            alt={item.name}
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    ) : (
-                                                        <div
-                                                            className="flex flex-col items-center justify-center gap-0.5">
-                                                            <Image20Regular className="w-5 h-5 text-primary"/>
-                                                            <span
-                                                                className="text-[7px] font-black uppercase bg-primary/10 text-primary px-1 rounded">
+                        {/* Files List Panel */}
+                        <div className="md:col-span-2 space-y-4">
+                            {/* Toolbar Control */}
+                            <div
+                                className="flex items-center justify-between p-4 border border-border bg-surface/50 backdrop-blur-md rounded-2xl gap-3">
+                                <div className="text-xs font-bold text-text-secondary">
+                                    Images loaded:{" "}
+                                    <span className="text-text-primary font-extrabold font-mono">
+                                            {totalCount}
+                                        </span>
+                                </div>
+
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <button
+                                        onClick={triggerFileInput}
+                                        disabled={isResizing}
+                                        className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover rounded-lg cursor-pointer transition-colors disabled:opacity-50"
+                                    >
+                                        <Add20Regular className="w-3.5 h-3.5"/>
+                                        Add Images
+                                    </button>
+
+                                    <button
+                                        onClick={clearAll}
+                                        className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-text-secondary hover:text-danger hover:bg-danger-bg/40 rounded-lg cursor-pointer transition-colors"
+                                    >
+                                        <Delete20Regular className="w-3.5 h-3.5"/>
+                                        Clear All
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Files Grid/List */}
+                            <div className="space-y-3 max-h-115 overflow-y-auto pr-2 custom-scrollbar">
+                                {files.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="flex flex-row items-center justify-between border border-border bg-surface/40 hover:bg-surface/70 backdrop-blur-md p-3 sm:p-4 rounded-2xl gap-3 transition-all duration-200"
+                                    >
+                                        {/* Left Side: Thumbnail & Image Info */}
+                                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                                            <div
+                                                className="w-12 h-12 rounded-lg bg-surface-secondary border border-border shrink-0 overflow-hidden flex items-center justify-center text-text-muted relative">
+                                                {item.previewUrl ? (
+                                                    /* eslint-disable-next-line @next/next/no-img-element */
+                                                    <img
+                                                        src={item.previewUrl}
+                                                        alt={item.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div
+                                                        className="flex flex-col items-center justify-center gap-0.5">
+                                                        <Image20Regular className="w-5 h-5 text-primary"/>
+                                                        <span
+                                                            className="text-[7px] font-black uppercase bg-primary/10 text-primary px-1 rounded">
                                                                 {item.inputFormat}
                                                             </span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="min-w-0 space-y-0.5">
-                                                    <div className="text-xs font-bold text-text-primary truncate"
-                                                         title={item.name}>
-                                                        {item.name}
                                                     </div>
-                                                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                                                )}
+                                            </div>
+                                            <div className="min-w-0 space-y-0.5">
+                                                <div className="text-xs font-bold text-text-primary truncate"
+                                                     title={item.name}>
+                                                    {item.name}
+                                                </div>
+                                                <div className="flex flex-wrap items-center gap-1.5 mt-2">
                                                         <span
                                                             className="text-[9px] font-extrabold uppercase px-1 py-0.2 rounded bg-surface-secondary border border-border text-text-secondary">
                                                             {item.inputFormat}
                                                         </span>
-                                                        <span className="text-[10px] text-text-muted">
+                                                    <span className="text-[10px] text-text-muted">
                                                             {formatBytes(item.size)}
                                                         </span>
-                                                        {item.originalWidth && item.originalHeight && (
-                                                            <>
-                                                                <span className="w-1 h-1 rounded-full bg-border"/>
-                                                                <span
-                                                                    className="text-[10px] font-semibold text-text-muted font-mono">
+                                                    {item.originalWidth && item.originalHeight && (
+                                                        <>
+                                                            <span className="w-1 h-1 rounded-full bg-border"/>
+                                                            <span
+                                                                className="text-[10px] font-semibold text-text-muted font-mono">
                                                                     {item.originalWidth}x{item.originalHeight} px
                                                                 </span>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Right Side: Resizing info, state indicators, and actions */}
-                                            <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-                                                {/* Output Target Resolution Preview */}
-                                                {item.status === "success" && item.resizedWidth && item.resizedHeight && (
-                                                    <div
-                                                        className="flex flex-col items-end text-right whitespace-nowrap">
-                                                        <div className="text-[10px] font-semibold text-text-primary">
-                                                            <span
-                                                                className="text-[9px] font-black uppercase tracking-wider text-success mr-1 hidden sm:inline">Resized to</span>
-                                                            <span className="font-bold font-mono">
-                                                                {item.resizedWidth}x{item.resizedHeight} px
-                                                            </span>
-                                                        </div>
-                                                        {item.resizedSize && (
-                                                            <span className="text-[9px] text-text-muted font-medium">
-                                                                {formatBytes(item.resizedSize)}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                )}
-
-                                                {/* Status indicators */}
-                                                <div className="flex items-center gap-3">
-                                                    {item.status === "resizing" && (
-                                                        <div className="flex items-center gap-1.5">
-                                                            <div
-                                                                className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
-                                                            <span
-                                                                className="text-[10px] font-bold text-primary hidden sm:inline">
-                                                                Resizing...
-                                                            </span>
-                                                        </div>
+                                                        </>
                                                     )}
-
-                                                    {item.status === "success" && (
-                                                        <div className="flex items-center gap-1.5 text-success">
-                                                            <CheckmarkCircle20Regular className="w-4 h-4"/>
-                                                            <span
-                                                                className="text-[10px] font-extrabold uppercase hidden sm:inline">
-                                                                Success
-                                                            </span>
-                                                        </div>
-                                                    )}
-
-                                                    {item.status === "error" && (
-                                                        <div
-                                                            className="flex items-center gap-1.5 text-danger group relative cursor-help"
-                                                            title={item.errorMsg}>
-                                                            <ErrorCircle20Regular className="w-4 h-4"/>
-                                                            <span
-                                                                className="text-[10px] font-extrabold uppercase hidden sm:inline">
-                                                                Failed
-                                                            </span>
-                                                        </div>
-                                                    )}
-
-                                                    {/* File Level Actions */}
-                                                    <div
-                                                        className="flex items-center gap-2 border-l border-border pl-2.5">
-                                                        {item.status === "success" && (
-                                                            <button
-                                                                onClick={() => triggerSingleDownload(item)}
-                                                                className="p-1.5 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-secondary cursor-pointer transition-colors"
-                                                                title="Download this resized image"
-                                                            >
-                                                                <ArrowDownload20Regular className="w-4 h-4"/>
-                                                            </button>
-                                                        )}
-
-                                                        {item.status === "error" && (
-                                                            <button
-                                                                onClick={() => resizeSingleItem(item.id)}
-                                                                className="p-1.5 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-secondary cursor-pointer transition-colors"
-                                                                title="Retry resize"
-                                                            >
-                                                                <ArrowCounterclockwise20Regular className="w-4 h-4"/>
-                                                            </button>
-                                                        )}
-
-                                                        {item.status !== "resizing" && (
-                                                            <button
-                                                                onClick={() => removeFile(item.id)}
-                                                                disabled={isResizing}
-                                                                className="p-1.5 rounded-lg text-text-muted hover:text-danger hover:bg-danger-bg/40 cursor-pointer transition-colors disabled:opacity-50"
-                                                                title="Remove image"
-                                                            >
-                                                                <Dismiss20Regular className="w-4 h-4"/>
-                                                            </button>
-                                                        )}
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
 
-                                {/* Batch Status Alert bar */}
-                                {errorCount > 0 && (
-                                    <div
-                                        className="p-3 border border-danger/30 bg-danger-bg text-danger rounded-2xl text-xs font-semibold flex items-center gap-2.5">
-                                        <ErrorCircle20Regular className="w-4 h-4"/>
-                                        <span>
-                                            Some images could not be resized. Make sure they are valid image files, and click retry to run again.
-                                        </span>
-                                    </div>
-                                )}
+                                        {/* Right Side: Resizing info, state indicators, and actions */}
+                                        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+                                            {/* Output Target Resolution Preview */}
+                                            {item.status === "success" && item.resizedWidth && item.resizedHeight && (
+                                                <div
+                                                    className="flex flex-col items-end text-right whitespace-nowrap">
+                                                    <div className="text-[10px] font-semibold text-text-primary">
+                                                            <span
+                                                                className="text-[9px] font-black uppercase tracking-wider text-success mr-1 hidden sm:inline">Resized to</span>
+                                                        <span className="font-bold font-mono">
+                                                                {item.resizedWidth}x{item.resizedHeight} px
+                                                            </span>
+                                                    </div>
+                                                    {item.resizedSize && (
+                                                        <span className="text-[9px] text-text-muted font-medium">
+                                                                {formatBytes(item.resizedSize)}
+                                                            </span>
+                                                    )}
+                                                </div>
+                                            )}
 
-                                {/* Main CTA Block */}
-                                <div
-                                    className="flex flex-col sm:flex-row items-center justify-between border border-border bg-surface/50 backdrop-blur-md p-4 rounded-2xl gap-4">
-                                    <div className="text-xs text-text-muted">
-                                        {successCount > 0 && (
-                                            <span>
-                                                Successfully resized{" "}
-                                                <strong className="text-success font-black">
-                                                    {successCount}
-                                                </strong>{" "}
-                                                / {totalCount} {totalCount === 1 ? "image" : "images"}.
-                                            </span>
-                                        )}
-                                        {successCount === 0 && (
-                                            <span>Ready to resize {totalCount} {totalCount === 1 ? "image" : "images"}.</span>
-                                        )}
-                                    </div>
-
-                                    <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-                                        {/* Resize trigger */}
-                                        {idleCount + errorCount > 0 && (
-                                            <button
-                                                onClick={startResizing}
-                                                disabled={isResizing}
-                                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover disabled:bg-primary/40 cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all"
-                                            >
-                                                {isResizing ? (
-                                                    <>
+                                            {/* Status indicators */}
+                                            <div className="flex items-center gap-3">
+                                                {item.status === "resizing" && (
+                                                    <div className="flex items-center gap-1.5">
                                                         <div
-                                                            className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"/>
-                                                        Resizing...
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Settings20Regular className="w-4 h-4"/>
-                                                        Resize {idleCount + errorCount} {idleCount + errorCount === 1 ? "Image" : "Images"}
-                                                    </>
+                                                            className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
+                                                        <span
+                                                            className="text-[10px] font-bold text-primary hidden sm:inline">
+                                                                Resizing...
+                                                            </span>
+                                                    </div>
                                                 )}
-                                            </button>
-                                        )}
 
-                                        {/* Download actions: 1 file vs multiple files (ZIP) */}
-                                        {totalCount === 1 && successCount === 1 && (
-                                            <button
-                                                onClick={() => triggerSingleDownload(files[0])}
-                                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all"
-                                            >
-                                                <ArrowDownload20Regular className="w-4 h-4"/>
-                                                Download Resized Image
-                                            </button>
-                                        )}
+                                                {item.status === "success" && (
+                                                    <div className="flex items-center gap-1.5 text-success">
+                                                        <CheckmarkCircle20Regular className="w-4 h-4"/>
+                                                        <span
+                                                            className="text-[10px] font-extrabold uppercase hidden sm:inline">
+                                                                Success
+                                                            </span>
+                                                    </div>
+                                                )}
 
-                                        {/* Multiple output: download ZIP */}
-                                        {totalCount > 1 && hasResized && (
-                                            <button
-                                                onClick={triggerZipDownload}
-                                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all"
-                                            >
-                                                <ArrowDownload20Regular className="w-4 h-4"/>
-                                                Download Resized (ZIP)
-                                            </button>
-                                        )}
+                                                {item.status === "error" && (
+                                                    <div
+                                                        className="flex items-center gap-1.5 text-danger group relative cursor-help"
+                                                        title={item.errorMsg}>
+                                                        <ErrorCircle20Regular className="w-4 h-4"/>
+                                                        <span
+                                                            className="text-[10px] font-extrabold uppercase hidden sm:inline">
+                                                                Failed
+                                                            </span>
+                                                    </div>
+                                                )}
+
+                                                {/* File Level Actions */}
+                                                <div
+                                                    className="flex items-center gap-2 border-l border-border pl-2.5">
+                                                    {item.status === "success" && (
+                                                        <button
+                                                            onClick={() => triggerSingleDownload(item)}
+                                                            className="p-1.5 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-secondary cursor-pointer transition-colors"
+                                                            title="Download this resized image"
+                                                        >
+                                                            <ArrowDownload20Regular className="w-4 h-4"/>
+                                                        </button>
+                                                    )}
+
+                                                    {item.status === "error" && (
+                                                        <button
+                                                            onClick={() => resizeSingleItem(item.id)}
+                                                            className="p-1.5 rounded-lg text-text-secondary hover:text-primary hover:bg-surface-secondary cursor-pointer transition-colors"
+                                                            title="Retry resize"
+                                                        >
+                                                            <ArrowCounterclockwise20Regular className="w-4 h-4"/>
+                                                        </button>
+                                                    )}
+
+                                                    {item.status !== "resizing" && (
+                                                        <button
+                                                            onClick={() => removeFile(item.id)}
+                                                            disabled={isResizing}
+                                                            className="p-1.5 rounded-lg text-text-muted hover:text-danger hover:bg-danger-bg/40 cursor-pointer transition-colors disabled:opacity-50"
+                                                            title="Remove image"
+                                                        >
+                                                            <Dismiss20Regular className="w-4 h-4"/>
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
 
+                            {/* Batch Status Alert bar */}
+                            {errorCount > 0 && (
+                                <div
+                                    className="p-3 border border-danger/30 bg-danger-bg text-danger rounded-2xl text-xs font-semibold flex items-center gap-2.5">
+                                    <ErrorCircle20Regular className="w-4 h-4"/>
+                                    <span>
+                                            Some images could not be resized. Make sure they are valid image files, and click retry to run again.
+                                        </span>
+                                </div>
+                            )}
+
+                            {/* Main CTA Block */}
+                            <div
+                                className="flex flex-col sm:flex-row items-center justify-between border border-border bg-surface/50 backdrop-blur-md p-4 rounded-2xl gap-4">
+                                <div className="text-xs text-text-muted">
+                                    {successCount > 0 && (
+                                        <span>
+                                                Successfully resized{" "}
+                                            <strong className="text-success font-black">
+                                                    {successCount}
+                                                </strong>{" "}
+                                            / {totalCount} {totalCount === 1 ? "image" : "images"}.
+                                            </span>
+                                    )}
+                                    {successCount === 0 && (
+                                        <span>Ready to resize {totalCount} {totalCount === 1 ? "image" : "images"}.</span>
+                                    )}
+                                </div>
+
+                                <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                                    {/* Resize trigger */}
+                                    {idleCount + errorCount > 0 && (
+                                        <button
+                                            onClick={startResizing}
+                                            disabled={isResizing}
+                                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover disabled:bg-primary/40 cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all"
+                                        >
+                                            {isResizing ? (
+                                                <>
+                                                    <div
+                                                        className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"/>
+                                                    Resizing...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Settings20Regular className="w-4 h-4"/>
+                                                    Resize {idleCount + errorCount} {idleCount + errorCount === 1 ? "Image" : "Images"}
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+
+                                    {/* Download actions: 1 file vs multiple files (ZIP) */}
+                                    {totalCount === 1 && successCount === 1 && (
+                                        <button
+                                            onClick={() => triggerSingleDownload(files[0])}
+                                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all"
+                                        >
+                                            <ArrowDownload20Regular className="w-4 h-4"/>
+                                            Download Resized Image
+                                        </button>
+                                    )}
+
+                                    {/* Multiple output: download ZIP */}
+                                    {totalCount > 1 && hasResized && (
+                                        <button
+                                            onClick={triggerZipDownload}
+                                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover cursor-pointer shadow-md shadow-primary/10 active:scale-98 transition-all"
+                                        >
+                                            <ArrowDownload20Regular className="w-4 h-4"/>
+                                            Download Resized (ZIP)
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
                         </div>
-                    )}
-                </div>
+
+                    </div>
+                )}
             </div>
-        </div>
+        </>
     );
 }

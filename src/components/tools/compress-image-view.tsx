@@ -511,385 +511,383 @@ export function CompressImageView({tool}: CompressImageViewProps) {
     const savedPercentage = totalOriginalSize > 0 ? Math.round((totalSavedSpace / totalOriginalSize) * 100) : 0;
 
     return (
-        <div className="w-full flex-1 relative overflow-hidden">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
-                {/* Tool Title Block */}
-                <div
-                    className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2.5">
+        <>
+            {/* Tool Title Block */}
+            <div
+                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
                             <span
                                 className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
                                 <ResizeSmall20Regular className="w-4 h-4"/>
                             </span>
-                            <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                                {tool.title}
-                            </h1>
-                        </div>
-                        <p className="text-xs sm:text-sm text-text-muted">
-                            {tool.description}
-                        </p>
+                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
+                            {tool.title}
+                        </h1>
                     </div>
+                    <p className="text-xs sm:text-sm text-text-muted">
+                        {tool.description}
+                    </p>
                 </div>
+            </div>
 
-                {/* Main Workspace */}
-                <div className="space-y-6">
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={onFileSelect}
-                        multiple
-                        accept="image/*"
-                        className="hidden"
-                    />
+            {/* Main Workspace */}
+            <div className="space-y-6">
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={onFileSelect}
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                />
 
-                    {/* Dropzone Area */}
-                    {totalCount === 0 && (
-                        <div
-                            onDragOver={onDragOver}
-                            onDragLeave={onDragLeave}
-                            onDrop={onDrop}
-                            onClick={triggerFileInput}
-                            className={`relative border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer transition-all duration-300 group ${
-                                isDragging
-                                    ? "border-primary bg-primary/5"
-                                    : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-                            }`}
-                        >
-                            <div className="flex flex-col items-center justify-center space-y-4">
-                                <div
-                                    className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
-                                    <Image20Regular className="w-8 h-8"/>
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-extrabold text-text-primary">
-                                        Drag & drop images here, or <span className="text-primary">browse</span>
-                                    </p>
-                                    <p className="text-[10px] text-text-muted">
-                                        Supports PNG, JPG, WebP, AVIF, HEIC, TIFF (Up to 15MB each)
-                                    </p>
-                                </div>
+                {/* Dropzone Area */}
+                {totalCount === 0 && (
+                    <div
+                        onDragOver={onDragOver}
+                        onDragLeave={onDragLeave}
+                        onDrop={onDrop}
+                        onClick={triggerFileInput}
+                        className={`relative border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer transition-all duration-300 group ${
+                            isDragging
+                                ? "border-primary bg-primary/5"
+                                : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
+                        }`}
+                    >
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <div
+                                className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
+                                <Image20Regular className="w-8 h-8"/>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-sm font-extrabold text-text-primary">
+                                    Drag & drop images here, or <span className="text-primary">browse</span>
+                                </p>
+                                <p className="text-[10px] text-text-muted">
+                                    Supports PNG, JPG, WebP, AVIF, HEIC, TIFF (Up to 15MB each)
+                                </p>
                             </div>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {/* Compressor Configuration & File List */}
-                    {totalCount > 0 && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Compressor Configuration & File List */}
+                {totalCount > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                            {/* Configuration Panel */}
-                            <div
-                                className="md:col-span-1 border border-border bg-surface/40 backdrop-blur-md p-5 rounded-3xl space-y-6">
-                                <h3 className="text-xs font-black uppercase tracking-wider text-text-primary flex items-center gap-1.5 border-b border-border pb-3">
-                                    <Settings20Regular className="w-4 h-4 text-primary"/>
-                                    Compression Settings
-                                </h3>
+                        {/* Configuration Panel */}
+                        <div
+                            className="md:col-span-1 border border-border bg-surface/40 backdrop-blur-md p-5 rounded-3xl space-y-6">
+                            <h3 className="text-xs font-black uppercase tracking-wider text-text-primary flex items-center gap-1.5 border-b border-border pb-3">
+                                <Settings20Regular className="w-4 h-4 text-primary"/>
+                                Compression Settings
+                            </h3>
 
-                                {/* Compression Level: Lossy vs Lossless */}
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-wide text-text-muted">
-                                        Compression Mode
-                                    </label>
-                                    <TabGroup
-                                        tabs={[
-                                            {id: "lossy", label: "Lossy"},
-                                            {id: "lossless", label: "Lossless"}
-                                        ]}
-                                        activeTab={compressionMode}
-                                        onChange={setCompressionMode}
-                                        disabled={isProcessing}
-                                    />
-                                </div>
+                            {/* Compression Level: Lossy vs Lossless */}
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-wide text-text-muted">
+                                    Compression Mode
+                                </label>
+                                <TabGroup
+                                    tabs={[
+                                        {id: "lossy", label: "Lossy"},
+                                        {id: "lossless", label: "Lossless"}
+                                    ]}
+                                    activeTab={compressionMode}
+                                    onChange={setCompressionMode}
+                                    disabled={isProcessing}
+                                />
+                            </div>
 
-                                {/* Lossy Configuration options */}
-                                {compressionMode === "lossy" && (
-                                    <div className="space-y-5 border-t border-border/55 pt-4">
-                                        {/* Target Options: Quality vs Target Size */}
-                                        <div className="space-y-2">
-                                            <label
-                                                className="text-[10px] font-black uppercase tracking-wide text-text-muted">
-                                                Optimize By
-                                            </label>
-                                            <TabGroup
-                                                tabs={[
-                                                    {id: "quality", label: "Quality"},
-                                                    {id: "size", label: "File Size Limit"}
-                                                ]}
-                                                activeTab={targetType}
-                                                onChange={setTargetType}
-                                                disabled={isProcessing}
-                                            />
-                                        </div>
+                            {/* Lossy Configuration options */}
+                            {compressionMode === "lossy" && (
+                                <div className="space-y-5 border-t border-border/55 pt-4">
+                                    {/* Target Options: Quality vs Target Size */}
+                                    <div className="space-y-2">
+                                        <label
+                                            className="text-[10px] font-black uppercase tracking-wide text-text-muted">
+                                            Optimize By
+                                        </label>
+                                        <TabGroup
+                                            tabs={[
+                                                {id: "quality", label: "Quality"},
+                                                {id: "size", label: "File Size Limit"}
+                                            ]}
+                                            activeTab={targetType}
+                                            onChange={setTargetType}
+                                            disabled={isProcessing}
+                                        />
+                                    </div>
 
-                                        {/* Quality Slider Option */}
-                                        {targetType === "quality" && (
-                                            <div className="space-y-3">
-                                                <div className="flex justify-between items-center text-xs">
+                                    {/* Quality Slider Option */}
+                                    {targetType === "quality" && (
+                                        <div className="space-y-3">
+                                            <div className="flex justify-between items-center text-xs">
                                                     <span
                                                         className="text-[10px] font-black uppercase tracking-wide text-text-muted">
                                                         Quality Level
                                                     </span>
-                                                    <span
-                                                        className="text-primary font-mono font-black">{quality}%</span>
-                                                </div>
-                                                <input
-                                                    type="range"
-                                                    min="5"
-                                                    max="95"
-                                                    step="5"
-                                                    value={quality}
-                                                    onChange={(e) => setQuality(parseInt(e.target.value, 10))}
-                                                    disabled={isProcessing}
-                                                    className="w-full accent-primary cursor-pointer"
-                                                />
-                                                {/* Presets */}
-                                                <div className="grid grid-cols-3 gap-1">
-                                                    {[
-                                                        {label: "Low (25%)", val: 25},
-                                                        {label: "Mid (60%)", val: 60},
-                                                        {label: "High (80%)", val: 80}
-                                                    ].map((preset) => (
-                                                        <PresetButton
-                                                            key={preset.val}
-                                                            label={preset.label}
-                                                            isActive={quality === preset.val}
-                                                            onClick={() => setQuality(preset.val)}
-                                                            disabled={isProcessing}
-                                                            sizeClass="text-[8px]"
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <p className="text-[9px] text-text-muted leading-relaxed italic mt-1">
-                                                    Discards subtle chromatic differences to minimize size. Lower values
-                                                    result in smaller file sizes but more compression artifacts.
-                                                </p>
+                                                <span
+                                                    className="text-primary font-mono font-black">{quality}%</span>
                                             </div>
-                                        )}
-
-                                        {/* Size-Based Option */}
-                                        {targetType === "size" && (
-                                            <div className="space-y-3">
-                                                <div className="space-y-1">
-                                                    <label
-                                                        className="text-[10px] font-black uppercase tracking-wide text-text-muted">
-                                                        Max Target Size
-                                                    </label>
-                                                    <div className="flex gap-2">
-                                                        <input
-                                                            type="number"
-                                                            value={targetSizeValue}
-                                                            onChange={(e) => setTargetSizeValue(e.target.value)}
-                                                            min="0.1"
-                                                            step={targetSizeUnit === "MB" ? "0.1" : "1"}
-                                                            disabled={isProcessing}
-                                                            className="flex-1 px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors"
-                                                        />
-                                                        <select
-                                                            value={targetSizeUnit}
-                                                            onChange={(e) => setTargetSizeUnit(e.target.value as "KB" | "MB")}
-                                                            disabled={isProcessing}
-                                                            className="px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors cursor-pointer"
-                                                        >
-                                                            <option value="KB">KB</option>
-                                                            <option value="MB">MB</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                {/* Predefined limit presets */}
-                                                <div className="grid grid-cols-4 gap-1">
-                                                    {(targetSizeUnit === "KB" ? [50, 100, 200, 500] : [0.5, 1, 2, 5]).map((size) => (
-                                                        <PresetButton
-                                                            key={size}
-                                                            label={`${size} ${targetSizeUnit}`}
-                                                            isActive={targetSizeValue === size.toString()}
-                                                            onClick={() => setTargetSizeValue(size.toString())}
-                                                            disabled={isProcessing}
-                                                            sizeClass="text-[9px]"
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <p className="text-[9px] text-info leading-relaxed italic mt-1 bg-info-bg/20 p-2 border border-info/20 rounded-lg">
-                                                    <strong>Smart Compression:</strong> The compressor automatically
-                                                    adjusts quality levels iteratively to get as close to the target
-                                                    size limit as possible without exceeding it.
-                                                </p>
+                                            <input
+                                                type="range"
+                                                min="5"
+                                                max="95"
+                                                step="5"
+                                                value={quality}
+                                                onChange={(e) => setQuality(parseInt(e.target.value, 10))}
+                                                disabled={isProcessing}
+                                                className="w-full accent-primary cursor-pointer"
+                                            />
+                                            {/* Presets */}
+                                            <div className="grid grid-cols-3 gap-1">
+                                                {[
+                                                    {label: "Low (25%)", val: 25},
+                                                    {label: "Mid (60%)", val: 60},
+                                                    {label: "High (80%)", val: 80}
+                                                ].map((preset) => (
+                                                    <PresetButton
+                                                        key={preset.val}
+                                                        label={preset.label}
+                                                        isActive={quality === preset.val}
+                                                        onClick={() => setQuality(preset.val)}
+                                                        disabled={isProcessing}
+                                                        sizeClass="text-[8px]"
+                                                    />
+                                                ))}
                                             </div>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* Lossless Configuration options */}
-                                {compressionMode === "lossless" && (
-                                    <div className="space-y-3 border-t border-border/55 pt-4">
-                                        <div className="text-[10px] font-black uppercase tracking-wide text-text-muted">
-                                            Lossless Settings
+                                            <p className="text-[9px] text-text-muted leading-relaxed italic mt-1">
+                                                Discards subtle chromatic differences to minimize size. Lower values
+                                                result in smaller file sizes but more compression artifacts.
+                                            </p>
                                         </div>
-                                        <p className="text-[9px] text-success leading-relaxed bg-success-bg/20 p-2.5 border border-success/20 rounded-lg">
-                                            <strong>100% Visual Fidelity:</strong> Reduces file sizes by optimizing file
-                                            internal metadata and entropy encoding without discarding any image pixel
-                                            information. Recommended for logos, line art, and critical documents.
-                                        </p>
-                                    </div>
-                                )}
+                                    )}
 
-                                {/* Aggregated savings summary (if compression occurred) */}
-                                {successCount > 0 && (
-                                    <div className="border-t border-border pt-4 space-y-3.5">
-                                        <h4 className="text-[10px] font-black uppercase tracking-wider text-text-primary">
-                                            Compression Report
-                                        </h4>
-                                        <div className="space-y-2">
-                                            <div className="flex justify-between text-xs text-text-muted">
-                                                <span>Original total size:</span>
-                                                <span
-                                                    className="font-semibold font-mono text-text-primary">{formatBytes(totalOriginalSize)}</span>
+                                    {/* Size-Based Option */}
+                                    {targetType === "size" && (
+                                        <div className="space-y-3">
+                                            <div className="space-y-1">
+                                                <label
+                                                    className="text-[10px] font-black uppercase tracking-wide text-text-muted">
+                                                    Max Target Size
+                                                </label>
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="number"
+                                                        value={targetSizeValue}
+                                                        onChange={(e) => setTargetSizeValue(e.target.value)}
+                                                        min="0.1"
+                                                        step={targetSizeUnit === "MB" ? "0.1" : "1"}
+                                                        disabled={isProcessing}
+                                                        className="flex-1 px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors"
+                                                    />
+                                                    <select
+                                                        value={targetSizeUnit}
+                                                        onChange={(e) => setTargetSizeUnit(e.target.value as "KB" | "MB")}
+                                                        disabled={isProcessing}
+                                                        className="px-3 py-2 text-xs font-bold bg-surface border border-border focus:border-primary rounded-xl outline-none transition-colors cursor-pointer"
+                                                    >
+                                                        <option value="KB">KB</option>
+                                                        <option value="MB">MB</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div className="flex justify-between text-xs text-text-muted">
-                                                <span>Compressed total:</span>
-                                                <span
-                                                    className="font-semibold font-mono text-text-primary">{formatBytes(totalCompressedSize)}</span>
+                                            {/* Predefined limit presets */}
+                                            <div className="grid grid-cols-4 gap-1">
+                                                {(targetSizeUnit === "KB" ? [50, 100, 200, 500] : [0.5, 1, 2, 5]).map((size) => (
+                                                    <PresetButton
+                                                        key={size}
+                                                        label={`${size} ${targetSizeUnit}`}
+                                                        isActive={targetSizeValue === size.toString()}
+                                                        onClick={() => setTargetSizeValue(size.toString())}
+                                                        disabled={isProcessing}
+                                                        sizeClass="text-[9px]"
+                                                    />
+                                                ))}
                                             </div>
-                                            <div
-                                                className="flex justify-between text-xs font-black border-t border-border/40 pt-2 text-success">
-                                                <span>Total Saved Space:</span>
-                                                <span className="font-mono text-success">
+                                            <p className="text-[9px] text-info leading-relaxed italic mt-1 bg-info-bg/20 p-2 border border-info/20 rounded-lg">
+                                                <strong>Smart Compression:</strong> The compressor automatically
+                                                adjusts quality levels iteratively to get as close to the target
+                                                size limit as possible without exceeding it.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Lossless Configuration options */}
+                            {compressionMode === "lossless" && (
+                                <div className="space-y-3 border-t border-border/55 pt-4">
+                                    <div className="text-[10px] font-black uppercase tracking-wide text-text-muted">
+                                        Lossless Settings
+                                    </div>
+                                    <p className="text-[9px] text-success leading-relaxed bg-success-bg/20 p-2.5 border border-success/20 rounded-lg">
+                                        <strong>100% Visual Fidelity:</strong> Reduces file sizes by optimizing file
+                                        internal metadata and entropy encoding without discarding any image pixel
+                                        information. Recommended for logos, line art, and critical documents.
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Aggregated savings summary (if compression occurred) */}
+                            {successCount > 0 && (
+                                <div className="border-t border-border pt-4 space-y-3.5">
+                                    <h4 className="text-[10px] font-black uppercase tracking-wider text-text-primary">
+                                        Compression Report
+                                    </h4>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs text-text-muted">
+                                            <span>Original total size:</span>
+                                            <span
+                                                className="font-semibold font-mono text-text-primary">{formatBytes(totalOriginalSize)}</span>
+                                        </div>
+                                        <div className="flex justify-between text-xs text-text-muted">
+                                            <span>Compressed total:</span>
+                                            <span
+                                                className="font-semibold font-mono text-text-primary">{formatBytes(totalCompressedSize)}</span>
+                                        </div>
+                                        <div
+                                            className="flex justify-between text-xs font-black border-t border-border/40 pt-2 text-success">
+                                            <span>Total Saved Space:</span>
+                                            <span className="font-mono text-success">
                                                     {formatBytes(totalSavedSpace)} ({savedPercentage}%)
                                                 </span>
-                                            </div>
                                         </div>
+                                    </div>
 
-                                        {/* Graphic space saving percentage bar */}
+                                    {/* Graphic space saving percentage bar */}
+                                    <div
+                                        className="w-full h-3.5 bg-surface-secondary border border-border rounded-full overflow-hidden relative">
                                         <div
-                                            className="w-full h-3.5 bg-surface-secondary border border-border rounded-full overflow-hidden relative">
-                                            <div
-                                                className="h-full bg-gradient-to-r from-success/80 to-success transition-all duration-500 rounded-full"
-                                                style={{width: `${savedPercentage}%`}}
-                                            />
-                                            <span
-                                                className="absolute inset-0 flex items-center justify-center text-[8px] font-black text-text-primary">
+                                            className="h-full bg-gradient-to-r from-success/80 to-success transition-all duration-500 rounded-full"
+                                            style={{width: `${savedPercentage}%`}}
+                                        />
+                                        <span
+                                            className="absolute inset-0 flex items-center justify-center text-[8px] font-black text-text-primary">
                                                 {savedPercentage}% Smallest Size
                                             </span>
-                                        </div>
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
+                        </div>
 
-                            {/* Files Grid / Processing Workspace */}
-                            <div className="md:col-span-2 space-y-4">
-                                {/* Actions Toolbar */}
-                                <div
-                                    className="flex items-center justify-between p-4 border border-border bg-surface/50 backdrop-blur-md rounded-2xl gap-3">
-                                    <div className="text-xs font-bold text-text-secondary">
-                                        Images loaded:{" "}
-                                        <span className="text-text-primary font-extrabold font-mono">
+                        {/* Files Grid / Processing Workspace */}
+                        <div className="md:col-span-2 space-y-4">
+                            {/* Actions Toolbar */}
+                            <div
+                                className="flex items-center justify-between p-4 border border-border bg-surface/50 backdrop-blur-md rounded-2xl gap-3">
+                                <div className="text-xs font-bold text-text-secondary">
+                                    Images loaded:{" "}
+                                    <span className="text-text-primary font-extrabold font-mono">
                                             {totalCount}
                                         </span>
-                                    </div>
+                                </div>
 
-                                    <div className="flex items-center gap-2 shrink-0">
+                                <div className="flex items-center gap-2 shrink-0">
+                                    <button
+                                        onClick={triggerFileInput}
+                                        disabled={isProcessing}
+                                        className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover rounded-lg cursor-pointer transition-colors disabled:opacity-50"
+                                    >
+                                        <Add20Regular className="w-3.5 h-3.5"/>
+                                        Add Images
+                                    </button>
+
+                                    <button
+                                        onClick={clearAll}
+                                        className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-text-secondary hover:text-danger hover:bg-danger-bg/40 rounded-lg cursor-pointer transition-colors"
+                                    >
+                                        <Delete20Regular className="w-3.5 h-3.5"/>
+                                        Clear All
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Files Grid List */}
+                            <div className="space-y-3 max-h-125 overflow-y-auto pr-2 custom-scrollbar">
+                                {files.map((item) => (
+                                    <FileListItem
+                                        key={item.id}
+                                        item={item}
+                                        onCompare={() => {
+                                            setActiveCompareItem(item);
+                                            setSliderPosition(50);
+                                        }}
+                                        onDownload={() => triggerSingleDownload(item)}
+                                        onRetry={() => compressSingleItem(item.id)}
+                                        onRemove={() => removeFile(item.id)}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Persistent Footer Actions Bar */}
+                            <div
+                                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border border-border bg-surface/50 backdrop-blur-md rounded-2xl">
+                                <div className="text-xs text-text-muted">
+                                    {successCount > 0 ? (
+                                        <>
+                                            Successfully compressed{" "}
+                                            <strong
+                                                className="text-text-primary font-mono">{successCount}</strong> of{" "}
+                                            <strong
+                                                className="text-text-primary font-mono">{totalCount}</strong> {totalCount === 1 ? "image" : "images"}.
+                                        </>
+                                    ) : (
+                                        <>
+                                            Ready to compress{" "}
+                                            <strong
+                                                className="text-text-primary font-mono">{totalCount}</strong> {totalCount === 1 ? "image" : "images"}.
+                                        </>
+                                    )}
+                                </div>
+
+                                <div className="flex flex-wrap items-center gap-2.5">
+                                    {/* Show Compress Button if there are idle or errored files, or if currently processing */}
+                                    {(files.some(f => f.status === "idle" || f.status === "error") || isProcessing) && (
                                         <button
-                                            onClick={triggerFileInput}
+                                            onClick={startCompression}
                                             disabled={isProcessing}
-                                            className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-white bg-primary hover:bg-primary-hover rounded-lg cursor-pointer transition-colors disabled:opacity-50"
+                                            className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
                                         >
-                                            <Add20Regular className="w-3.5 h-3.5"/>
-                                            Add Images
-                                        </button>
-
-                                        <button
-                                            onClick={clearAll}
-                                            className="inline-flex items-center gap-1 px-3 py-1.5 text-[10px] font-extrabold tracking-wide uppercase text-text-secondary hover:text-danger hover:bg-danger-bg/40 rounded-lg cursor-pointer transition-colors"
-                                        >
-                                            <Delete20Regular className="w-3.5 h-3.5"/>
-                                            Clear All
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* Files Grid List */}
-                                <div className="space-y-3 max-h-125 overflow-y-auto pr-2 custom-scrollbar">
-                                    {files.map((item) => (
-                                        <FileListItem
-                                            key={item.id}
-                                            item={item}
-                                            onCompare={() => {
-                                                setActiveCompareItem(item);
-                                                setSliderPosition(50);
-                                            }}
-                                            onDownload={() => triggerSingleDownload(item)}
-                                            onRetry={() => compressSingleItem(item.id)}
-                                            onRemove={() => removeFile(item.id)}
-                                        />
-                                    ))}
-                                </div>
-
-                                {/* Persistent Footer Actions Bar */}
-                                <div
-                                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border border-border bg-surface/50 backdrop-blur-md rounded-2xl">
-                                    <div className="text-xs text-text-muted">
-                                        {successCount > 0 ? (
-                                            <>
-                                                Successfully compressed{" "}
-                                                <strong
-                                                    className="text-text-primary font-mono">{successCount}</strong> of{" "}
-                                                <strong
-                                                    className="text-text-primary font-mono">{totalCount}</strong> {totalCount === 1 ? "image" : "images"}.
-                                            </>
-                                        ) : (
-                                            <>
-                                                Ready to compress{" "}
-                                                <strong
-                                                    className="text-text-primary font-mono">{totalCount}</strong> {totalCount === 1 ? "image" : "images"}.
-                                            </>
-                                        )}
-                                    </div>
-
-                                    <div className="flex flex-wrap items-center gap-2.5">
-                                        {/* Show Compress Button if there are idle or errored files, or if currently processing */}
-                                        {(files.some(f => f.status === "idle" || f.status === "error") || isProcessing) && (
-                                            <button
-                                                onClick={startCompression}
-                                                disabled={isProcessing}
-                                                className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
-                                            >
-                                                {isProcessing ? (
-                                                    <>
+                                            {isProcessing ? (
+                                                <>
                                                         <span
                                                             className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"/>
-                                                        Compressing...
-                                                    </>
-                                                ) : (
-                                                    totalCount === 1 ? "Compress Image" : "Compress Images"
-                                                )}
-                                            </button>
-                                        )}
-
-                                        {/* Download buttons when successCount > 0 */}
-                                        {successCount > 0 && !isProcessing && (
-                                            successCount === 1 ? (
-                                                <button
-                                                    onClick={() => triggerSingleDownload(successFiles[0])}
-                                                    className="px-5 py-2.5 bg-success hover:bg-success/90 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5"
-                                                >
-                                                    <ArrowDownload20Regular className="w-4 h-4"/>
-                                                    Download Image
-                                                </button>
+                                                    Compressing...
+                                                </>
                                             ) : (
-                                                <button
-                                                    onClick={triggerZipDownload}
-                                                    className="px-5 py-2.5 bg-success hover:bg-success/90 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5"
-                                                >
-                                                    <ArrowDownload20Regular className="w-4 h-4"/>
-                                                    Download All (ZIP)
-                                                </button>
-                                            )
-                                        )}
-                                    </div>
+                                                totalCount === 1 ? "Compress Image" : "Compress Images"
+                                            )}
+                                        </button>
+                                    )}
+
+                                    {/* Download buttons when successCount > 0 */}
+                                    {successCount > 0 && !isProcessing && (
+                                        successCount === 1 ? (
+                                            <button
+                                                onClick={() => triggerSingleDownload(successFiles[0])}
+                                                className="px-5 py-2.5 bg-success hover:bg-success/90 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                                            >
+                                                <ArrowDownload20Regular className="w-4 h-4"/>
+                                                Download Image
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={triggerZipDownload}
+                                                className="px-5 py-2.5 bg-success hover:bg-success/90 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                                            >
+                                                <ArrowDownload20Regular className="w-4 h-4"/>
+                                                Download All (ZIP)
+                                            </button>
+                                        )
+                                    )}
                                 </div>
                             </div>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
 
             {/* Premium Before / After Image Comparison Modal */}
@@ -1012,6 +1010,6 @@ export function CompressImageView({tool}: CompressImageViewProps) {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }

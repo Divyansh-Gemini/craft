@@ -419,357 +419,355 @@ export function TextDiffView({tool}: TextDiffViewProps) {
     };
 
     return (
-        <div className="w-full flex-1 relative overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-6">
-                {/* Header Title Block */}
-                <div
-                    className="flex flex-col md:flex-row md:items-center justify-between border-b border-border pb-6 gap-4">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2.5">
+        <>
+            {/* Header Title Block */}
+            <div
+                className="flex flex-col md:flex-row md:items-center justify-between border-b border-border pb-6 gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
                             <span
                                 className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
                                 <ItemCompare20Regular className="w-4 h-4"/>
                             </span>
-                            <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                                {tool.title}
-                            </h1>
-                        </div>
-                        <p className="text-xs sm:text-sm text-text-muted">
-                            {tool.description}
-                        </p>
+                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
+                            {tool.title}
+                        </h1>
                     </div>
+                    <p className="text-xs sm:text-sm text-text-muted">
+                        {tool.description}
+                    </p>
+                </div>
 
-                    {/* Quick Presets Dropdown */}
-                    <div className="flex items-center gap-2 flex-wrap">
+                {/* Quick Presets Dropdown */}
+                <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">
                             Try Samples:
                         </span>
-                        {PRESET_OPTIONS.map((preset) => (
+                    {PRESET_OPTIONS.map((preset) => (
+                        <button
+                            key={preset.key}
+                            onClick={() => handleLoadSample(preset.key)}
+                            className={BTN_PRESET}
+                        >
+                            {preset.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Global Toolbar Bar */}
+            <div
+                className="flex flex-wrap items-center justify-between gap-4 bg-surface/40 backdrop-blur-md border border-border/80 rounded-2xl p-4">
+                {/* Left: View Controls */}
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setShowInputs(!showInputs)}
+                        className={`${BTN_BASE} ${showInputs ? BTN_ACTIVE : BTN_INACTIVE}`}
+                    >
+                        <Document20Regular className="w-3.5 h-3.5"/>
+                        {showInputs ? "Hide Editors" : "Show Editors"}
+                    </button>
+
+                    <span className="w-px h-5 bg-border mx-1"/>
+
+                    <div className="flex bg-surface border border-border rounded-lg p-0.5">
+                        {DIFF_MODES.map((mode) => (
                             <button
-                                key={preset.key}
-                                onClick={() => handleLoadSample(preset.key)}
-                                className={BTN_PRESET}
+                                key={mode.key}
+                                onClick={() => setDiffMode(mode.key)}
+                                className={`${BTN_TAB_BASE} ${
+                                    diffMode === mode.key
+                                        ? "bg-primary text-white shadow-xs"
+                                        : "text-text-secondary hover:text-primary"
+                                }`}
                             >
-                                {preset.label}
+                                {mode.label}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Global Toolbar Bar */}
-                <div
-                    className="flex flex-wrap items-center justify-between gap-4 bg-surface/40 backdrop-blur-md border border-border/80 rounded-2xl p-4">
-                    {/* Left: View Controls */}
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => setShowInputs(!showInputs)}
-                            className={`${BTN_BASE} ${showInputs ? BTN_ACTIVE : BTN_INACTIVE}`}
-                        >
-                            <Document20Regular className="w-3.5 h-3.5"/>
-                            {showInputs ? "Hide Editors" : "Show Editors"}
-                        </button>
+                {/* Right: Functional Toggles */}
+                <div className="flex items-center gap-3">
+                    {/* Swap Option */}
+                    <button
+                        onClick={handleSwap}
+                        disabled={!originalText && !modifiedText}
+                        className={BTN_SECONDARY}
+                        title="Swap original and modified text"
+                    >
+                        <ArrowSwap20Regular className="w-3.5 h-3.5"/>
+                        <span className="text-[10px] uppercase">Swap</span>
+                    </button>
 
-                        <span className="w-px h-5 bg-border mx-1"/>
+                    {/* Line Wrap Toggle */}
+                    <button
+                        onClick={() => setIsLineWrap(!isLineWrap)}
+                        className={`${BTN_BASE} ${isLineWrap ? BTN_ACTIVE : BTN_INACTIVE}`}
+                    >
+                        <span className="text-[10px] uppercase">Wrap</span>
+                        <span className={`w-2 h-2 rounded-full ${isLineWrap ? "bg-primary" : "bg-text-muted/40"}`}/>
+                    </button>
 
-                        <div className="flex bg-surface border border-border rounded-lg p-0.5">
-                            {DIFF_MODES.map((mode) => (
-                                <button
-                                    key={mode.key}
-                                    onClick={() => setDiffMode(mode.key)}
-                                    className={`${BTN_TAB_BASE} ${
-                                        diffMode === mode.key
-                                            ? "bg-primary text-white shadow-xs"
-                                            : "text-text-secondary hover:text-primary"
-                                    }`}
-                                >
-                                    {mode.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Right: Functional Toggles */}
-                    <div className="flex items-center gap-3">
-                        {/* Swap Option */}
-                        <button
-                            onClick={handleSwap}
-                            disabled={!originalText && !modifiedText}
-                            className={BTN_SECONDARY}
-                            title="Swap original and modified text"
-                        >
-                            <ArrowSwap20Regular className="w-3.5 h-3.5"/>
-                            <span className="text-[10px] uppercase">Swap</span>
-                        </button>
-
-                        {/* Line Wrap Toggle */}
-                        <button
-                            onClick={() => setIsLineWrap(!isLineWrap)}
-                            className={`${BTN_BASE} ${isLineWrap ? BTN_ACTIVE : BTN_INACTIVE}`}
-                        >
-                            <span className="text-[10px] uppercase">Wrap</span>
-                            <span className={`w-2 h-2 rounded-full ${isLineWrap ? "bg-primary" : "bg-text-muted/40"}`}/>
-                        </button>
-
-                        {/* Clear All */}
-                        <button
-                            onClick={() => handleClear("both")}
-                            disabled={!originalText && !modifiedText}
-                            className={BTN_DANGER}
-                        >
-                            Clear All
-                        </button>
-                    </div>
+                    {/* Clear All */}
+                    <button
+                        onClick={() => handleClear("both")}
+                        disabled={!originalText && !modifiedText}
+                        className={BTN_DANGER}
+                    >
+                        Clear All
+                    </button>
                 </div>
+            </div>
 
-                {/* Inputs Block (Collapsible) */}
-                {showInputs && (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fadeIn">
-                        <DiffEditor
-                            title="Original Text"
-                            type="original"
-                            value={originalText}
-                            onChange={setOriginalText}
-                            textareaRef={origTextareaRef}
-                            gutterRef={origGutterRef}
-                            onScroll={handleOrigScroll}
-                            isLineWrap={isLineWrap}
-                            placeholder="Paste or drag-and-drop the original text here..."
-                            onClear={() => handleClear("original")}
-                            onCopy={() => handleCopyInput(originalText, "original")}
-                            isCopied={copyState.original}
-                            lines={originalLines}
-                        />
+            {/* Inputs Block (Collapsible) */}
+            {showInputs && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fadeIn">
+                    <DiffEditor
+                        title="Original Text"
+                        type="original"
+                        value={originalText}
+                        onChange={setOriginalText}
+                        textareaRef={origTextareaRef}
+                        gutterRef={origGutterRef}
+                        onScroll={handleOrigScroll}
+                        isLineWrap={isLineWrap}
+                        placeholder="Paste or drag-and-drop the original text here..."
+                        onClear={() => handleClear("original")}
+                        onCopy={() => handleCopyInput(originalText, "original")}
+                        isCopied={copyState.original}
+                        lines={originalLines}
+                    />
 
-                        <DiffEditor
-                            title="Modified Text"
-                            type="modified"
-                            value={modifiedText}
-                            onChange={setModifiedText}
-                            textareaRef={modTextareaRef}
-                            gutterRef={modGutterRef}
-                            onScroll={handleModScroll}
-                            isLineWrap={isLineWrap}
-                            placeholder="Paste or drag-and-drop the modified/newer text here..."
-                            onClear={() => handleClear("modified")}
-                            onCopy={() => handleCopyInput(modifiedText, "modified")}
-                            isCopied={copyState.modified}
-                            lines={modifiedLines}
-                        />
-                    </div>
-                )}
+                    <DiffEditor
+                        title="Modified Text"
+                        type="modified"
+                        value={modifiedText}
+                        onChange={setModifiedText}
+                        textareaRef={modTextareaRef}
+                        gutterRef={modGutterRef}
+                        onScroll={handleModScroll}
+                        isLineWrap={isLineWrap}
+                        placeholder="Paste or drag-and-drop the modified/newer text here..."
+                        onClear={() => handleClear("modified")}
+                        onCopy={() => handleCopyInput(modifiedText, "modified")}
+                        isCopied={copyState.modified}
+                        lines={modifiedLines}
+                    />
+                </div>
+            )}
 
-                {/* Differences View Output Block */}
+            {/* Differences View Output Block */}
+            <div
+                className="border border-border bg-surface backdrop-blur-md rounded-2xl shadow-xs overflow-hidden flex flex-col">
+                {/* Header */}
                 <div
-                    className="border border-border bg-surface backdrop-blur-md rounded-2xl shadow-xs overflow-hidden flex flex-col">
-                    {/* Header */}
-                    <div
-                        className="flex items-center justify-between px-4 py-3 bg-surface-secondary/50 border-b border-border/60">
-                        <div className="flex items-center gap-3 flex-wrap">
-                            <div className="flex items-center gap-2">
-                                <span className="w-2.5 h-2.5 rounded-full bg-primary"/>
-                                <h2 className="text-xs font-extrabold uppercase tracking-wider text-text-primary">
-                                    Real-Time Difference Output
-                                    ({diffMode === "split" ? "Split side-by-side" : "Unified inline"})
-                                </h2>
-                            </div>
-                            {(originalText || modifiedText) && (
-                                <div
-                                    className="flex items-center gap-1.5 select-none text-[10px] font-extrabold font-mono tracking-wider">
+                    className="flex items-center justify-between px-4 py-3 bg-surface-secondary/50 border-b border-border/60">
+                    <div className="flex items-center gap-3 flex-wrap">
+                        <div className="flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-primary"/>
+                            <h2 className="text-xs font-extrabold uppercase tracking-wider text-text-primary">
+                                Real-Time Difference Output
+                                ({diffMode === "split" ? "Split side-by-side" : "Unified inline"})
+                            </h2>
+                        </div>
+                        {(originalText || modifiedText) && (
+                            <div
+                                className="flex items-center gap-1.5 select-none text-[10px] font-extrabold font-mono tracking-wider">
                                     <span
                                         className="px-2 py-0.5 rounded-md bg-success-bg text-success border border-success/10">
                                         +{stats.additions + stats.modified} Additions
                                     </span>
-                                    <span
-                                        className="px-2 py-0.5 rounded-md bg-danger-bg text-danger border border-danger/10">
+                                <span
+                                    className="px-2 py-0.5 rounded-md bg-danger-bg text-danger border border-danger/10">
                                         -{stats.removals + stats.modified} Deletions
                                     </span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Render Area */}
-                    <div className="flex-1 min-h-125 max-h-237.5 overflow-y-auto bg-surface relative select-text">
-                        {rows.length === 0 ? (
-                            <div
-                                className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-3 bg-surface-secondary/10">
-                                <ItemCompare20Regular className="w-10 h-10 text-text-muted/30"/>
-                                <div className="space-y-1">
-                                    <p className="text-sm font-bold text-text-secondary">
-                                        No Comparison Content
-                                    </p>
-                                    <p className="text-xs text-text-muted max-w-sm">
-                                        Enter different texts in the original and modified panels above, or load a
-                                        sample preset to see visual differences in real-time.
-                                    </p>
-                                </div>
                             </div>
-                        ) : (
-                            <div className="font-mono text-xs divide-y divide-border/10 flex flex-col select-text">
-                                {diffMode === "split" ? (
-                                    /* Split side-by-side View */
-                                    rows.map((row, index) => {
-                                        let leftBg = "bg-transparent";
-                                        let leftGutter = "bg-surface-secondary/10 border-r-border/30 text-text-muted/40";
-                                        let leftStyle = {};
-                                        let leftSign = "";
+                        )}
+                    </div>
+                </div>
 
-                                        let rightBg = "bg-transparent";
-                                        let rightGutter = "bg-surface-secondary/10 border-r-border/30 text-text-muted/40";
-                                        let rightStyle = {};
-                                        let rightSign = "";
+                {/* Render Area */}
+                <div className="flex-1 min-h-125 max-h-237.5 overflow-y-auto bg-surface relative select-text">
+                    {rows.length === 0 ? (
+                        <div
+                            className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-3 bg-surface-secondary/10">
+                            <ItemCompare20Regular className="w-10 h-10 text-text-muted/30"/>
+                            <div className="space-y-1">
+                                <p className="text-sm font-bold text-text-secondary">
+                                    No Comparison Content
+                                </p>
+                                <p className="text-xs text-text-muted max-w-sm">
+                                    Enter different texts in the original and modified panels above, or load a
+                                    sample preset to see visual differences in real-time.
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="font-mono text-xs divide-y divide-border/10 flex flex-col select-text">
+                            {diffMode === "split" ? (
+                                /* Split side-by-side View */
+                                rows.map((row, index) => {
+                                    let leftBg = "bg-transparent";
+                                    let leftGutter = "bg-surface-secondary/10 border-r-border/30 text-text-muted/40";
+                                    let leftStyle = {};
+                                    let leftSign = "";
 
-                                        if (row.type === "removed") {
-                                            leftBg = "bg-danger-bg/25 text-text-primary";
-                                            leftGutter = "bg-danger-bg/40 text-danger/80 border-r-danger/25 font-bold";
-                                            leftSign = "-";
-                                            rightBg = "bg-surface-secondary/5";
-                                            rightStyle = spacerStyle;
-                                        } else if (row.type === "added") {
-                                            leftBg = "bg-surface-secondary/5";
-                                            leftStyle = spacerStyle;
-                                            rightBg = "bg-success-bg/25 text-text-primary";
-                                            rightGutter = "bg-success-bg/40 text-success/80 border-r-success/25 font-bold";
-                                            rightSign = "+";
-                                        } else if (row.type === "modified") {
-                                            leftBg = "bg-danger-bg/20 text-text-primary border-r border-danger/10";
-                                            leftGutter = "bg-danger-bg/35 text-danger/70 border-r-danger/20";
-                                            leftSign = "-";
-                                            rightBg = "bg-success-bg/20 text-text-primary";
-                                            rightGutter = "bg-success-bg/35 text-success/70 border-r-success/20";
-                                            rightSign = "+";
-                                        } else {
-                                            // Unchanged
-                                            leftGutter = "bg-surface-secondary/15 text-text-muted/30 border-r-border/20";
-                                            rightGutter = "bg-surface-secondary/15 text-text-muted/30 border-r-border/20";
-                                        }
+                                    let rightBg = "bg-transparent";
+                                    let rightGutter = "bg-surface-secondary/10 border-r-border/30 text-text-muted/40";
+                                    let rightStyle = {};
+                                    let rightSign = "";
 
-                                        return (
-                                            <div
-                                                key={`row-${index}`}
-                                                className="flex border-b border-border/5 hover:bg-surface-secondary/15 dark:hover:bg-surface-secondary/5 group transition-colors"
+                                    if (row.type === "removed") {
+                                        leftBg = "bg-danger-bg/25 text-text-primary";
+                                        leftGutter = "bg-danger-bg/40 text-danger/80 border-r-danger/25 font-bold";
+                                        leftSign = "-";
+                                        rightBg = "bg-surface-secondary/5";
+                                        rightStyle = spacerStyle;
+                                    } else if (row.type === "added") {
+                                        leftBg = "bg-surface-secondary/5";
+                                        leftStyle = spacerStyle;
+                                        rightBg = "bg-success-bg/25 text-text-primary";
+                                        rightGutter = "bg-success-bg/40 text-success/80 border-r-success/25 font-bold";
+                                        rightSign = "+";
+                                    } else if (row.type === "modified") {
+                                        leftBg = "bg-danger-bg/20 text-text-primary border-r border-danger/10";
+                                        leftGutter = "bg-danger-bg/35 text-danger/70 border-r-danger/20";
+                                        leftSign = "-";
+                                        rightBg = "bg-success-bg/20 text-text-primary";
+                                        rightGutter = "bg-success-bg/35 text-success/70 border-r-success/20";
+                                        rightSign = "+";
+                                    } else {
+                                        // Unchanged
+                                        leftGutter = "bg-surface-secondary/15 text-text-muted/30 border-r-border/20";
+                                        rightGutter = "bg-surface-secondary/15 text-text-muted/30 border-r-border/20";
+                                    }
+
+                                    return (
+                                        <div
+                                            key={`row-${index}`}
+                                            className="flex border-b border-border/5 hover:bg-surface-secondary/15 dark:hover:bg-surface-secondary/5 group transition-colors"
+                                        >
+                                            <SplitCell
+                                                side="left"
+                                                lineData={row.left}
+                                                gutterClass={leftGutter}
+                                                bgClass={leftBg}
+                                                sign={leftSign}
+                                                style={leftStyle}
+                                                isLineWrap={isLineWrap}
+                                                borderRight={true}
+                                            />
+                                            <SplitCell
+                                                side="right"
+                                                lineData={row.right}
+                                                gutterClass={rightGutter}
+                                                bgClass={rightBg}
+                                                sign={rightSign}
+                                                style={rightStyle}
+                                                isLineWrap={isLineWrap}
+                                            />
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                /* Unified inline View */
+                                rows.flatMap((row, index) => {
+                                    const elements: React.ReactNode[] = [];
+
+                                    if (row.type === "unchanged") {
+                                        elements.push(
+                                            <UnifiedLine
+                                                key={`u-unchanged-${index}`}
+                                                leftLineNum={row.left?.lineNumber}
+                                                rightLineNum={row.right?.lineNumber}
+                                                sign=" "
+                                                containerClass="hover:bg-surface-secondary/20 dark:hover:bg-surface-secondary/10"
+                                                leftGutterClass="border-r-border/30 bg-surface-secondary/15 text-text-muted/40"
+                                                rightGutterClass="border-r-border/30 bg-surface-secondary/15 text-text-muted/40"
+                                                signClass="text-text-muted/30"
+                                                contentClass=""
+                                                isLineWrap={isLineWrap}
                                             >
-                                                <SplitCell
-                                                    side="left"
-                                                    lineData={row.left}
-                                                    gutterClass={leftGutter}
-                                                    bgClass={leftBg}
-                                                    sign={leftSign}
-                                                    style={leftStyle}
-                                                    isLineWrap={isLineWrap}
-                                                    borderRight={true}
-                                                />
-                                                <SplitCell
-                                                    side="right"
-                                                    lineData={row.right}
-                                                    gutterClass={rightGutter}
-                                                    bgClass={rightBg}
-                                                    sign={rightSign}
-                                                    style={rightStyle}
-                                                    isLineWrap={isLineWrap}
-                                                />
-                                            </div>
+                                                {row.left?.content}
+                                            </UnifiedLine>
                                         );
-                                    })
-                                ) : (
-                                    /* Unified inline View */
-                                    rows.flatMap((row, index) => {
-                                        const elements: React.ReactNode[] = [];
-
-                                        if (row.type === "unchanged") {
+                                    } else if (row.type === "removed") {
+                                        elements.push(
+                                            <UnifiedLine
+                                                key={`u-removed-${index}`}
+                                                leftLineNum={row.left?.lineNumber}
+                                                sign="-"
+                                                containerClass="bg-danger-bg/25 hover:bg-danger-bg/30 transition-colors"
+                                                leftGutterClass="border-r-danger/25 bg-danger-bg/40 text-danger/80"
+                                                rightGutterClass="border-r-border/20 bg-danger-bg/10 text-text-muted/20"
+                                                signClass="text-danger/70 bg-danger-bg/10"
+                                                contentClass="bg-danger-bg/5"
+                                                isLineWrap={isLineWrap}
+                                            >
+                                                {row.left?.content}
+                                            </UnifiedLine>
+                                        );
+                                    } else if (row.type === "added") {
+                                        elements.push(
+                                            <UnifiedLine
+                                                key={`u-added-${index}`}
+                                                rightLineNum={row.right?.lineNumber}
+                                                sign="+"
+                                                containerClass="bg-success-bg/25 hover:bg-success-bg/30 transition-colors"
+                                                leftGutterClass="border-r-border/20 bg-success-bg/10 text-text-muted/20"
+                                                rightGutterClass="border-r-success/25 bg-success-bg/40 text-success/80"
+                                                signClass="text-success/70 bg-success-bg/10"
+                                                contentClass="bg-success-bg/5"
+                                                isLineWrap={isLineWrap}
+                                            >
+                                                {row.right?.content}
+                                            </UnifiedLine>
+                                        );
+                                    } else if (row.type === "modified") {
+                                        if (row.left) {
                                             elements.push(
                                                 <UnifiedLine
-                                                    key={`u-unchanged-${index}`}
-                                                    leftLineNum={row.left?.lineNumber}
-                                                    rightLineNum={row.right?.lineNumber}
-                                                    sign=" "
-                                                    containerClass="hover:bg-surface-secondary/20 dark:hover:bg-surface-secondary/10"
-                                                    leftGutterClass="border-r-border/30 bg-surface-secondary/15 text-text-muted/40"
-                                                    rightGutterClass="border-r-border/30 bg-surface-secondary/15 text-text-muted/40"
-                                                    signClass="text-text-muted/30"
-                                                    contentClass=""
-                                                    isLineWrap={isLineWrap}
-                                                >
-                                                    {row.left?.content}
-                                                </UnifiedLine>
-                                            );
-                                        } else if (row.type === "removed") {
-                                            elements.push(
-                                                <UnifiedLine
-                                                    key={`u-removed-${index}`}
-                                                    leftLineNum={row.left?.lineNumber}
+                                                    key={`u-mod-left-${index}`}
+                                                    leftLineNum={row.left.lineNumber}
                                                     sign="-"
-                                                    containerClass="bg-danger-bg/25 hover:bg-danger-bg/30 transition-colors"
-                                                    leftGutterClass="border-r-danger/25 bg-danger-bg/40 text-danger/80"
+                                                    containerClass="bg-danger-bg/20 hover:bg-danger-bg/25 transition-colors"
+                                                    leftGutterClass="border-r-danger/20 bg-danger-bg/35 text-danger/80"
                                                     rightGutterClass="border-r-border/20 bg-danger-bg/10 text-text-muted/20"
                                                     signClass="text-danger/70 bg-danger-bg/10"
                                                     contentClass="bg-danger-bg/5"
                                                     isLineWrap={isLineWrap}
                                                 >
-                                                    {row.left?.content}
+                                                    {renderWordDiff("left", row.left.words, row.left.content)}
                                                 </UnifiedLine>
                                             );
-                                        } else if (row.type === "added") {
+                                        }
+                                        if (row.right) {
                                             elements.push(
                                                 <UnifiedLine
-                                                    key={`u-added-${index}`}
-                                                    rightLineNum={row.right?.lineNumber}
+                                                    key={`u-mod-right-${index}`}
+                                                    rightLineNum={row.right.lineNumber}
                                                     sign="+"
-                                                    containerClass="bg-success-bg/25 hover:bg-success-bg/30 transition-colors"
+                                                    containerClass="bg-success-bg/20 hover:bg-success-bg/25 transition-colors"
                                                     leftGutterClass="border-r-border/20 bg-success-bg/10 text-text-muted/20"
-                                                    rightGutterClass="border-r-success/25 bg-success-bg/40 text-success/80"
+                                                    rightGutterClass="border-r-success/20 bg-success-bg/35 text-success/80"
                                                     signClass="text-success/70 bg-success-bg/10"
                                                     contentClass="bg-success-bg/5"
                                                     isLineWrap={isLineWrap}
                                                 >
-                                                    {row.right?.content}
+                                                    {renderWordDiff("right", row.right.words, row.right.content)}
                                                 </UnifiedLine>
                                             );
-                                        } else if (row.type === "modified") {
-                                            if (row.left) {
-                                                elements.push(
-                                                    <UnifiedLine
-                                                        key={`u-mod-left-${index}`}
-                                                        leftLineNum={row.left.lineNumber}
-                                                        sign="-"
-                                                        containerClass="bg-danger-bg/20 hover:bg-danger-bg/25 transition-colors"
-                                                        leftGutterClass="border-r-danger/20 bg-danger-bg/35 text-danger/80"
-                                                        rightGutterClass="border-r-border/20 bg-danger-bg/10 text-text-muted/20"
-                                                        signClass="text-danger/70 bg-danger-bg/10"
-                                                        contentClass="bg-danger-bg/5"
-                                                        isLineWrap={isLineWrap}
-                                                    >
-                                                        {renderWordDiff("left", row.left.words, row.left.content)}
-                                                    </UnifiedLine>
-                                                );
-                                            }
-                                            if (row.right) {
-                                                elements.push(
-                                                    <UnifiedLine
-                                                        key={`u-mod-right-${index}`}
-                                                        rightLineNum={row.right.lineNumber}
-                                                        sign="+"
-                                                        containerClass="bg-success-bg/20 hover:bg-success-bg/25 transition-colors"
-                                                        leftGutterClass="border-r-border/20 bg-success-bg/10 text-text-muted/20"
-                                                        rightGutterClass="border-r-success/20 bg-success-bg/35 text-success/80"
-                                                        signClass="text-success/70 bg-success-bg/10"
-                                                        contentClass="bg-success-bg/5"
-                                                        isLineWrap={isLineWrap}
-                                                    >
-                                                        {renderWordDiff("right", row.right.words, row.right.content)}
-                                                    </UnifiedLine>
-                                                );
-                                            }
                                         }
+                                    }
 
-                                        return elements;
-                                    })
-                                )}
-                            </div>
-                        )}
-                    </div>
+                                    return elements;
+                                })
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
-        </div>
+        </>
     );
 }

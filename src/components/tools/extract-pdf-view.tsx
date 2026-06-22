@@ -464,325 +464,323 @@ export function ExtractPdfView({tool}: ExtractPdfViewProps) {
     };
 
     return (
-        <div className="w-full flex-1 relative overflow-hidden">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
-                {/* Title and description */}
-                <div
-                    className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2.5">
+        <>
+            {/* Title and description */}
+            <div
+                className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-6 gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-2.5">
                             <span
                                 className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
                                 <DocumentTextExtract20Regular className="w-4 h-4"/>
                             </span>
-                            <h1 className="text-xl sm:text-2xl font-black text-text-primary">
-                                {tool.title}
-                            </h1>
-                        </div>
-                        <p className="text-xs sm:text-sm text-text-muted">
-                            {tool.description}
-                        </p>
+                        <h1 className="text-xl sm:text-2xl font-black text-text-primary">
+                            {tool.title}
+                        </h1>
                     </div>
+                    <p className="text-xs sm:text-sm text-text-muted">
+                        {tool.description}
+                    </p>
                 </div>
+            </div>
 
-                {/* Notification Banners */}
-                {errorMsg && (
-                    <div
-                        className="flex items-start gap-3 p-4 border border-danger/20 bg-danger-bg/40 text-danger rounded-2xl text-xs font-bold animate-fadeIn">
-                        <ErrorCircle20Regular className="w-5 h-5 shrink-0"/>
-                        <div>{errorMsg}</div>
-                    </div>
-                )}
+            {/* Notification Banners */}
+            {errorMsg && (
+                <div
+                    className="flex items-start gap-3 p-4 border border-danger/20 bg-danger-bg/40 text-danger rounded-2xl text-xs font-bold animate-fadeIn">
+                    <ErrorCircle20Regular className="w-5 h-5 shrink-0"/>
+                    <div>{errorMsg}</div>
+                </div>
+            )}
 
-                {successMsg && (
-                    <div
-                        className="flex items-start gap-3 p-4 border border-success/20 bg-success-bg/40 text-success rounded-2xl text-xs font-bold animate-fadeIn">
-                        <CheckmarkCircle20Regular className="w-5 h-5 shrink-0"/>
-                        <div>{successMsg}</div>
-                    </div>
-                )}
+            {successMsg && (
+                <div
+                    className="flex items-start gap-3 p-4 border border-success/20 bg-success-bg/40 text-success rounded-2xl text-xs font-bold animate-fadeIn">
+                    <CheckmarkCircle20Regular className="w-5 h-5 shrink-0"/>
+                    <div>{successMsg}</div>
+                </div>
+            )}
 
-                {/* PDF Loading Core overlay */}
-                {!pdfjs && !errorMsg && (
+            {/* PDF Loading Core overlay */}
+            {!pdfjs && !errorMsg && (
+                <div
+                    className="flex flex-col items-center justify-center py-20 space-y-4 border border-border bg-surface/30 backdrop-blur-md rounded-3xl">
                     <div
-                        className="flex flex-col items-center justify-center py-20 space-y-4 border border-border bg-surface/30 backdrop-blur-md rounded-3xl">
+                        className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"/>
+                    <p className="text-xs font-bold text-text-secondary animate-pulse">
+                        Initializing WebAssembly PDF Render Core...
+                    </p>
+                </div>
+            )}
+
+            {pdfjs && (
+                <div className="space-y-6">
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={onFileSelect}
+                        accept=".pdf,application/pdf"
+                        className="hidden"
+                    />
+
+                    {/* File Upload Zone */}
+                    {!file && (
                         <div
-                            className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"/>
-                        <p className="text-xs font-bold text-text-secondary animate-pulse">
-                            Initializing WebAssembly PDF Render Core...
-                        </p>
-                    </div>
-                )}
-
-                {pdfjs && (
-                    <div className="space-y-6">
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={onFileSelect}
-                            accept=".pdf,application/pdf"
-                            className="hidden"
-                        />
-
-                        {/* File Upload Zone */}
-                        {!file && (
-                            <div
-                                onDragOver={onDragOver}
-                                onDragLeave={onDragLeave}
-                                onDrop={onDrop}
-                                onClick={triggerFileInput}
-                                className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
-                                    isDragging
-                                        ? "border-primary bg-primary/5 shadow-inner"
-                                        : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-                                }`}
-                            >
-                                <div className="flex flex-col items-center justify-center space-y-4">
-                                    <div
-                                        className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
-                                        <DocumentTextExtract20Regular className="w-8 h-8"/>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-extrabold text-text-primary">
-                                            Drag & drop your PDF file here, or <span
-                                            className="text-primary">browse</span>
-                                        </p>
-                                        <p className="text-[10px] text-text-muted">
-                                            Extract pages and download your document completely offline. Your files
-                                            never touch our servers.
-                                        </p>
-                                    </div>
+                            onDragOver={onDragOver}
+                            onDragLeave={onDragLeave}
+                            onDrop={onDrop}
+                            onClick={triggerFileInput}
+                            className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
+                                isDragging
+                                    ? "border-primary bg-primary/5 shadow-inner"
+                                    : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
+                            }`}
+                        >
+                            <div className="flex flex-col items-center justify-center space-y-4">
+                                <div
+                                    className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
+                                    <DocumentTextExtract20Regular className="w-8 h-8"/>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-sm font-extrabold text-text-primary">
+                                        Drag & drop your PDF file here, or <span
+                                        className="text-primary">browse</span>
+                                    </p>
+                                    <p className="text-[10px] text-text-muted">
+                                        Extract pages and download your document completely offline. Your files
+                                        never touch our servers.
+                                    </p>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Editor Workspace */}
-                        {file && pdfDoc && (
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Editor Workspace */}
+                    {file && pdfDoc && (
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                                {/* Left Side: Pages Grid Visual Map */}
-                                <div className="lg:col-span-7 space-y-4">
+                            {/* Left Side: Pages Grid Visual Map */}
+                            <div className="lg:col-span-7 space-y-4">
+                                <div
+                                    className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-5 space-y-4">
                                     <div
-                                        className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-5 space-y-4">
+                                        className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-3 gap-3">
                                         <div
-                                            className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-3 gap-3">
-                                            <div
-                                                className="flex items-center gap-2 text-xs font-black text-text-primary">
-                                                <Grid20Regular className="w-4 h-4 text-primary"/>
-                                                <span>PDF Page Layout Grid</span>
-                                            </div>
-
-                                            {/* Filtering pills */}
-                                            <div
-                                                className="flex bg-surface-secondary border border-border p-0.5 rounded-lg text-[10px] font-black self-start sm:self-auto select-none">
-                                                <button
-                                                    onClick={() => setFilterMode("all")}
-                                                    className={`px-3 py-1 rounded-md transition-all duration-200 cursor-pointer ${
-                                                        filterMode === "all"
-                                                            ? "bg-surface text-text-primary shadow-xs"
-                                                            : "text-text-muted hover:text-text-primary"
-                                                    }`}
-                                                >
-                                                    All ({totalPages})
-                                                </button>
-                                                <button
-                                                    onClick={() => setFilterMode("selected")}
-                                                    className={`px-3 py-1 rounded-md transition-all duration-200 cursor-pointer ${
-                                                        filterMode === "selected"
-                                                            ? "bg-surface text-primary shadow-xs"
-                                                            : "text-text-muted hover:text-text-primary"
-                                                    }`}
-                                                >
-                                                    Selected ({selectedPages.size})
-                                                </button>
-                                                <button
-                                                    onClick={() => setFilterMode("excluded")}
-                                                    className={`px-3 py-1 rounded-md transition-all duration-200 cursor-pointer ${
-                                                        filterMode === "excluded"
-                                                            ? "bg-surface text-text-primary shadow-xs"
-                                                            : "text-text-muted hover:text-text-primary"
-                                                    }`}
-                                                >
-                                                    Excluded ({excludedPagesCount})
-                                                </button>
-                                            </div>
+                                            className="flex items-center gap-2 text-xs font-black text-text-primary">
+                                            <Grid20Regular className="w-4 h-4 text-primary"/>
+                                            <span>PDF Page Layout Grid</span>
                                         </div>
 
-                                        <p className="text-[10px] text-text-muted leading-relaxed font-bold bg-surface-secondary/40 border border-border/60 p-2.5 rounded-xl">
-                                            💡 Click on page thumbnails to select or deselect them. Only selected pages
-                                            will be included in the final document.
-                                        </p>
+                                        {/* Filtering pills */}
+                                        <div
+                                            className="flex bg-surface-secondary border border-border p-0.5 rounded-lg text-[10px] font-black self-start sm:self-auto select-none">
+                                            <button
+                                                onClick={() => setFilterMode("all")}
+                                                className={`px-3 py-1 rounded-md transition-all duration-200 cursor-pointer ${
+                                                    filterMode === "all"
+                                                        ? "bg-surface text-text-primary shadow-xs"
+                                                        : "text-text-muted hover:text-text-primary"
+                                                }`}
+                                            >
+                                                All ({totalPages})
+                                            </button>
+                                            <button
+                                                onClick={() => setFilterMode("selected")}
+                                                className={`px-3 py-1 rounded-md transition-all duration-200 cursor-pointer ${
+                                                    filterMode === "selected"
+                                                        ? "bg-surface text-primary shadow-xs"
+                                                        : "text-text-muted hover:text-text-primary"
+                                                }`}
+                                            >
+                                                Selected ({selectedPages.size})
+                                            </button>
+                                            <button
+                                                onClick={() => setFilterMode("excluded")}
+                                                className={`px-3 py-1 rounded-md transition-all duration-200 cursor-pointer ${
+                                                    filterMode === "excluded"
+                                                        ? "bg-surface text-text-primary shadow-xs"
+                                                        : "text-text-muted hover:text-text-primary"
+                                                }`}
+                                            >
+                                                Excluded ({excludedPagesCount})
+                                            </button>
+                                        </div>
+                                    </div>
 
-                                        {/* Grid Gallery */}
-                                        <div className="max-h-120 overflow-y-auto pr-1.5 custom-scrollbar">
-                                            {visiblePages.length > 0 ? (
-                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 select-none">
-                                                    {visiblePages.map((pageNum) => (
-                                                        <PageThumbnailCard
-                                                            key={pageNum}
-                                                            pdfDoc={pdfDoc}
-                                                            pageNumber={pageNum}
-                                                            isSelected={selectedPages.has(pageNum)}
-                                                            onToggle={togglePageSelection}
-                                                        />
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <div
-                                                    className="flex flex-col items-center justify-center py-16 text-center space-y-2 border border-dashed border-border rounded-xl">
+                                    <p className="text-[10px] text-text-muted leading-relaxed font-bold bg-surface-secondary/40 border border-border/60 p-2.5 rounded-xl">
+                                        💡 Click on page thumbnails to select or deselect them. Only selected pages
+                                        will be included in the final document.
+                                    </p>
+
+                                    {/* Grid Gallery */}
+                                    <div className="max-h-120 overflow-y-auto pr-1.5 custom-scrollbar">
+                                        {visiblePages.length > 0 ? (
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 select-none">
+                                                {visiblePages.map((pageNum) => (
+                                                    <PageThumbnailCard
+                                                        key={pageNum}
+                                                        pdfDoc={pdfDoc}
+                                                        pageNumber={pageNum}
+                                                        isSelected={selectedPages.has(pageNum)}
+                                                        onToggle={togglePageSelection}
+                                                    />
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className="flex flex-col items-center justify-center py-16 text-center space-y-2 border border-dashed border-border rounded-xl">
                                                     <span className="text-text-muted/40">
                                                         <DismissCircle20Regular className="w-8 h-8"/>
                                                     </span>
-                                                    <p className="text-xs font-bold text-text-muted">
-                                                        No pages match the active filter mode.
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
+                                                <p className="text-xs font-bold text-text-muted">
+                                                    No pages match the active filter mode.
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Right Side: Extraction Settings and Controls */}
-                                <div className="lg:col-span-5 space-y-6">
+                            {/* Right Side: Extraction Settings and Controls */}
+                            <div className="lg:col-span-5 space-y-6">
+                                <div
+                                    className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-6">
+                                    <div className="flex items-center gap-2 border-b border-border pb-3">
+                                        <Settings20Regular className="w-4 h-4 text-primary"/>
+                                        <h2 className="text-xs font-black text-text-primary uppercase tracking-wider">
+                                            Extraction Options
+                                        </h2>
+                                    </div>
+
+                                    {/* File Metadata Overview Card */}
                                     <div
-                                        className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-6">
-                                        <div className="flex items-center gap-2 border-b border-border pb-3">
-                                            <Settings20Regular className="w-4 h-4 text-primary"/>
-                                            <h2 className="text-xs font-black text-text-primary uppercase tracking-wider">
-                                                Extraction Options
-                                            </h2>
+                                        className="flex items-center justify-between bg-surface-secondary/40 border border-border p-4 rounded-xl">
+                                        <div className="min-w-0 flex-1 pr-3">
+                                            <p className="text-xs font-extrabold text-text-primary truncate"
+                                               title={file.name}>
+                                                {file.name}
+                                            </p>
+                                            <p className="text-[10px] text-text-muted font-bold mt-0.5 font-mono">
+                                                {formatBytes(file.size)} • {totalPages} {totalPages === 1 ? "Page" : "Pages"}
+                                            </p>
                                         </div>
+                                        <button
+                                            onClick={resetState}
+                                            disabled={isProcessing}
+                                            className="w-8 h-8 rounded-lg border border-border bg-surface text-text-muted hover:border-danger hover:text-danger disabled:opacity-50 cursor-pointer transition-all duration-200 flex items-center justify-center shrink-0"
+                                            title="Select another document"
+                                        >
+                                            <Dismiss20Regular className="w-4 h-4"/>
+                                        </button>
+                                    </div>
 
-                                        {/* File Metadata Overview Card */}
-                                        <div
-                                            className="flex items-center justify-between bg-surface-secondary/40 border border-border p-4 rounded-xl">
-                                            <div className="min-w-0 flex-1 pr-3">
-                                                <p className="text-xs font-extrabold text-text-primary truncate"
-                                                   title={file.name}>
-                                                    {file.name}
-                                                </p>
-                                                <p className="text-[10px] text-text-muted font-bold mt-0.5 font-mono">
-                                                    {formatBytes(file.size)} • {totalPages} {totalPages === 1 ? "Page" : "Pages"}
-                                                </p>
-                                            </div>
-                                            <button
-                                                onClick={resetState}
-                                                disabled={isProcessing}
-                                                className="w-8 h-8 rounded-lg border border-border bg-surface text-text-muted hover:border-danger hover:text-danger disabled:opacity-50 cursor-pointer transition-all duration-200 flex items-center justify-center shrink-0"
-                                                title="Select another document"
-                                            >
-                                                <Dismiss20Regular className="w-4 h-4"/>
-                                            </button>
-                                        </div>
-
-                                        {/* Quick Presets */}
-                                        <div className="space-y-2">
-                                            <div className="flex items-center justify-between">
-                                                <label className="text-xs font-bold text-text-secondary">
-                                                    Quick Select Presets
-                                                </label>
-                                                <PresetSelector onSelect={selectPreset} disabled={isProcessing}/>
-                                            </div>
-                                        </div>
-
-                                        {/* Page Range Text Input */}
-                                        <div className="space-y-2 border-t border-border pt-4">
+                                    {/* Quick Presets */}
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
                                             <label className="text-xs font-bold text-text-secondary">
-                                                Pages to Extract
+                                                Quick Select Presets
                                             </label>
-                                            <div className="relative">
-                                                <input
-                                                    type="text"
-                                                    value={rangeInput}
-                                                    onChange={handleRangeChange}
-                                                    placeholder="e.g. 1-3, 5, 7"
-                                                    disabled={isProcessing}
-                                                    className="w-full text-xs font-bold font-mono px-3.5 py-3 border border-border bg-surface rounded-xl focus:border-primary focus:ring-1 focus:ring-primary/20 outline-hidden transition-all duration-200 placeholder:text-text-muted/60 disabled:opacity-50"
-                                                />
-                                            </div>
+                                            <PresetSelector onSelect={selectPreset} disabled={isProcessing}/>
+                                        </div>
+                                    </div>
 
-                                            {/* Input helper validation */}
-                                            <div className="flex items-center justify-between min-h-5 pt-0.5">
-                                                {!isValidPageRange(rangeInput) ? (
-                                                    <span
-                                                        className="text-[10px] text-danger font-bold flex items-center gap-1">
+                                    {/* Page Range Text Input */}
+                                    <div className="space-y-2 border-t border-border pt-4">
+                                        <label className="text-xs font-bold text-text-secondary">
+                                            Pages to Extract
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                value={rangeInput}
+                                                onChange={handleRangeChange}
+                                                placeholder="e.g. 1-3, 5, 7"
+                                                disabled={isProcessing}
+                                                className="w-full text-xs font-bold font-mono px-3.5 py-3 border border-border bg-surface rounded-xl focus:border-primary focus:ring-1 focus:ring-primary/20 outline-hidden transition-all duration-200 placeholder:text-text-muted/60 disabled:opacity-50"
+                                            />
+                                        </div>
+
+                                        {/* Input helper validation */}
+                                        <div className="flex items-center justify-between min-h-5 pt-0.5">
+                                            {!isValidPageRange(rangeInput) ? (
+                                                <span
+                                                    className="text-[10px] text-danger font-bold flex items-center gap-1">
                                                         <ErrorCircle20Regular className="w-3.5 h-3.5"/>
                                                         Invalid format (use numbers, commas, and dashes)
                                                     </span>
-                                                ) : selectedPages.size === 0 ? (
-                                                    <span
-                                                        className="text-[10px] text-danger font-bold flex items-center gap-1">
+                                            ) : selectedPages.size === 0 ? (
+                                                <span
+                                                    className="text-[10px] text-danger font-bold flex items-center gap-1">
                                                         <ErrorCircle20Regular className="w-3.5 h-3.5"/>
                                                         Must select at least 1 page
                                                     </span>
-                                                ) : (
-                                                    <span className="text-[10px] text-text-muted font-bold">
+                                            ) : (
+                                                <span className="text-[10px] text-text-muted font-bold">
                                                         Extracting {selectedPages.size} {selectedPages.size === 1 ? "page" : "pages"}, excluding {excludedPagesCount} {excludedPagesCount === 1 ? "page" : "pages"}
                                                     </span>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {/* Action Button */}
-                                        <div className="pt-2">
-                                            {isProcessing ? (
-                                                <button
-                                                    disabled
-                                                    className="w-full py-3.5 px-4 bg-primary/10 text-primary border border-primary/20 rounded-xl text-xs font-black flex items-center justify-center gap-2"
-                                                >
-                                                    <div
-                                                        className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
-                                                    <span>Processing PDF ({progress}%)</span>
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={handleProcessPdf}
-                                                    disabled={!isSelectionValid}
-                                                    className="w-full py-3.5 px-4 bg-success text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 hover:bg-success/90 disabled:opacity-50 transition-all duration-200 cursor-pointer shadow-md shadow-success/15 hover:scale-[1.01] active:scale-[0.99]"
-                                                >
-                                                    <ArrowDownload20Regular className="w-4 h-4"/>
-                                                    <span>
-                                                        Extract Pages & Download PDF
-                                                    </span>
-                                                </button>
                                             )}
                                         </div>
                                     </div>
 
-                                    {/* Inline Logger */}
-                                    {isProcessing && (
-                                        <div
-                                            className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-4 animate-fadeIn">
-                                            <div
-                                                className="flex justify-between items-center text-xs font-black text-text-primary">
-                                                <span>Processing Details</span>
-                                                <span className="font-mono text-primary">{progress}%</span>
-                                            </div>
-
-                                            <div
-                                                className="w-full bg-surface-secondary rounded-full h-2 overflow-hidden border border-border">
+                                    {/* Action Button */}
+                                    <div className="pt-2">
+                                        {isProcessing ? (
+                                            <button
+                                                disabled
+                                                className="w-full py-3.5 px-4 bg-primary/10 text-primary border border-primary/20 rounded-xl text-xs font-black flex items-center justify-center gap-2"
+                                            >
                                                 <div
-                                                    className="bg-primary h-full transition-all duration-300"
-                                                    style={{width: `${progress}%`}}
-                                                />
-                                            </div>
-
-                                            {currentStepName && (
-                                                <div
-                                                    className="text-[10px] text-text-muted font-bold flex items-center gap-1.5">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"/>
-                                                    <span className="truncate">Active: {currentStepName}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
+                                                    className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"/>
+                                                <span>Processing PDF ({progress}%)</span>
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={handleProcessPdf}
+                                                disabled={!isSelectionValid}
+                                                className="w-full py-3.5 px-4 bg-success text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 hover:bg-success/90 disabled:opacity-50 transition-all duration-200 cursor-pointer shadow-md shadow-success/15 hover:scale-[1.01] active:scale-[0.99]"
+                                            >
+                                                <ArrowDownload20Regular className="w-4 h-4"/>
+                                                <span>
+                                                        Extract Pages & Download PDF
+                                                    </span>
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
 
+                                {/* Inline Logger */}
+                                {isProcessing && (
+                                    <div
+                                        className="border border-border bg-surface/50 backdrop-blur-md rounded-2xl p-6 space-y-4 animate-fadeIn">
+                                        <div
+                                            className="flex justify-between items-center text-xs font-black text-text-primary">
+                                            <span>Processing Details</span>
+                                            <span className="font-mono text-primary">{progress}%</span>
+                                        </div>
+
+                                        <div
+                                            className="w-full bg-surface-secondary rounded-full h-2 overflow-hidden border border-border">
+                                            <div
+                                                className="bg-primary h-full transition-all duration-300"
+                                                style={{width: `${progress}%`}}
+                                            />
+                                        </div>
+
+                                        {currentStepName && (
+                                            <div
+                                                className="text-[10px] text-text-muted font-bold flex items-center gap-1.5">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"/>
+                                                <span className="truncate">Active: {currentStepName}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        </div>
+
+                        </div>
+                    )}
+                </div>
+            )}
+        </>
     );
 }
