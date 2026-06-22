@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useMemo, useCallback, useEffect} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Copy20Regular,
     Dismiss20Regular,
     ArrowSwap20Regular,
@@ -310,8 +308,6 @@ function UnifiedLine({
 }
 
 export function TextDiffView({tool}: TextDiffViewProps) {
-    const router = useRouter();
-
     // State for editable inputs
     const [originalText, setOriginalText] = useState("");
     const [modifiedText, setModifiedText] = useState("");

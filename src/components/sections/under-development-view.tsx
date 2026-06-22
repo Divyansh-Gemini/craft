@@ -2,11 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-import {
-    ArrowLeft20Regular,
-    Wrench20Regular
-} from "@fluentui/react-icons";
+import {Wrench20Regular} from "@fluentui/react-icons";
 import {ToolIcon} from "@/components/ui/tool-icon";
 import {TOOLS} from "@/registry/tools";
 import {Tool} from "@/types/tool";
@@ -59,7 +55,6 @@ const categoryConfig = {
 };
 
 export function UnderDevelopmentView({tool}: UnderDevelopmentViewProps) {
-    const router = useRouter();
     const config = categoryConfig[tool.category];
 
     // Filter for related tools in the same category

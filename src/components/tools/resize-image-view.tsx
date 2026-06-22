@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useCallback, useEffect} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Dismiss20Regular,
     ArrowDownload20Regular,
     Image20Regular,
@@ -52,7 +50,6 @@ const getResizedFilename = (name: string, inputFormat: string): string => {
 };
 
 export function ResizeImageView({tool}: ResizeImageViewProps) {
-    const router = useRouter();
     const [files, setFiles] = useState<ResizeFileItem[]>([]);
     const [resizeMode, setResizeMode] = useState<"dimensions" | "percentage">("dimensions");
 

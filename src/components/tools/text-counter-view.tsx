@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useMemo, useCallback} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Copy20Regular,
     Dismiss20Regular,
     TextWordCount20Regular,
@@ -18,7 +16,6 @@ interface TextCounterViewProps {
 }
 
 export function TextCounterView({tool}: TextCounterViewProps) {
-    const router = useRouter();
     const [text, setText] = useState("");
     const [isCopied, setIsCopied] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);

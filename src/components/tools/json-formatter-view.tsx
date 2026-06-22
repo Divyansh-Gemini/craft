@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useMemo, useCallback} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Copy20Regular,
     Dismiss20Regular,
     ArrowDownload20Regular,
@@ -28,7 +26,6 @@ interface JsonFormatterViewProps {
 }
 
 export function JsonFormatterView({tool}: JsonFormatterViewProps) {
-    const router = useRouter();
     const [inputJson, setInputJson] = useState("");
     const [indentSize, setIndentSize] = useState<"2" | "3" | "4" | "tab">("2");
     const [sortKeys, setSortKeys] = useState(false);

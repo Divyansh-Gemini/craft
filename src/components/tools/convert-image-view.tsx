@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useCallback, useEffect} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Dismiss20Regular,
     ArrowDownload20Regular,
     Image20Regular,
@@ -41,7 +39,6 @@ interface ConvertFileItem {
 }
 
 export function ConvertImageView({tool}: ConvertImageViewProps) {
-    const router = useRouter();
     const [files, setFiles] = useState<ConvertFileItem[]>([]);
     const [globalTargetFormat, setGlobalTargetFormat] = useState<string>("webp");
     const [isDragging, setIsDragging] = useState<boolean>(false);

@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useCallback, useEffect} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Dismiss20Regular,
     ArrowDownload20Regular,
     Image20Regular,
@@ -252,7 +250,6 @@ function FileListItem({item, onCompare, onDownload, onRetry, onRemove}: FileList
 }
 
 export function CompressImageView({tool}: CompressImageViewProps) {
-    const router = useRouter();
     const [files, setFiles] = useState<CompressFileItem[]>([]);
 
     // Compression Configuration

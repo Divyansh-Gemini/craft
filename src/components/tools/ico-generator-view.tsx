@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useCallback, useEffect} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Dismiss20Regular,
     ArrowDownload20Regular,
     Image20Regular,
@@ -441,8 +439,6 @@ interface IcoGeneratorViewProps {
 }
 
 export function IcoGeneratorView({tool}: IcoGeneratorViewProps) {
-    const router = useRouter();
-
     // File State
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);

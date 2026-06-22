@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useCallback, useMemo, useEffect} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     ArrowDownload20Regular,
     DocumentAdd20Regular,
     CheckmarkCircle20Regular,
@@ -130,7 +128,6 @@ function PdfCoverThumbnail({file}: PdfCoverThumbnailProps) {
 }
 
 export function MergePdfView({tool}: MergePdfViewProps) {
-    const router = useRouter();
     const [files, setFiles] = useState<MergeFileItem[]>([]);
     const [outputName, setOutputName] = useState<string>("merged-document");
     const [isMerging, setIsMerging] = useState<boolean>(false);

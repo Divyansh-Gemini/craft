@@ -1,9 +1,7 @@
 "use client";
 
 import React, {useState, useRef, useCallback, useEffect, useMemo} from "react";
-import {useRouter} from "next/navigation";
 import {
-    ArrowLeft20Regular,
     Dismiss20Regular,
     ArrowDownload20Regular,
     Image20Regular,
@@ -202,7 +200,6 @@ function PresetSelector({onSelect, disabled = false}: PresetSelectorProps) {
 }
 
 export function PdfToImagesView({tool}: PdfToImagesViewProps) {
-    const router = useRouter();
     const [pdfjs, setPdfjs] = useState<any>(null);
     const [file, setFile] = useState<File | null>(null);
     const [pdfDoc, setPdfDoc] = useState<any>(null);
