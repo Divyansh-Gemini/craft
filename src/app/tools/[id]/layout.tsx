@@ -18,6 +18,7 @@ export default function ToolLayout({children}: {
                 <Link
                     href="/"
                     className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-primary transition-colors duration-200 cursor-pointer group"
+                    scroll={false}
                 >
                     <ArrowLeft20Regular
                         className="w-4 h-4 transform transition-transform duration-300 group-hover:-translate-x-0.5"/>

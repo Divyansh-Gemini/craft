@@ -10,7 +10,6 @@ import {
     Image20Regular,
     Document20Regular
 } from "@fluentui/react-icons";
-import {useRouter} from "next/navigation";
 import {ToolIcon} from "@/components/ui/tool-icon";
 import {TOOLS} from "@/registry/tools";
 
@@ -40,8 +39,16 @@ export function ToolsBrowserSection({
                                         setActiveTab
                                     }: ToolsBrowserSectionProps) {
     const [pillStyle, setPillStyle] = useState({left: 0, width: 0});
+    const [isLoaded, setIsLoaded] = useState(false);
     const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
-    const router = useRouter();
+
+    // Disable transition animation during initial mount restoration to prevent sliding
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoaded(true);
+        }, 150);
+        return () => clearTimeout(timer);
+    }, []);
 
     // Keep active background sliding pill aligned dynamically on resize and active tab changes
     useEffect(() => {
@@ -107,7 +114,8 @@ export function ToolsBrowserSection({
                 >
                     {/* Animated sliding background active tab indicator */}
                     <div
-                        className="absolute top-1 bottom-1 rounded-lg bg-surface border border-border/80 shadow-xs transition-all duration-300 ease-out z-0"
+                        className={`absolute top-1 bottom-1 rounded-lg bg-surface border border-border/80 shadow-xs z-0 
+                        ${isLoaded ? "transition-all duration-300 ease-out" : ""}`}
                         style={{
                             left: `${pillStyle.left}px`,
                             width: `${pillStyle.width}px`
