@@ -13,6 +13,7 @@ import {RemovePdfView} from "@/components/tools/remove-pdf-view";
 import {ExtractPdfView} from "@/components/tools/extract-pdf-view";
 import {ReorderPdfView} from "@/components/tools/reorder-pdf-view";
 import {ImagesToPdfView} from "@/components/tools/images-to-pdf-view";
+import {EditAudioMetadataView} from "@/components/tools/edit-audio-metadata-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -21,7 +22,7 @@ export const TOOLS: Tool[] = [
         description: "Modify tags, artwork, and technical details for MP3, FLAC, WAV, and other formats.",
         category: "audio",
         iconId: "music-note",
-        component: UnderDevelopmentView
+        component: EditAudioMetadataView
     },
     {
         slug: "trim-audio",
