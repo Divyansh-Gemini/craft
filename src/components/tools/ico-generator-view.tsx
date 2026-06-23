@@ -18,6 +18,7 @@ import {
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
 import {ToolHeader} from "@/components/ui/tool-header";
+import {FileDropzone, FileDropzoneRef} from "@/components/ui/file-dropzone";
 import {formatBytes} from "@/features/image/image-converter";
 import {generateIco} from "@/features/image/ico-generator";
 
@@ -25,46 +26,6 @@ import {generateIco} from "@/features/image/ico-generator";
 // Sub-Components for Clean Architecture
 // ==========================================
 
-interface FileDropzoneProps {
-    isDragging: boolean;
-    onDragOver: (e: React.DragEvent) => void;
-    onDragLeave: () => void;
-    onDrop: (e: React.DragEvent) => void;
-    onClick: () => void;
-}
-
-function FileDropzone({isDragging, onDragOver, onDragLeave, onDrop, onClick}: FileDropzoneProps) {
-    return (
-        <div
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-            onDrop={onDrop}
-            onClick={onClick}
-            className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
-                isDragging
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-            }`}
-        >
-            <div className="flex flex-col items-center justify-center space-y-4">
-                <div
-                    className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300"
-                >
-                    <Image20Regular className="w-8 h-8"/>
-                </div>
-                <div className="space-y-1.5">
-                    <p className="text-sm font-extrabold text-text-primary">
-                        Drag & drop image or SVG here, or{" "}
-                        <span className="text-primary hover:underline">browse</span>
-                    </p>
-                    <p className="text-xs text-text-muted">
-                        Supports PNG, SVG, JPG, WebP, AVIF, HEIC, TIFF (Up to 10MB)
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 interface SelectedFileCardProps {
     file: File;
@@ -443,7 +404,6 @@ export function IcoGeneratorView({tool}: IcoGeneratorViewProps) {
     // File State
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [isDragging, setIsDragging] = useState<boolean>(false);
 
     // Options
     const autoSquare = true;
@@ -463,7 +423,7 @@ export function IcoGeneratorView({tool}: IcoGeneratorViewProps) {
     const [mockTitle, setMockTitle] = useState<string>("My Awesome Website");
     const [copied, setCopied] = useState<boolean>(false);
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<FileDropzoneRef>(null);
 
     // Clean up Object URL
     useEffect(() => {
@@ -534,35 +494,6 @@ export function IcoGeneratorView({tool}: IcoGeneratorViewProps) {
                 return [...prev, size].sort((a, b) => a - b);
             }
         });
-    };
-
-    // Drag events
-    const onDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const onDragLeave = () => {
-        setIsDragging(false);
-    };
-
-    const onDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFile(e.dataTransfer.files[0]);
-        }
-    };
-
-    const triggerFileInput = () => {
-        fileInputRef.current?.click();
-    };
-
-    const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            handleFile(e.target.files[0]);
-            e.target.value = "";
-        }
     };
 
     const removeFile = () => {
@@ -646,24 +577,21 @@ export function IcoGeneratorView({tool}: IcoGeneratorViewProps) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Left Column: Input and Settings */}
                 <div className="lg:col-span-7 space-y-6">
-                    <input
-                        type="file"
+                    <FileDropzone
                         ref={fileInputRef}
-                        onChange={onFileSelect}
+                        onFilesSelected={(files) => handleFile(files[0])}
                         accept="image/*,.heic,.heif,.svg"
-                        className="hidden"
+                        showDropzone={!file}
+                        icon={<Image20Regular className="w-8 h-8"/>}
+                        title={
+                            <p className="text-sm font-extrabold text-text-primary">
+                                Drag & drop image or SVG here, or{" "}
+                                <span className="text-primary hover:underline">browse</span>
+                            </p>
+                        }
+                        description="Supports PNG, SVG, JPG, WebP, AVIF, HEIC, TIFF (Up to 10MB)"
                     />
-
-                    {/* File Dropzone */}
-                    {!file ? (
-                        <FileDropzone
-                            isDragging={isDragging}
-                            onDragOver={onDragOver}
-                            onDragLeave={onDragLeave}
-                            onDrop={onDrop}
-                            onClick={triggerFileInput}
-                        />
-                    ) : (
+                    {file && (
                         <SelectedFileCard
                             file={file}
                             previewUrl={previewUrl}

@@ -16,6 +16,7 @@ import {
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
 import {ToolHeader} from "@/components/ui/tool-header";
+import {FileDropzone, FileDropzoneRef} from "@/components/ui/file-dropzone";
 import {formatBytes, downloadBlob, downloadZip} from "@/features/image/image-converter";
 import {resizeSingleImage, ResizeOptions} from "@/features/image/image-resizer";
 
@@ -60,10 +61,8 @@ export function ResizeImageView({tool}: ResizeImageViewProps) {
     const [percentage, setPercentage] = useState<number>(50);
     const [maintainAspectRatio, setMaintainAspectRatio] = useState<boolean>(true);
 
-    // UI state
-    const [isDragging, setIsDragging] = useState<boolean>(false);
     const [isResizing, setIsResizing] = useState<boolean>(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<FileDropzoneRef>(null);
 
     // Clean up Object URLs when files are removed or component unmounts
     useEffect(() => {
@@ -222,32 +221,8 @@ export function ResizeImageView({tool}: ResizeImageViewProps) {
         });
     }, [resizeMode, widthInput, heightInput, percentage, maintainAspectRatio]);
 
-    const onDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const onDragLeave = () => {
-        setIsDragging(false);
-    };
-
-    const onDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        if (e.dataTransfer.files) {
-            handleFiles(e.dataTransfer.files);
-        }
-    };
-
     const triggerFileInput = () => {
-        fileInputRef.current?.click();
-    };
-
-    const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            handleFiles(e.target.files);
-            e.target.value = "";
-        }
+        fileInputRef.current?.trigger();
     };
 
     const removeFile = useCallback((id: string) => {
@@ -403,44 +378,21 @@ export function ResizeImageView({tool}: ResizeImageViewProps) {
 
             {/* Main Workspace */}
             <div className="space-y-6">
-                <input
-                    type="file"
+                <FileDropzone
                     ref={fileInputRef}
-                    onChange={onFileSelect}
+                    onFilesSelected={handleFiles}
                     multiple
                     accept="image/*"
-                    className="hidden"
+                    showDropzone={totalCount === 0}
+                    paddingClassName="p-10"
+                    icon={<Image20Regular className="w-8 h-8"/>}
+                    title={
+                        <p className="text-sm font-extrabold text-text-primary">
+                            Drag & drop images here, or <span className="text-primary">browse</span>
+                        </p>
+                    }
+                    description="Supports PNG, JPG, WebP, AVIF, HEIC, TIFF, GIF (Up to 15MB each)"
                 />
-
-                {/* Dropzone Area */}
-                {totalCount === 0 && (
-                    <div
-                        onDragOver={onDragOver}
-                        onDragLeave={onDragLeave}
-                        onDrop={onDrop}
-                        onClick={triggerFileInput}
-                        className={`relative border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer transition-all duration-300 group ${
-                            isDragging
-                                ? "border-primary bg-primary/5"
-                                : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-                        }`}
-                    >
-                        <div className="flex flex-col items-center justify-center space-y-4">
-                            <div
-                                className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
-                                <Image20Regular className="w-8 h-8"/>
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-sm font-extrabold text-text-primary">
-                                    Drag & drop images here, or <span className="text-primary">browse</span>
-                                </p>
-                                <p className="text-[10px] text-text-muted">
-                                    Supports PNG, JPG, WebP, AVIF, HEIC, TIFF, GIF (Up to 15MB each)
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                )}
 
                 {/* Resize Config & Controls (Visible only after file selection) */}
                 {totalCount > 0 && (

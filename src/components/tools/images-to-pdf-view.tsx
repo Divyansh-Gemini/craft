@@ -18,6 +18,7 @@ import {
 } from "@fluentui/react-icons";
 import {Tool} from "@/types/tool";
 import {ToolHeader} from "@/components/ui/tool-header";
+import {FileDropzone, FileDropzoneRef} from "@/components/ui/file-dropzone";
 import {downloadBlob, formatBytes} from "@/features/image/image-converter";
 import {imagesToPdf, ImagesToPdfOptions} from "@/features/pdf/images-to-pdf";
 import {RadioSelector} from "@/components/ui/radio-selector";
@@ -240,7 +241,6 @@ export function ImagesToPdfView({tool}: ImagesToPdfViewProps) {
     const [currentStepName, setCurrentStepName] = useState<string>("");
 
     // Drag-and-drop upload states
-    const [isDragging, setIsDragging] = useState<boolean>(false);
     const [isDraggingQueue, setIsDraggingQueue] = useState<boolean>(false);
 
     // List sorting states
@@ -251,7 +251,7 @@ export function ImagesToPdfView({tool}: ImagesToPdfViewProps) {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<FileDropzoneRef>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Revoke object URLs on component unmount to prevent leaks
@@ -454,23 +454,6 @@ export function ImagesToPdfView({tool}: ImagesToPdfViewProps) {
     };
 
     // Upload interactions
-    const onDragOverUpload = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const onDragLeaveUpload = () => {
-        setIsDragging(false);
-    };
-
-    const onDropUpload = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            handleFiles(e.dataTransfer.files);
-        }
-    };
-
     const onDragOverQueue = (e: React.DragEvent) => {
         if (e.dataTransfer.types.includes("Files")) {
             e.preventDefault();
@@ -491,14 +474,7 @@ export function ImagesToPdfView({tool}: ImagesToPdfViewProps) {
     };
 
     const triggerFileInput = () => {
-        fileInputRef.current?.click();
-    };
-
-    const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            handleFiles(e.target.files);
-            e.target.value = "";
-        }
+        fileInputRef.current?.trigger();
     };
 
     return (
@@ -516,45 +492,25 @@ export function ImagesToPdfView({tool}: ImagesToPdfViewProps) {
             )}
 
             <div className="space-y-6">
-                <input
-                    type="file"
+                <FileDropzone
                     ref={fileInputRef}
-                    onChange={onFileSelect}
+                    onFilesSelected={handleFiles}
                     multiple
                     accept="image/*"
-                    className="hidden"
+                    showDropzone={files.length === 0}
+                    icon={<Image20Regular className="w-8 h-8"/>}
+                    title={
+                        <p className="text-sm font-extrabold text-text-primary">
+                            Drag & drop images here, or <span className="text-primary">browse</span>
+                        </p>
+                    }
+                    description={
+                        <p className="text-[10px] text-text-muted max-w-md mx-auto leading-relaxed">
+                            Convert PNG, JPG, WebP, SVG, or GIF files client-side into a single high-quality
+                            PDF document.
+                        </p>
+                    }
                 />
-
-                {/* Drag and Drop Zone when empty */}
-                {files.length === 0 && (
-                    <div
-                        onDragOver={onDragOverUpload}
-                        onDragLeave={onDragLeaveUpload}
-                        onDrop={onDropUpload}
-                        onClick={triggerFileInput}
-                        className={`relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 group ${
-                            isDragging
-                                ? "border-primary bg-primary/5 shadow-inner"
-                                : "border-border hover:border-primary/40 bg-surface/30 backdrop-blur-md"
-                        }`}
-                    >
-                        <div className="flex flex-col items-center justify-center space-y-4">
-                            <div
-                                className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 group-hover:scale-105 transition-transform duration-300">
-                                <Image20Regular className="w-8 h-8"/>
-                            </div>
-                            <div className="space-y-1">
-                                <p className="text-sm font-extrabold text-text-primary">
-                                    Drag & drop images here, or <span className="text-primary">browse</span>
-                                </p>
-                                <p className="text-[10px] text-text-muted max-w-md mx-auto leading-relaxed">
-                                    Convert PNG, JPG, WebP, SVG, or GIF files client-side into a single high-quality
-                                    PDF document.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                )}
 
                 {/* Workspace Split Layout */}
                 {files.length > 0 && (
