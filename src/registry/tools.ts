@@ -14,6 +14,7 @@ import {ExtractPdfView} from "@/components/tools/extract-pdf-view";
 import {ReorderPdfView} from "@/components/tools/reorder-pdf-view";
 import {ImagesToPdfView} from "@/components/tools/images-to-pdf-view";
 import {EditAudioMetadataView} from "@/components/tools/edit-audio-metadata-view";
+import {MuteVideoView} from "@/components/tools/mute-video-view";
 
 export const TOOLS: Tool[] = [
     {
@@ -88,7 +89,7 @@ export const TOOLS: Tool[] = [
         description: "Remove the audio track from any video clip.",
         category: "video",
         iconId: "speaker-mute",
-        component: UnderDevelopmentView
+        component: MuteVideoView
     },
     {
         slug: "extract-audio",
