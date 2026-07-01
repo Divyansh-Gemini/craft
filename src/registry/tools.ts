@@ -15,6 +15,8 @@ import {ReorderPdfView} from "@/components/tools/reorder-pdf-view";
 import {ImagesToPdfView} from "@/components/tools/images-to-pdf-view";
 import {EditAudioMetadataView} from "@/components/tools/edit-audio-metadata-view";
 import {MuteVideoView} from "@/components/tools/mute-video-view";
+import {ExtractAudioView} from "@/components/tools/extract-audio-view";
+
 
 export const TOOLS: Tool[] = [
     {
@@ -97,7 +99,7 @@ export const TOOLS: Tool[] = [
         description: "Save the audio track of a video as a standalone audio file.",
         category: "video",
         iconId: "arrow-download",
-        component: UnderDevelopmentView
+        component: ExtractAudioView
     },
     {
         slug: "video-to-gif",

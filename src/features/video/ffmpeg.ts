@@ -143,3 +143,174 @@ export async function muteVideoFile(
         }
     }
 }
+
+/**
+ * Extracts the audio track from a video file and encodes it to the specified format
+ * or copies the stream losslessly if original is selected.
+ */
+export async function extractAudioFromVideo(
+    ffmpeg: FFmpeg,
+    file: File,
+    options: {
+        format: "mp3" | "m4a" | "wav" | "flac" | "ogg" | "copy";
+        bitrate: string;
+        channels: string;
+        sampleRate: string;
+        volume: number;
+    },
+    onProgress?: (progress: number) => void
+): Promise<{ file: File; codecDetected?: string }> {
+    const fileExt = file.name.substring(file.name.lastIndexOf("."));
+    const inputName = `input_${Date.now()}${fileExt}`;
+
+    // Write input file to FFmpeg VFS
+    await ffmpeg.writeFile(inputName, await fetchFile(file));
+
+    // Detect original audio codec to find if there is an audio track and determine copy extension
+    let codec = "";
+    const logHandler = ({message}: {message: string}) => {
+        const audioMatch = message.match(/Audio:\s+([a-zA-Z0-9_-]+)/i);
+        if (audioMatch && audioMatch[1]) {
+            codec = audioMatch[1].toLowerCase();
+        }
+    };
+
+    ffmpeg.on("log", logHandler);
+    try {
+        await ffmpeg.exec(["-i", inputName]);
+    } catch {
+        // Expected ffmpeg exit code is non-zero when no output file is provided
+    } finally {
+        ffmpeg.off("log", logHandler);
+    }
+
+    if (!codec) {
+        try {
+            await ffmpeg.deleteFile(inputName);
+        } catch {
+            // Ignore clean up error
+        }
+        throw new Error("No audio track detected in this video file.");
+    }
+
+    // Determine output extension and mime type
+    let ext: string;
+    const isCopy = options.format === "copy";
+
+    if (isCopy) {
+        const codecToExtension: Record<string, string> = {
+            aac: ".m4a",
+            mp3: ".mp3",
+            ac3: ".ac3",
+            eac3: ".eac3",
+            opus: ".opus",
+            vorbis: ".ogg",
+            flac: ".flac",
+            pcm_s16le: ".wav",
+            pcm_s24le: ".wav",
+            pcm_s32le: ".wav",
+            pcm_alaw: ".wav",
+            pcm_mulaw: ".wav",
+            alac: ".m4a",
+            truehd: ".thd",
+            mp2: ".mp2",
+            wma: ".wma",
+        };
+        ext = codecToExtension[codec] || `.${codec}`;
+        // Sanity check extension format
+        if (!/^\.[a-zA-Z0-9]+$/.test(ext)) {
+            ext = ".m4a";
+        }
+    } else {
+        ext = `.${options.format}`;
+    }
+
+    const extensionToMime: Record<string, string> = {
+        ".mp3": "audio/mpeg",
+        ".m4a": "audio/mp4",
+        ".wav": "audio/wav",
+        ".flac": "audio/flac",
+        ".ogg": "audio/ogg",
+        ".opus": "audio/opus",
+        ".aac": "audio/aac",
+    };
+    const mime = extensionToMime[ext] || "audio/x-generic";
+    const baseName = file.name.substring(0, file.name.lastIndexOf("."));
+    const outputName = `output_${Date.now()}${ext}`;
+
+    const progressHandler = ({progress}: { progress: number }) => {
+        if (onProgress) {
+            onProgress(Math.min(100, Math.round(progress * 100)));
+        }
+    };
+    ffmpeg.on("progress", progressHandler);
+
+    try {
+        const cmdArgs = ["-i", inputName];
+
+        if (isCopy) {
+            // No video, lossless audio stream copy
+            cmdArgs.push("-vn", "-c:a", "copy");
+        } else {
+            // No video
+            cmdArgs.push("-vn");
+
+            // Setup encoder
+            if (options.format === "mp3") {
+                cmdArgs.push("-c:a", "libmp3lame");
+            } else if (options.format === "m4a") {
+                cmdArgs.push("-c:a", "aac");
+            } else if (options.format === "wav") {
+                cmdArgs.push("-c:a", "pcm_s16le");
+            } else if (options.format === "flac") {
+                cmdArgs.push("-c:a", "flac");
+            } else if (options.format === "ogg") {
+                cmdArgs.push("-c:a", "libvorbis");
+            }
+
+            // Bitrate (applicable to mp3, m4a, ogg)
+            if (options.format !== "wav" && options.format !== "flac" && options.bitrate) {
+                cmdArgs.push("-b:a", options.bitrate);
+            }
+
+            // Channels
+            if (options.channels && options.channels !== "keep") {
+                cmdArgs.push("-ac", options.channels);
+            }
+
+            // Sample rate
+            if (options.sampleRate && options.sampleRate !== "keep") {
+                cmdArgs.push("-ar", options.sampleRate);
+            }
+
+            // Volume filter
+            if (options.volume && options.volume !== 1.0) {
+                cmdArgs.push("-filter:a", `volume=${options.volume}`);
+            }
+        }
+
+        cmdArgs.push(outputName);
+        await ffmpeg.exec(cmdArgs);
+
+        const data = await ffmpeg.readFile(outputName);
+        const u8 = typeof data === "string"
+            ? new TextEncoder().encode(data)
+            : new Uint8Array(data as Uint8Array).slice();
+
+        const blob = new Blob([u8], {type: mime});
+        const outputFileName = `${baseName}${ext}`;
+        return {
+            file: new File([blob], outputFileName, {type: mime}),
+            codecDetected: codec
+        };
+    } finally {
+        ffmpeg.off("progress", progressHandler);
+        try {
+            await ffmpeg.deleteFile(inputName);
+            await ffmpeg.deleteFile(outputName);
+        } catch {
+            // Ignore clean up warning
+        }
+    }
+}
+
